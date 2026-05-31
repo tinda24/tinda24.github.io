@@ -64,7 +64,7 @@
       margin: 0 auto;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
       gap: 24px;
     }
 
@@ -90,12 +90,49 @@
       display: flex;
       align-items: center;
       gap: 22px;
+      margin-left: 6px;
       color: rgba(255, 253, 248, 0.82);
       font-size: 0.95rem;
     }
 
     .nav-links a:hover {
       color: #fffdf8;
+    }
+
+    .nav-map-link {
+      position: relative;
+      margin-left: auto;
+      padding: 8px 6px;
+      color: #ff645f;
+      font-size: 2rem;
+      font-weight: 500;
+      line-height: 1;
+      text-shadow: 0 0 24px rgba(255, 100, 95, 0.28);
+      transition: color 180ms ease, transform 180ms ease, text-shadow 180ms ease;
+    }
+
+    .nav-map-link::after {
+      content: "";
+      position: absolute;
+      left: 6px;
+      right: 6px;
+      bottom: 2px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, currentColor, transparent);
+      transform: scaleX(0.18);
+      opacity: 0;
+      transition: transform 180ms ease, opacity 180ms ease;
+    }
+
+    .nav-map-link:hover {
+      color: #ff8a68;
+      transform: translateY(-1px);
+      text-shadow: 0 0 34px rgba(255, 138, 104, 0.42);
+    }
+
+    .nav-map-link:hover::after {
+      transform: scaleX(1);
+      opacity: 1;
     }
 
     .hero {
@@ -238,6 +275,397 @@
       font-size: 1.08rem;
     }
 
+    .research-section {
+      position: relative;
+      padding: 98px 0 106px;
+      overflow: hidden;
+      color: #fffdf8;
+      background:
+        radial-gradient(circle at 16% 18%, rgba(15, 123, 92, 0.25), transparent 28%),
+        radial-gradient(circle at 82% 26%, rgba(220, 109, 79, 0.18), transparent 30%),
+        linear-gradient(135deg, #101719 0%, #172220 52%, #111818 100%);
+    }
+
+    .research-section .section-kicker {
+      color: #9ce0c8;
+    }
+
+    .research-section .lead {
+      color: rgba(255, 253, 248, 0.72);
+    }
+
+    .research-board {
+      position: relative;
+      min-height: 620px;
+      margin-top: 38px;
+      border: 1px solid rgba(255, 253, 248, 0.16);
+      border-radius: 8px;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(255, 253, 248, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 253, 248, 0.045) 1px, transparent 1px),
+        rgba(255, 253, 248, 0.045);
+      background-size: 42px 42px;
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.28);
+      isolation: isolate;
+    }
+
+    .research-board::before {
+      content: "";
+      position: absolute;
+      inset: 20px;
+      border: 1px solid rgba(255, 253, 248, 0.1);
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    .map-axis {
+      position: absolute;
+      z-index: 1;
+      color: rgba(255, 253, 248, 0.58);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .axis-y {
+      left: 22px;
+      top: 58%;
+      transform: rotate(-90deg);
+      transform-origin: left center;
+    }
+
+    .axis-x {
+      right: 34px;
+      bottom: 28px;
+    }
+
+    .axis-arrow {
+      position: absolute;
+      z-index: 1;
+      background: rgba(255, 253, 248, 0.68);
+      pointer-events: none;
+    }
+
+    .axis-arrow.x {
+      left: 56px;
+      right: 58px;
+      bottom: 72px;
+      height: 2px;
+    }
+
+    .axis-arrow.y {
+      left: 72px;
+      top: 56px;
+      bottom: 78px;
+      width: 2px;
+    }
+
+    .axis-arrow::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-top: 2px solid rgba(255, 253, 248, 0.68);
+      border-right: 2px solid rgba(255, 253, 248, 0.68);
+    }
+
+    .axis-arrow.x::after {
+      right: -1px;
+      top: 50%;
+      transform: translateY(-50%) rotate(45deg);
+    }
+
+    .axis-arrow.y::after {
+      left: 50%;
+      top: -1px;
+      transform: translateX(-50%) rotate(-45deg);
+    }
+
+    .map-lines {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .route-line {
+      fill: none;
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.42;
+      stroke-dasharray: 12 18;
+      animation: routeFlow 3.6s linear infinite;
+      filter: drop-shadow(0 0 8px rgba(255, 253, 248, 0.12));
+      transition: opacity 260ms ease, stroke-width 260ms ease, filter 260ms ease;
+    }
+
+    .route-line.secondary {
+      stroke-width: 3;
+      opacity: 0.3;
+      stroke-dasharray: 7 14;
+      animation-duration: 4.8s;
+    }
+
+    .research-board.has-active .route-line,
+    .research-board.is-previewing .route-line {
+      opacity: 0.16;
+    }
+
+    .research-board[data-active="observe"] [data-route~="observe"],
+    .research-board[data-active="encode"] [data-route~="encode"],
+    .research-board[data-active="dynamics"] [data-route~="dynamics"],
+    .research-board[data-active="fusion"] [data-route~="fusion"],
+    .research-board[data-active="action"] [data-route~="action"],
+    .research-board[data-active="distance"] [data-route~="distance"] {
+      opacity: 0.95;
+      stroke-width: 7;
+      filter: drop-shadow(0 0 18px rgba(156, 224, 200, 0.42));
+      animation-duration: 1.55s;
+    }
+
+    .map-node {
+      --node-color: var(--green);
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      z-index: 4;
+      width: 188px;
+      min-height: 116px;
+      padding: 14px;
+      border: 1px solid color-mix(in srgb, var(--node-color), #fff 28%);
+      border-radius: 8px;
+      appearance: none;
+      color: #fffdf8;
+      font: inherit;
+      text-align: left;
+      background: color-mix(in srgb, var(--node-color), #101719 70%);
+      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.22);
+      cursor: pointer;
+      transform: translate(-50%, -50%);
+      transition:
+        width 260ms ease,
+        min-height 260ms ease,
+        transform 260ms ease,
+        background 260ms ease,
+        border-color 260ms ease,
+        box-shadow 260ms ease,
+        opacity 260ms ease;
+    }
+
+    .map-node::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 253, 248, 0.08);
+      pointer-events: none;
+    }
+
+    .map-node::after {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      right: 12px;
+      top: 12px;
+      border-radius: 50%;
+      background: var(--node-color);
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--node-color), transparent 55%);
+      animation: nodePulse 2.4s ease-out infinite;
+    }
+
+    .node-core {
+      display: grid;
+      grid-template-columns: repeat(3, 18px);
+      gap: 5px;
+      margin-bottom: 16px;
+    }
+
+    .node-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      background: color-mix(in srgb, var(--node-color), #fff 24%);
+      box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.16);
+    }
+
+    .node-title {
+      display: block;
+      max-width: 136px;
+      font-size: 1.02rem;
+      line-height: 1.18;
+    }
+
+    .node-meta {
+      display: block;
+      margin-top: 6px;
+      color: rgba(255, 253, 248, 0.68);
+      font-size: 0.82rem;
+    }
+
+    .node-detail {
+      max-height: 0;
+      margin: 0;
+      overflow: hidden;
+      color: rgba(255, 253, 248, 0.78);
+      font-size: 0.9rem;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: max-height 260ms ease, margin 260ms ease, opacity 220ms ease, transform 220ms ease;
+    }
+
+    .research-board.has-active .map-node {
+      opacity: 0.56;
+      transform: translate(-50%, -50%) scale(0.96);
+    }
+
+    .map-node:hover,
+    .map-node:focus-visible,
+    .map-node.is-active {
+      width: 238px;
+      min-height: 168px;
+      opacity: 1;
+      background: color-mix(in srgb, var(--node-color), #101719 48%);
+      border-color: color-mix(in srgb, var(--node-color), #fff 48%);
+      box-shadow: 0 24px 70px color-mix(in srgb, var(--node-color), rgba(0, 0, 0, 0.2) 74%);
+      transform: translate(-50%, -50%) scale(1.06);
+    }
+
+    .map-node:hover .node-detail,
+    .map-node:focus-visible .node-detail,
+    .map-node.is-active .node-detail {
+      max-height: 96px;
+      margin-top: 12px;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .map-node.is-active {
+      z-index: 6;
+    }
+
+    .map-node.is-active::after {
+      animation-duration: 1.1s;
+    }
+
+    .map-node[data-topic="observe"] {
+      --node-color: #15cdbc;
+      --x: 15%;
+      --y: 34%;
+    }
+
+    .map-node[data-topic="encode"] {
+      --node-color: #dca637;
+      --x: 29%;
+      --y: 20%;
+    }
+
+    .map-node[data-topic="dynamics"] {
+      --node-color: #dc6d4f;
+      --x: 46%;
+      --y: 44%;
+    }
+
+    .map-node[data-topic="fusion"] {
+      --node-color: #72b8d6;
+      --x: 58%;
+      --y: 68%;
+    }
+
+    .map-node[data-topic="action"] {
+      --node-color: #d975c6;
+      --x: 78%;
+      --y: 34%;
+    }
+
+    .map-node[data-topic="distance"] {
+      --node-color: #8ccf74;
+      --x: 76%;
+      --y: 70%;
+    }
+
+    .research-panel {
+      position: absolute;
+      right: 28px;
+      bottom: 108px;
+      z-index: 5;
+      width: min(340px, calc(100% - 56px));
+      padding: 22px;
+      border: 1px solid rgba(255, 253, 248, 0.16);
+      border-radius: 8px;
+      background: rgba(16, 23, 25, 0.82);
+      box-shadow: 0 26px 70px rgba(0, 0, 0, 0.32);
+      backdrop-filter: blur(18px);
+      opacity: 0;
+      transform: translateY(18px) scale(0.98);
+      pointer-events: none;
+      transition: opacity 260ms ease, transform 260ms ease;
+    }
+
+    .research-panel.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .panel-kicker {
+      margin: 0 0 8px;
+      color: #9ce0c8;
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .research-panel h3 {
+      margin: 0;
+      font-size: 1.35rem;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .research-panel p {
+      margin: 12px 0 0;
+      color: rgba(255, 253, 248, 0.74);
+      font-size: 0.96rem;
+    }
+
+    .panel-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .panel-tags span {
+      padding: 6px 9px;
+      border: 1px solid rgba(255, 253, 248, 0.14);
+      border-radius: 999px;
+      color: rgba(255, 253, 248, 0.78);
+      font-size: 0.8rem;
+    }
+
+    @keyframes routeFlow {
+      to {
+        stroke-dashoffset: -60;
+      }
+    }
+
+    @keyframes nodePulse {
+      70% {
+        box-shadow: 0 0 0 14px color-mix(in srgb, var(--node-color), transparent 100%);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 color-mix(in srgb, var(--node-color), transparent 100%);
+      }
+    }
+
     .about-grid {
       display: grid;
       grid-template-columns: 1.15fr 0.85fr;
@@ -286,7 +714,7 @@
 
     .work-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 18px;
     }
 
@@ -313,6 +741,10 @@
 
     .work-card:nth-child(3) {
       border-top: 5px solid var(--gold);
+    }
+
+    .work-card:nth-child(4) {
+      border-top: 5px solid #72b8d6;
     }
 
     .work-card:first-child {
@@ -349,7 +781,7 @@
 
     .skills {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
     }
 
@@ -425,6 +857,132 @@
       color: var(--night);
     }
 
+    .life-section {
+      padding: 88px 0 96px;
+      background: #ebe7dd;
+    }
+
+    .word-cloud-frame {
+      position: relative;
+      aspect-ratio: 21 / 9;
+      border: 1px solid rgba(24, 32, 29, 0.12);
+      border-radius: 8px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 22% 26%, rgba(15, 123, 92, 0.24), transparent 28%),
+        radial-gradient(circle at 76% 32%, rgba(220, 109, 79, 0.2), transparent 28%),
+        radial-gradient(circle at 56% 80%, rgba(180, 139, 56, 0.16), transparent 28%),
+        linear-gradient(135deg, #101719 0%, #182520 54%, #111818 100%);
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+
+    .word-cloud-frame::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid rgba(255, 253, 248, 0.09);
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    .word-cloud {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .word-cloud text {
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      font-weight: 800;
+      letter-spacing: 0;
+      paint-order: stroke;
+      stroke: rgba(16, 23, 25, 0.26);
+      stroke-width: 2px;
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: wordBreath 6s ease-in-out infinite;
+    }
+
+    .word-cloud text:nth-child(2n) {
+      animation-delay: -1.8s;
+    }
+
+    .word-cloud text:nth-child(3n) {
+      animation-delay: -3.1s;
+    }
+
+    .word-cloud .primary-word {
+      fill: #fffdf8;
+      font-size: 112px;
+      filter: drop-shadow(0 0 18px rgba(255, 253, 248, 0.16));
+    }
+
+    .word-cloud .green-word {
+      fill: #9ce0c8;
+    }
+
+    .word-cloud .coral-word {
+      fill: #ff8a68;
+    }
+
+    .word-cloud .gold-word {
+      fill: #e4c36f;
+    }
+
+    .word-cloud .blue-word {
+      fill: #97cbe0;
+    }
+
+    .word-cloud .large-word {
+      font-size: 78px;
+    }
+
+    .word-cloud .mid-word {
+      font-size: 54px;
+    }
+
+    .word-cloud .small-word {
+      font-size: 36px;
+      opacity: 0.82;
+    }
+
+    .life-more {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 18px;
+    }
+
+    .life-more a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 2px;
+      color: var(--green);
+      font-size: 1.05rem;
+      font-weight: 900;
+      transition: color 180ms ease, transform 180ms ease;
+    }
+
+    .life-more a:hover {
+      color: var(--coral);
+      transform: translateX(4px);
+    }
+
+    @keyframes wordBreath {
+      0%,
+      100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.88;
+      }
+
+      50% {
+        transform: translateY(-4px) scale(1.015);
+        opacity: 1;
+      }
+    }
+
     .site-footer {
       padding: 28px 0;
       color: var(--muted);
@@ -442,10 +1000,15 @@
     @media (max-width: 820px) {
       .nav {
         min-height: 64px;
+        gap: 16px;
       }
 
       .nav-links {
         display: none;
+      }
+
+      .nav-map-link {
+        font-size: 1.55rem;
       }
 
       h1 {
@@ -468,6 +1031,74 @@
         background:
           linear-gradient(180deg, rgba(16, 23, 25, 0.94) 0%, rgba(16, 23, 25, 0.62) 56%, rgba(16, 23, 25, 0.36) 100%),
           url("assets/hero-tinda.png") center / cover no-repeat;
+      }
+
+      .research-section {
+        padding: 76px 0 82px;
+      }
+
+      .research-board {
+        min-height: 960px;
+      }
+
+      .map-lines {
+        opacity: 0.58;
+      }
+
+      .axis-y,
+      .axis-x {
+        font-size: 0.72rem;
+      }
+
+      .map-node {
+        width: min(220px, calc(100% - 72px));
+      }
+
+      .map-node:hover,
+      .map-node:focus-visible,
+      .map-node.is-active {
+        width: min(260px, calc(100% - 48px));
+      }
+
+      .map-node[data-topic="observe"] {
+        --x: 50%;
+        --y: 13%;
+      }
+
+      .map-node[data-topic="encode"] {
+        --x: 50%;
+        --y: 27%;
+      }
+
+      .map-node[data-topic="dynamics"] {
+        --x: 50%;
+        --y: 42%;
+      }
+
+      .map-node[data-topic="fusion"] {
+        --x: 50%;
+        --y: 57%;
+      }
+
+      .map-node[data-topic="action"] {
+        --x: 50%;
+        --y: 72%;
+      }
+
+      .map-node[data-topic="distance"] {
+        --x: 50%;
+        --y: 86%;
+      }
+
+      .research-panel {
+        left: 28px;
+        right: 28px;
+        bottom: 28px;
+        width: auto;
+      }
+
+      .life-section {
+        padding: 72px 0 78px;
       }
 
       .about-grid,
@@ -520,6 +1151,22 @@
         font-size: 1rem;
       }
 
+      .word-cloud .primary-word {
+        font-size: 92px;
+      }
+
+      .word-cloud .large-word {
+        font-size: 66px;
+      }
+
+      .word-cloud .mid-word {
+        font-size: 46px;
+      }
+
+      .word-cloud .small-word {
+        font-size: 32px;
+      }
+
       .button,
       .contact-links a {
         width: 100%;
@@ -534,11 +1181,12 @@
         <span class="brand-mark">T</span>
         <span>Tinda</span>
       </a>
+      <a class="nav-map-link" href="#research-map">科研地图</a>
       <div class="nav-links">
         <a href="#about">关于</a>
-        <a href="#work">作品</a>
-        <a href="#skills">技能</a>
+        <a href="#work">作品与聚焦</a>
         <a href="#contact">联系</a>
+        <a href="#aesthetic-life">审美与生活</a>
       </div>
     </nav>
   </header>
@@ -549,13 +1197,105 @@
       <h1>把想法做成可以被体验的东西。</h1>
       <p class="hero-copy">你好，我是 Tinda。这里收集我的项目、实验和正在形成的作品方向：从产品原型到前端体验，从工具搭建到一点点视觉表达。</p>
       <div class="hero-actions">
-        <a class="button primary" href="#work">查看作品</a>
-        <a class="button secondary" href="mailto:hello@example.com">联系我</a>
+        <a class="button primary" href="#research-map">进入科研地图</a>
+        <a class="button secondary" href="#work">作品与聚焦</a>
       </div>
     </div>
   </section>
 
   <main>
+    <section id="research-map" class="research-section">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="section-kicker">Research Map</p>
+          <h2>科研地图</h2>
+          <p class="lead">把观测、历史编码、动力场、融合表征和行动输出放在同一张动态地图里，呈现我对多模态时序研究的理解路径。</p>
+        </div>
+
+        <div class="research-board" aria-label="交互式科研地图">
+          <span class="axis-arrow x" aria-hidden="true"></span>
+          <span class="axis-arrow y" aria-hidden="true"></span>
+          <span class="map-axis axis-y">Temporal Advance</span>
+          <span class="map-axis axis-x">Modality Distance</span>
+
+          <svg class="map-lines" viewBox="0 0 1000 620" preserveAspectRatio="none" aria-hidden="true">
+            <path class="route-line" data-route="observe encode dynamics action" stroke="#15cdbc" d="M120 214 C230 110 330 112 438 246 S672 315 790 214"></path>
+            <path class="route-line secondary" data-route="encode action" stroke="#dca637" d="M292 124 C454 70 640 118 784 206"></path>
+            <path class="route-line" data-route="observe dynamics fusion distance" stroke="#dc6d4f" d="M128 234 C286 338 414 398 584 420 S704 432 772 430"></path>
+            <path class="route-line secondary" data-route="dynamics fusion action" stroke="#72b8d6" d="M458 276 C522 350 578 390 620 420 C690 360 718 268 786 212"></path>
+            <path class="route-line secondary" data-route="fusion distance action" stroke="#8ccf74" d="M602 432 C690 492 776 482 830 426 C832 340 822 270 790 216"></path>
+          </svg>
+
+          <button class="map-node" type="button" data-topic="observe" data-panel-title="OBS 观测入口" data-panel-body="从多源观测中整理时序线索，先压低噪声，再保留能推动推理的状态变化。" data-tags="OBS, State, Clarity">
+            <span class="node-core" aria-hidden="true">
+              <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
+              <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
+            </span>
+            <strong class="node-title">OBS 观测入口</strong>
+            <span class="node-meta">时序前堆叠</span>
+            <p class="node-detail">聚焦“看见什么”和“哪些变化值得被编码”。</p>
+          </button>
+
+          <button class="map-node" type="button" data-topic="encode" data-panel-title="History Encode 历史编码" data-panel-body="把历史片段压缩成可被后续模块读取的上下文，让模型记住趋势，而不是只记住单帧。" data-tags="History, Context, Encode">
+            <span class="node-core" aria-hidden="true">
+              <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
+              <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
+            </span>
+            <strong class="node-title">History Encode</strong>
+            <span class="node-meta">上下文压缩</span>
+            <p class="node-detail">为后续动力场提供更稳定的上下文坐标。</p>
+          </button>
+
+          <button class="map-node" type="button" data-topic="dynamics" data-panel-title="Contextual 动力场" data-panel-body="在时序推进和跨模态变化之间建立桥梁，让运动、语义和场景状态可以一起演化。" data-tags="IDM, FDM, Dynamics">
+            <span class="node-core" aria-hidden="true">
+              <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
+              <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
+            </span>
+            <strong class="node-title">Contextual 动力场</strong>
+            <span class="node-meta">场力与轨迹</span>
+            <p class="node-detail">对应参考图中的“时序前进”和“共模态前进”。</p>
+          </button>
+
+          <button class="map-node" type="button" data-topic="fusion" data-panel-title="LA 融合观测" data-panel-body="把点云、光流、占用、BEV 和语义特征对齐到同一个决策视角，减少信息孤岛。" data-tags="LA, BEV, Features">
+            <span class="node-core" aria-hidden="true">
+              <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
+              <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
+            </span>
+            <strong class="node-title">LA 融合观测</strong>
+            <span class="node-meta">多模态对齐</span>
+            <p class="node-detail">把异构输入转成更容易比较的特征面。</p>
+          </button>
+
+          <button class="map-node" type="button" data-topic="action" data-panel-title="Action 行动输出" data-panel-body="将上下文表征转成可执行的策略或预测结果，同时保留链路可解释性。" data-tags="Action, Policy, Output">
+            <span class="node-core" aria-hidden="true">
+              <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
+              <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
+            </span>
+            <strong class="node-title">Action 行动输出</strong>
+            <span class="node-meta">策略与决策</span>
+            <p class="node-detail">把表征转化为策略选择和预测输出。</p>
+          </button>
+
+          <button class="map-node" type="button" data-topic="distance" data-panel-title="Modality Distance 模态距离" data-panel-body="把不同维度的信息差异显式摆出来，观察哪些表征更接近行动，哪些仍需要对齐。" data-tags="Distance, Alignment, Space">
+            <span class="node-core" aria-hidden="true">
+              <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
+              <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
+            </span>
+            <strong class="node-title">Modality Distance</strong>
+            <span class="node-meta">高维距离轴</span>
+            <p class="node-detail">以距离变化呈现表征之间的结构关系。</p>
+          </button>
+
+          <aside class="research-panel" aria-live="polite" aria-hidden="true">
+            <p class="panel-kicker">Selected Focus</p>
+            <h3></h3>
+            <p></p>
+            <div class="panel-tags"></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
     <section id="about" class="section">
       <div class="wrap">
         <div class="section-head">
@@ -589,37 +1329,51 @@
         <div class="section-head">
           <p class="section-kicker">Selected Work</p>
           <h2>近期项目</h2>
-          <p class="lead">这些项目代表我喜欢投入的方向：组织知识、验证产品想法，以及用网页表达更细腻的体验。</p>
+          <p class="lead">围绕具身操作、长时序建模、视角鲁棒表征和 3D-aware 预训练，我持续把研究问题拆成可验证的算法框架与真实机器人实验。</p>
         </div>
         <div class="work-grid">
           <article class="work-card">
             <div>
-              <h3>个人知识库</h3>
-              <p>整理学习笔记、项目复盘和灵感素材，让长期积累变得可搜索、可连接。</p>
+              <h3>PAM 自适应工作记忆策略</h3>
+              <p>面向机器人操作中的遮挡、阶段相似和历史依赖问题，提出长历史建模框架，将策略可利用历史窗口扩展至 300 帧，并保持 20Hz 推理频率。</p>
             </div>
             <div class="tag-list">
-              <span class="tag">Writing</span>
-              <span class="tag">System</span>
+              <span class="tag">RA-L Accepted</span>
+              <span class="tag">Long-Horizon</span>
+              <span class="tag">VLA</span>
             </div>
           </article>
           <article class="work-card">
             <div>
-              <h3>产品原型</h3>
-              <p>围绕真实使用场景快速搭建界面，把抽象需求转成可以讨论的交互。</p>
+              <h3>AutoSpeed 阶段自适应速度学习</h3>
+              <p>提出无标注阶段自适应速度学习框架，使操作策略根据任务阶段自动调整动作节奏，在仿真和真实任务中同时提升执行效率与成功率。</p>
             </div>
             <div class="tag-list">
-              <span class="tag">Prototype</span>
-              <span class="tag">UI</span>
+              <span class="tag">ECCV Review</span>
+              <span class="tag">Speed Policy</span>
+              <span class="tag">Real Robot</span>
             </div>
           </article>
           <article class="work-card">
             <div>
-              <h3>创意实验</h3>
-              <p>尝试用代码、图像和叙事做小型实验，探索更有表现力的网页体验。</p>
+              <h3>BPP 视角无关动态表征学习</h3>
+              <p>参与自监督表征学习框架设计与实验分析，通过跨视角点轨迹预测和双路径信息瓶颈，增强机器人策略对未见视角和视觉扰动的鲁棒性。</p>
             </div>
             <div class="tag-list">
-              <span class="tag">Creative</span>
-              <span class="tag">Web</span>
+              <span class="tag">NeurIPS Review</span>
+              <span class="tag">View-Invariant</span>
+              <span class="tag">Flow Matching</span>
+            </div>
+          </article>
+          <article class="work-card">
+            <div>
+              <h3>DiffuView 多视角扩散预训练</h3>
+              <p>参与 3D-aware 机器人表征学习框架，负责模仿学习 Codebase 构建、Franka Arm 真机遥操作映射、模型训练与策略测评。</p>
+            </div>
+            <div class="tag-list">
+              <span class="tag">CVPR Accepted</span>
+              <span class="tag">3D-Aware</span>
+              <span class="tag">Franka</span>
             </div>
           </article>
         </div>
@@ -634,20 +1388,20 @@
         </div>
         <div class="skills">
           <div class="skill">
-            <strong>前端实现</strong>
-            <span>HTML、CSS、响应式页面与交互细节。</span>
+            <strong>具身操作算法栈</strong>
+            <span>熟悉 ACT、Diffusion Policy、RDT、TinyVLA、Pi0.5 等主流策略与 VLA 框架。</span>
           </div>
           <div class="skill">
-            <strong>产品思考</strong>
-            <span>需求梳理、信息架构与体验路径。</span>
+            <strong>工程实现与调试</strong>
+            <span>熟练使用 PyTorch 与 ROS，具备规范 Git 流程和 AI 协同开发经验。</span>
           </div>
           <div class="skill">
-            <strong>视觉表达</strong>
-            <span>版式、色彩、节奏和品牌氛围。</span>
+            <strong>真机与仿真实验</strong>
+            <span>在 Mobile ALOHA、Franka、RoboTwin、RLBench、LIBERO、RoboCasa、CALVIN 等平台部署与评测。</span>
           </div>
           <div class="skill">
-            <strong>内容写作</strong>
-            <span>把复杂想法写得清楚、可信、容易进入。</span>
+            <strong>研究聚焦</strong>
+            <span>长期跟踪具身操作前沿，在长时序建模、表征学习和动作速度优化方向具备 SOTA 项目经验。</span>
           </div>
         </div>
       </div>
@@ -668,6 +1422,40 @@
         </div>
       </div>
     </section>
+
+    <section id="aesthetic-life" class="life-section">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="section-kicker">Aesthetic Life</p>
+          <h2>审美与生活</h2>
+        </div>
+        <div class="word-cloud-frame" role="img" aria-label="审美与生活关键词词云">
+          <svg class="word-cloud" viewBox="0 0 2100 900" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <text class="primary-word" x="640" y="455">显著性</text>
+            <text class="large-word green-word" x="180" y="230">真实反馈</text>
+            <text class="large-word coral-word" x="1280" y="250">听无的间</text>
+            <text class="mid-word gold-word" x="320" y="595">生活审美化</text>
+            <text class="mid-word blue-word" x="1180" y="590">注意力生态位</text>
+            <text class="mid-word green-word" x="820" y="185">创造具象化</text>
+            <text class="small-word coral-word" x="1480" y="430">外部形式</text>
+            <text class="small-word gold-word" x="125" y="430">被抛</text>
+            <text class="small-word blue-word" x="780" y="705">解释系统</text>
+            <text class="small-word green-word" x="1540" y="720">亲力亲为</text>
+            <text class="small-word coral-word" x="540" y="760">复利动机</text>
+            <text class="small-word gold-word" x="1520" y="130">Awe</text>
+            <text class="small-word blue-word" x="240" y="755">共在推演</text>
+            <text class="small-word green-word" x="1010" y="795">选择成本</text>
+            <text class="small-word coral-word" x="1740" y="555">关系厚度</text>
+            <text class="small-word gold-word" x="310" y="120">经验整理</text>
+            <text class="small-word blue-word" x="970" y="315">反攫取</text>
+            <text class="small-word green-word" x="1360" y="805">具体语境</text>
+          </svg>
+        </div>
+        <div class="life-more">
+          <a href="aesthetic-life/">了解更多……</a>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -676,5 +1464,120 @@
       <span>Built with curiosity and care.</span>
     </div>
   </footer>
+
+  <script>
+    (() => {
+      const board = document.querySelector(".research-board");
+      if (!board) {
+        return;
+      }
+
+      const nodes = Array.from(board.querySelectorAll(".map-node"));
+      const panel = board.querySelector(".research-panel");
+      const panelTitle = panel.querySelector("h3");
+      const panelBody = panel.querySelector("p:not(.panel-kicker)");
+      const panelTags = panel.querySelector(".panel-tags");
+      let activeNode = null;
+
+      const clearPreview = () => {
+        if (activeNode) {
+          return;
+        }
+
+        board.classList.remove("is-previewing");
+        board.removeAttribute("data-active");
+      };
+
+      const showPreview = (node) => {
+        if (activeNode) {
+          return;
+        }
+
+        board.dataset.active = node.dataset.topic;
+        board.classList.add("is-previewing");
+      };
+
+      const renderPanel = (node) => {
+        panelTitle.textContent = node.dataset.panelTitle;
+        panelBody.textContent = node.dataset.panelBody;
+        panelTags.replaceChildren(
+          ...node.dataset.tags.split(",").map((tag) => {
+            const item = document.createElement("span");
+            item.textContent = tag.trim();
+            return item;
+          })
+        );
+      };
+
+      const clearActive = () => {
+        if (!activeNode) {
+          clearPreview();
+          return;
+        }
+
+        activeNode.classList.remove("is-active");
+        activeNode.setAttribute("aria-pressed", "false");
+        activeNode = null;
+        board.classList.remove("has-active");
+        board.removeAttribute("data-active");
+        panel.classList.remove("is-visible");
+        panel.setAttribute("aria-hidden", "true");
+      };
+
+      const activateNode = (node) => {
+        if (activeNode === node) {
+          clearActive();
+          return;
+        }
+
+        if (activeNode) {
+          activeNode.classList.remove("is-active");
+          activeNode.setAttribute("aria-pressed", "false");
+        }
+
+        activeNode = node;
+        node.classList.add("is-active");
+        node.setAttribute("aria-pressed", "true");
+        board.classList.remove("is-previewing");
+        board.classList.add("has-active");
+        board.dataset.active = node.dataset.topic;
+        renderPanel(node);
+        panel.classList.add("is-visible");
+        panel.setAttribute("aria-hidden", "false");
+      };
+
+      nodes.forEach((node) => {
+        node.setAttribute("aria-pressed", "false");
+
+        node.addEventListener("pointerenter", () => showPreview(node));
+        node.addEventListener("pointerleave", clearPreview);
+        node.addEventListener("focus", () => showPreview(node));
+        node.addEventListener("blur", clearPreview);
+        node.addEventListener("click", (event) => {
+          event.stopPropagation();
+          activateNode(node);
+        });
+      });
+
+      board.addEventListener("pointerleave", clearPreview);
+      board.addEventListener("click", (event) => {
+        if (!event.target.closest(".map-node") && !event.target.closest(".research-panel")) {
+          clearActive();
+        }
+      });
+
+      document.addEventListener("click", (event) => {
+        if (activeNode && !board.contains(event.target)) {
+          clearActive();
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          clearActive();
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
