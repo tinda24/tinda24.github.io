@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Tinda 的个人网站，展示作品、技能与联系方式。">
-  <title>Tinda | Personal Website</title>
+  <meta name="description" content="Qingda Hu's research homepage, focusing on robot manipulation, action representation learning, long-horizon modeling, and memory mechanisms.">
+  <title>Qingda Hu | Robotics Research</title>
   <style>
     :root {
       color-scheme: light;
@@ -18,6 +18,9 @@
       --gold: #b48b38;
       --night: #101719;
       --shadow: 0 20px 70px rgba(24, 32, 29, 0.14);
+      --content-max: 1040px;
+      --page-gutter: clamp(52px, 7vw, 128px);
+      --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     * {
@@ -26,6 +29,7 @@
 
     html {
       scroll-behavior: smooth;
+      scroll-padding-top: 88px;
     }
 
     body {
@@ -59,7 +63,7 @@
     }
 
     .nav {
-      width: min(1120px, calc(100% - 40px));
+      width: min(var(--content-max), calc(100% - var(--page-gutter) - var(--page-gutter)));
       min-height: 72px;
       margin: 0 auto;
       display: flex;
@@ -90,49 +94,17 @@
       display: flex;
       align-items: center;
       gap: 22px;
-      margin-left: 6px;
+      margin-left: auto;
       color: rgba(255, 253, 248, 0.82);
       font-size: 0.95rem;
     }
 
+    .nav-links a {
+      transition: color 180ms ease;
+    }
+
     .nav-links a:hover {
       color: #fffdf8;
-    }
-
-    .nav-map-link {
-      position: relative;
-      margin-left: auto;
-      padding: 8px 6px;
-      color: #ff645f;
-      font-size: 2rem;
-      font-weight: 500;
-      line-height: 1;
-      text-shadow: 0 0 24px rgba(255, 100, 95, 0.28);
-      transition: color 180ms ease, transform 180ms ease, text-shadow 180ms ease;
-    }
-
-    .nav-map-link::after {
-      content: "";
-      position: absolute;
-      left: 6px;
-      right: 6px;
-      bottom: 2px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, currentColor, transparent);
-      transform: scaleX(0.18);
-      opacity: 0;
-      transition: transform 180ms ease, opacity 180ms ease;
-    }
-
-    .nav-map-link:hover {
-      color: #ff8a68;
-      transform: translateY(-1px);
-      text-shadow: 0 0 34px rgba(255, 138, 104, 0.42);
-    }
-
-    .nav-map-link:hover::after {
-      transform: scaleX(1);
-      opacity: 1;
     }
 
     .hero {
@@ -151,7 +123,7 @@
       inset: 0;
       background:
         linear-gradient(90deg, rgba(16, 23, 25, 0.92) 0%, rgba(16, 23, 25, 0.66) 42%, rgba(16, 23, 25, 0.18) 100%),
-        url("assets/hero-tinda.png") center / cover no-repeat;
+        url("assets/hero-background.png") center / cover no-repeat;
       transform: scale(1.02);
     }
 
@@ -168,7 +140,7 @@
     .hero-content {
       position: relative;
       z-index: 1;
-      width: min(1120px, calc(100% - 40px));
+      width: min(var(--content-max), calc(100% - var(--page-gutter) - var(--page-gutter)));
       margin: 0 auto;
       padding: 128px 0 92px;
     }
@@ -185,7 +157,7 @@
     h1 {
       max-width: 760px;
       margin: 0;
-      font-size: 6.5rem;
+      font-size: 5.5rem;
       line-height: 0.95;
       letter-spacing: 0;
     }
@@ -235,8 +207,156 @@
       z-index: 2;
     }
 
+    .section-float-nav {
+      position: fixed;
+      left: max(18px, calc((100vw - 1440px) / 2));
+      top: 50%;
+      z-index: 20;
+      padding: 16px 12px;
+      border: 1px solid rgba(255, 253, 248, 0.16);
+      border-radius: 999px;
+      background: rgba(16, 23, 25, 0.66);
+      box-shadow: 0 16px 44px rgba(16, 23, 25, 0.18);
+      backdrop-filter: blur(16px);
+      transform: translateY(-50%);
+    }
+
+    .section-float-nav ul {
+      position: relative;
+      display: grid;
+      gap: 16px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .section-float-nav ul::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 10px;
+      bottom: 10px;
+      border-left: 1px dashed rgba(255, 253, 248, 0.34);
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .section-float-nav li {
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+
+    .section-float-nav a {
+      position: relative;
+      width: 20px;
+      height: 20px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #fffdf8;
+      outline: none;
+    }
+
+    .float-nav-dot {
+      position: relative;
+      z-index: 2;
+      width: 7px;
+      height: 7px;
+      border: 1px solid rgba(255, 253, 248, 0.88);
+      border-radius: 50%;
+      background: #18201d;
+      box-shadow: 0 0 0 3px rgba(16, 23, 25, 0.72);
+      transition: width 220ms ease, height 220ms ease, background 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+    }
+
+    .float-nav-dot::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border: 1px solid currentColor;
+      border-radius: inherit;
+      opacity: 0;
+      transform: scale(1);
+    }
+
+    .float-nav-label {
+      position: absolute;
+      left: 31px;
+      top: 50%;
+      min-width: max-content;
+      padding: 6px 10px;
+      border: 1px solid rgba(255, 253, 248, 0.14);
+      border-radius: 6px;
+      color: #fffdf8;
+      background: rgba(16, 23, 25, 0.9);
+      box-shadow: 0 10px 28px rgba(16, 23, 25, 0.18);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-8px, -50%);
+      transition: opacity 180ms ease, transform 220ms ease;
+    }
+
+    .section-float-nav a:hover .float-nav-dot,
+    .section-float-nav a:focus-visible .float-nav-dot,
+    .section-float-nav a.is-active .float-nav-dot {
+      width: 11px;
+      height: 11px;
+      border-color: #9ce0c8;
+      background: #9ce0c8;
+      box-shadow: 0 0 0 4px rgba(156, 224, 200, 0.14), 0 0 18px rgba(156, 224, 200, 0.48);
+    }
+
+    .section-float-nav a:hover .float-nav-dot::after,
+    .section-float-nav a:focus-visible .float-nav-dot::after {
+      animation: floatNavRipple 900ms ease-out infinite;
+    }
+
+    .section-float-nav a:hover .float-nav-label,
+    .section-float-nav a:focus-visible .float-nav-label {
+      opacity: 1;
+      transform: translate(0, -50%);
+    }
+
+    .section-float-nav a.is-active .float-nav-label {
+      color: #9ce0c8;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .section-float-nav:has(a:hover) .float-nav-label {
+        color: rgba(255, 253, 248, 0.5);
+        opacity: 0.34;
+        transform: translate(0, -50%);
+      }
+
+      .section-float-nav:has(a:hover) a:hover .float-nav-label {
+        color: #9ce0c8;
+        opacity: 1;
+        transform: translate(0, -50%) scale(1.04);
+      }
+
+      .section-float-nav:has(a:hover) a.is-active:not(:hover) .float-nav-label {
+        color: rgba(156, 224, 200, 0.62);
+      }
+    }
+
+    @keyframes floatNavRipple {
+      0% {
+        opacity: 0.65;
+        transform: scale(1);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(2.4);
+      }
+    }
+
     .section {
-      padding: 86px 0;
+      padding: 108px 0;
     }
 
     .section.alt {
@@ -244,13 +364,15 @@
     }
 
     .wrap {
-      width: min(1120px, calc(100% - 40px));
+      position: relative;
+      z-index: 1;
+      width: min(var(--content-max), calc(100% - var(--page-gutter) - var(--page-gutter)));
       margin: 0 auto;
     }
 
     .section-head {
       max-width: 710px;
-      margin-bottom: 34px;
+      margin-bottom: 44px;
     }
 
     .section-kicker {
@@ -294,6 +416,13 @@
       color: rgba(255, 253, 248, 0.72);
     }
 
+    .research-focus {
+      display: block;
+      margin-bottom: 8px;
+      color: #9f9cff;
+      font-weight: 900;
+    }
+
     .research-board {
       position: relative;
       min-height: 620px;
@@ -329,46 +458,57 @@
       text-transform: uppercase;
     }
 
-    .axis-y {
-      left: 22px;
-      top: 58%;
-      transform: rotate(-90deg);
-      transform-origin: left center;
-    }
-
     .axis-x {
-      right: 34px;
-      bottom: 28px;
+      right: 58px;
+      bottom: 25px;
+      color: rgba(255, 253, 248, 0.5);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
     }
 
     .axis-arrow {
       position: absolute;
       z-index: 1;
-      background: rgba(255, 253, 248, 0.68);
       pointer-events: none;
     }
 
     .axis-arrow.x {
-      left: 56px;
+      left: 72px;
       right: 58px;
       bottom: 72px;
-      height: 2px;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(156, 224, 200, 0.48), rgba(255, 253, 248, 0.68));
     }
 
     .axis-arrow.y {
       left: 72px;
       top: 56px;
-      bottom: 78px;
-      width: 2px;
+      bottom: 72px;
+      width: 1px;
+      background: linear-gradient(0deg, rgba(156, 224, 200, 0.48), rgba(255, 253, 248, 0.68));
+    }
+
+    .axis-arrow.x::before {
+      content: "";
+      position: absolute;
+      left: -4px;
+      top: 50%;
+      width: 8px;
+      height: 8px;
+      border: 1px solid rgba(156, 224, 200, 0.76);
+      border-radius: 50%;
+      background: #172220;
+      box-shadow: 0 0 0 5px rgba(156, 224, 200, 0.08);
+      transform: translateY(-50%);
     }
 
     .axis-arrow::after {
       content: "";
       position: absolute;
-      width: 10px;
-      height: 10px;
-      border-top: 2px solid rgba(255, 253, 248, 0.68);
-      border-right: 2px solid rgba(255, 253, 248, 0.68);
+      width: 8px;
+      height: 8px;
+      border-top: 1px solid rgba(255, 253, 248, 0.76);
+      border-right: 1px solid rgba(255, 253, 248, 0.76);
     }
 
     .axis-arrow.x::after {
@@ -411,17 +551,15 @@
       animation-duration: 4.8s;
     }
 
-    .research-board.has-active .route-line,
     .research-board.is-previewing .route-line {
       opacity: 0.16;
     }
 
     .research-board[data-active="observe"] [data-route~="observe"],
-    .research-board[data-active="encode"] [data-route~="encode"],
     .research-board[data-active="dynamics"] [data-route~="dynamics"],
     .research-board[data-active="fusion"] [data-route~="fusion"],
     .research-board[data-active="action"] [data-route~="action"],
-    .research-board[data-active="distance"] [data-route~="distance"] {
+    .research-board[data-active="latent"] [data-route~="latent"] {
       opacity: 0.95;
       stroke-width: 7;
       filter: drop-shadow(0 0 18px rgba(156, 224, 200, 0.42));
@@ -445,7 +583,7 @@
       text-align: left;
       background: color-mix(in srgb, var(--node-color), #101719 70%);
       box-shadow: 0 16px 44px rgba(0, 0, 0, 0.22);
-      cursor: pointer;
+      cursor: default;
       transform: translate(-50%, -50%);
       transition:
         width 260ms ease,
@@ -519,14 +657,9 @@
       transition: max-height 260ms ease, margin 260ms ease, opacity 220ms ease, transform 220ms ease;
     }
 
-    .research-board.has-active .map-node {
-      opacity: 0.56;
-      transform: translate(-50%, -50%) scale(0.96);
-    }
-
     .map-node:hover,
-    .map-node:focus-visible,
-    .map-node.is-active {
+    .map-node:focus-visible {
+      z-index: 6;
       width: 238px;
       min-height: 168px;
       opacity: 1;
@@ -537,32 +670,17 @@
     }
 
     .map-node:hover .node-detail,
-    .map-node:focus-visible .node-detail,
-    .map-node.is-active .node-detail {
+    .map-node:focus-visible .node-detail {
       max-height: 96px;
       margin-top: 12px;
       opacity: 1;
       transform: translateY(0);
     }
 
-    .map-node.is-active {
-      z-index: 6;
-    }
-
-    .map-node.is-active::after {
-      animation-duration: 1.1s;
-    }
-
     .map-node[data-topic="observe"] {
       --node-color: #15cdbc;
-      --x: 15%;
+      --x: 18%;
       --y: 34%;
-    }
-
-    .map-node[data-topic="encode"] {
-      --node-color: #dca637;
-      --x: 29%;
-      --y: 20%;
     }
 
     .map-node[data-topic="dynamics"] {
@@ -573,8 +691,8 @@
 
     .map-node[data-topic="fusion"] {
       --node-color: #72b8d6;
-      --x: 58%;
-      --y: 68%;
+      --x: 52%;
+      --y: 19%;
     }
 
     .map-node[data-topic="action"] {
@@ -583,71 +701,145 @@
       --y: 34%;
     }
 
-    .map-node[data-topic="distance"] {
-      --node-color: #8ccf74;
-      --x: 76%;
-      --y: 70%;
-    }
-
-    .research-panel {
+    .map-project-module {
+      --module-color: #15cdbc;
+      --x: 18%;
       position: absolute;
-      right: 28px;
-      bottom: 108px;
+      left: var(--x);
+      top: calc(34% + 84px);
       z-index: 5;
-      width: min(340px, calc(100% - 56px));
-      padding: 22px;
-      border: 1px solid rgba(255, 253, 248, 0.16);
+      width: 230px;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      padding: 12px 46px 12px 15px;
+      border: 1px solid color-mix(in srgb, var(--module-color), #fff 28%);
       border-radius: 8px;
-      background: rgba(16, 23, 25, 0.82);
-      box-shadow: 0 26px 70px rgba(0, 0, 0, 0.32);
-      backdrop-filter: blur(18px);
-      opacity: 0;
-      transform: translateY(18px) scale(0.98);
-      pointer-events: none;
-      transition: opacity 260ms ease, transform 260ms ease;
+      appearance: none;
+      color: #fffdf8;
+      background:
+        linear-gradient(90deg, color-mix(in srgb, var(--module-color), transparent 89%) 1px, transparent 1px),
+        color-mix(in srgb, var(--module-color), #101719 78%);
+      background-size: 24px 24px;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.2);
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transform: translateX(-50%);
+      transition: transform 260ms var(--ease-out), border-color 220ms ease, background 220ms ease, box-shadow 260ms var(--ease-out);
     }
 
-    .research-panel.is-visible {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      pointer-events: auto;
+    .map-project-module::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -27px;
+      height: 26px;
+      border-left: 1px dashed color-mix(in srgb, var(--module-color), #fff 28%);
+      transform: translateX(-50%);
     }
 
-    .panel-kicker {
-      margin: 0 0 8px;
-      color: #9ce0c8;
-      font-size: 0.78rem;
+    .map-project-module::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -31px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--module-color);
+      box-shadow: 0 0 0 5px color-mix(in srgb, var(--module-color), transparent 84%);
+      transform: translateX(-50%);
+    }
+
+    .map-project-module[data-project="autospeed"] {
+      --module-color: #dc6d4f;
+      --x: 78%;
+    }
+
+    .map-project-module[data-project="lam"] {
+      --module-color: #8ccf74;
+      --x: 52%;
+      top: calc(72% - 36px);
+    }
+
+    .map-project-module[data-project="lam"]::before,
+    .map-project-module[data-project="lam"]::after {
+      display: none;
+    }
+
+    .map-project-module--upcoming {
+      --module-color: #d975c6;
+      --x: 78%;
+      top: calc(34% - 176px);
+      min-height: 88px;
+      padding: 13px 46px 13px 15px;
+    }
+
+    .map-project-module--upcoming::before {
+      top: auto;
+      bottom: -31px;
+      height: 30px;
+    }
+
+    .map-project-module--upcoming::after {
+      top: auto;
+      bottom: -35px;
+    }
+
+    .map-project-module-copy {
+      display: grid;
+      gap: 2px;
+    }
+
+    .map-project-label {
+      color: color-mix(in srgb, var(--module-color), #fff 48%);
+      font-size: 0.68rem;
       font-weight: 900;
-      letter-spacing: 0;
+      letter-spacing: 0.09em;
       text-transform: uppercase;
     }
 
-    .research-panel h3 {
-      margin: 0;
-      font-size: 1.35rem;
-      line-height: 1.2;
-      letter-spacing: 0;
+    .map-project-status {
+      color: rgba(255, 253, 248, 0.52);
+      font-size: 0.68rem;
+      font-weight: 700;
     }
 
-    .research-panel p {
-      margin: 12px 0 0;
-      color: rgba(255, 253, 248, 0.74);
-      font-size: 0.96rem;
+    .map-project-module strong {
+      font-size: 0.88rem;
+      line-height: 1.22;
     }
 
-    .panel-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 16px;
+    .map-project-arrow {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 253, 248, 0.2);
+      border-radius: 6px;
+      background: rgba(255, 253, 248, 0.06);
+      transform: translateY(-50%);
+      transition: color 220ms ease, background 220ms ease, transform 260ms var(--ease-out);
     }
 
-    .panel-tags span {
-      padding: 6px 9px;
-      border: 1px solid rgba(255, 253, 248, 0.14);
-      border-radius: 999px;
-      color: rgba(255, 253, 248, 0.78);
-      font-size: 0.8rem;
+    .map-project-module:hover,
+    .map-project-module:focus-visible {
+      border-color: color-mix(in srgb, var(--module-color), #fff 58%);
+      background-color: color-mix(in srgb, var(--module-color), #101719 66%);
+      box-shadow: 0 22px 54px color-mix(in srgb, var(--module-color), rgba(0, 0, 0, 0.24) 80%);
+      outline: none;
+      transform: translateX(-50%) translateY(-4px);
+    }
+
+    .map-project-module:hover .map-project-arrow,
+    .map-project-module:focus-visible .map-project-arrow {
+      color: var(--night);
+      background: #fffdf8;
+      transform: translate(2px, calc(-50% - 2px));
     }
 
     @keyframes routeFlow {
@@ -666,338 +858,958 @@
       }
     }
 
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 28px;
-      align-items: start;
-    }
-
-    .statement {
-      padding: 34px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-      box-shadow: var(--shadow);
-    }
-
-    .statement p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 1.05rem;
-    }
-
-    .stats {
-      display: grid;
-      gap: 14px;
-    }
-
-    .stat {
-      padding: 22px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255, 253, 248, 0.72);
-    }
-
-    .stat strong {
-      display: block;
-      color: var(--ink);
-      font-size: 1.55rem;
-      line-height: 1;
-    }
-
-    .stat span {
-      display: block;
-      margin-top: 8px;
-      color: var(--muted);
-    }
-
-    .work-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .work-card {
-      min-height: 260px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 24px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-      transition: transform 180ms ease, box-shadow 180ms ease;
-    }
-
-    .work-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow);
-    }
-
-    .work-card:nth-child(2) {
-      border-top: 5px solid var(--coral);
-    }
-
-    .work-card:nth-child(3) {
-      border-top: 5px solid var(--gold);
-    }
-
-    .work-card:nth-child(4) {
-      border-top: 5px solid #72b8d6;
-    }
-
-    .work-card:first-child {
-      border-top: 5px solid var(--green);
-    }
-
-    .work-card h3 {
-      margin: 0 0 12px;
-      font-size: 1.35rem;
-      line-height: 1.2;
-      letter-spacing: 0;
-    }
-
-    .work-card p {
-      margin: 0;
-      color: var(--muted);
-    }
-
-    .tag-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 26px;
-    }
-
-    .tag {
-      padding: 6px 10px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: var(--muted);
-      font-size: 0.86rem;
-      background: #f7f4ed;
-    }
-
-    .skills {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .skill {
-      min-height: 128px;
-      padding: 20px;
-      border-left: 4px solid var(--green);
-      background: #fffdf8;
-    }
-
-    .skill:nth-child(2) {
-      border-color: var(--coral);
-    }
-
-    .skill:nth-child(3) {
-      border-color: var(--gold);
-    }
-
-    .skill:nth-child(4) {
-      border-color: #2d5f88;
-    }
-
-    .skill strong {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 1.05rem;
-    }
-
-    .skill span {
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .contact {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 24px;
-      align-items: center;
-      padding: 36px;
-      border-radius: 8px;
-      background: var(--night);
-      color: #fffdf8;
-    }
-
-    .contact h2 {
-      font-size: 2.8rem;
-    }
-
-    .contact p {
-      max-width: 620px;
-      margin: 14px 0 0;
-      color: rgba(255, 253, 248, 0.74);
-    }
-
-    .contact-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: flex-end;
-    }
-
-    .contact-links a {
-      min-width: 112px;
-      padding: 11px 14px;
-      border: 1px solid rgba(255, 253, 248, 0.2);
-      border-radius: 8px;
-      text-align: center;
-      font-weight: 800;
-    }
-
-    .contact-links a:hover {
-      background: #fffdf8;
-      color: var(--night);
-    }
-
-    .life-section {
-      padding: 88px 0 96px;
-      background: #ebe7dd;
-    }
-
-    .word-cloud-frame {
+    .projects-section {
       position: relative;
-      aspect-ratio: 21 / 9;
-      border: 1px solid rgba(24, 32, 29, 0.12);
-      border-radius: 8px;
+      padding: 142px 0 150px;
       overflow: hidden;
-      background:
-        radial-gradient(circle at 22% 26%, rgba(15, 123, 92, 0.24), transparent 28%),
-        radial-gradient(circle at 76% 32%, rgba(220, 109, 79, 0.2), transparent 28%),
-        radial-gradient(circle at 56% 80%, rgba(180, 139, 56, 0.16), transparent 28%),
-        linear-gradient(135deg, #101719 0%, #182520 54%, #111818 100%);
-      box-shadow: var(--shadow);
       isolation: isolate;
+      color: #fffdf8;
+      border-top: 1px solid rgba(255, 253, 248, 0.08);
+      background:
+        radial-gradient(circle at 8% 12%, rgba(15, 123, 92, 0.2), transparent 30%),
+        radial-gradient(circle at 92% 82%, rgba(220, 109, 79, 0.11), transparent 32%),
+        linear-gradient(145deg, #111a19 0%, #16211f 52%, #101819 100%);
     }
 
-    .word-cloud-frame::before {
+    .projects-section::before,
+    .about-section::before,
+    .blogs-section::before {
       content: "";
       position: absolute;
-      inset: 18px;
-      border: 1px solid rgba(255, 253, 248, 0.09);
-      border-radius: 8px;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(255, 253, 248, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 253, 248, 0.035) 1px, transparent 1px);
+      background-size: 42px 42px;
+      -webkit-mask-image: linear-gradient(180deg, transparent, #000 16%, #000 84%, transparent);
+      mask-image: linear-gradient(180deg, transparent, #000 16%, #000 84%, transparent);
       pointer-events: none;
     }
 
-    .word-cloud {
+    .projects-heading,
+    .blogs-heading {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr minmax(320px, 0.72fr);
+      align-items: end;
+      gap: 48px;
+      max-width: none;
+      padding-left: 26px;
+    }
+
+    .projects-heading,
+    .about-heading,
+    .blogs-heading {
+      margin-bottom: 62px;
+    }
+
+    .projects-section .section-kicker,
+    .about-section .section-kicker,
+    .blogs-section .section-kicker {
+      color: #9ce0c8;
+    }
+
+    .projects-section .lead,
+    .about-section .lead,
+    .blogs-section .lead {
+      color: rgba(255, 253, 248, 0.62);
+    }
+
+    .projects-heading::before,
+    .about-heading::before,
+    .blogs-heading::before {
+      content: "";
       position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
+      left: 0;
+      top: 4px;
+      bottom: 4px;
+      width: 1px;
+      background: linear-gradient(180deg, var(--green), rgba(15, 123, 92, 0.06));
     }
 
-    .word-cloud text {
-      font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
-      font-weight: 800;
-      letter-spacing: 0;
-      paint-order: stroke;
-      stroke: rgba(16, 23, 25, 0.26);
-      stroke-width: 2px;
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: wordBreath 6s ease-in-out infinite;
+    .projects-heading::after,
+    .about-heading::after,
+    .blogs-heading::after {
+      content: "";
+      position: absolute;
+      left: -4px;
+      top: 3px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 7px rgba(15, 123, 92, 0.08), 0 0 22px rgba(15, 123, 92, 0.24);
+      animation: sectionNode 2.8s ease-out infinite;
     }
 
-    .word-cloud text:nth-child(2n) {
-      animation-delay: -1.8s;
+    .projects-heading .lead,
+    .blogs-heading .lead {
+      margin: 0 0 8px;
     }
 
-    .word-cloud text:nth-child(3n) {
-      animation-delay: -3.1s;
+    .project-bento {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
     }
 
-    .word-cloud .primary-word {
-      fill: #fffdf8;
-      font-size: 112px;
-      filter: drop-shadow(0 0 18px rgba(255, 253, 248, 0.16));
+    .project-tile {
+      position: relative;
+      grid-column: 1;
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(150px, auto) 34px;
+      align-items: center;
+      gap: 22px;
+      padding: 20px 26px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 253, 248, 0.13);
+      border-radius: 10px;
+      color: #fffdf8;
+      background: rgba(255, 253, 248, 0.045);
+      box-shadow: 0 18px 54px rgba(0, 0, 0, 0.18);
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transform: translateY(0);
+      transition: transform 320ms var(--ease-out), box-shadow 320ms var(--ease-out), border-color 240ms ease;
     }
 
-    .word-cloud .green-word {
-      fill: #9ce0c8;
+    .project-tile::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 2;
+      width: 3px;
+      background: linear-gradient(180deg, var(--tile-accent), color-mix(in srgb, var(--tile-accent), #fff 54%));
+      transform: scaleY(0.28);
+      transform-origin: top;
+      transition: transform 420ms var(--ease-out);
     }
 
-    .word-cloud .coral-word {
-      fill: #ff8a68;
+    .project-tile--wide {
+      grid-column: 1;
+      min-height: 0;
     }
 
-    .word-cloud .gold-word {
-      fill: #e4c36f;
+    .project-tile--tall {
+      grid-column: 1;
+      min-height: 0;
     }
 
-    .word-cloud .blue-word {
-      fill: #97cbe0;
+    .project-tile:hover,
+    .project-tile:focus-visible {
+      transform: translateY(-6px);
+      border-color: color-mix(in srgb, var(--tile-accent), transparent 48%);
+      box-shadow: 0 30px 78px rgba(0, 0, 0, 0.3);
+      outline: none;
     }
 
-    .word-cloud .large-word {
-      font-size: 78px;
+    .project-tile:hover::after,
+    .project-tile:focus-visible::after {
+      transform: scaleY(1);
     }
 
-    .word-cloud .mid-word {
-      font-size: 54px;
-    }
-
-    .word-cloud .small-word {
-      font-size: 36px;
-      opacity: 0.82;
-    }
-
-    .life-more {
+    .project-tile-copy {
       display: flex;
-      justify-content: flex-end;
-      margin-top: 18px;
+      flex-direction: column;
+      gap: 4px;
+      padding: 0;
     }
 
-    .life-more a {
+    .project-eyebrow {
       display: inline-flex;
       align-items: center;
-      min-height: 44px;
-      padding: 0 2px;
-      color: var(--green);
-      font-size: 1.05rem;
+      gap: 8px;
+      color: var(--tile-accent);
+      font-size: 0.68rem;
       font-weight: 900;
-      transition: color 180ms ease, transform 180ms ease;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
-    .life-more a:hover {
-      color: var(--coral);
-      transform: translateX(4px);
+    .project-eyebrow::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 0 5px color-mix(in srgb, currentColor, transparent 88%);
     }
 
-    @keyframes wordBreath {
-      0%,
-      100% {
-        transform: translateY(0) scale(1);
-        opacity: 0.88;
-      }
+    .project-tile-copy strong {
+      max-width: 92%;
+      font-size: 1.34rem;
+      line-height: 1.08;
+      letter-spacing: -0.025em;
+    }
 
-      50% {
-        transform: translateY(-4px) scale(1.015);
-        opacity: 1;
-      }
+    .project-tile--wide .project-tile-copy strong,
+    .project-tile--tall .project-tile-copy strong {
+      font-size: 1.34rem;
+    }
+
+    .project-tile-copy > span:last-child {
+      color: rgba(255, 253, 248, 0.62);
+      font-size: 0.84rem;
+      line-height: 1.35;
+    }
+
+    .project-tile-metric {
+      margin: 0;
+      padding: 0;
+      color: rgba(255, 253, 248, 0.84);
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-align: right;
+    }
+
+    .project-open {
+      position: static;
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 253, 248, 0.18);
+      border-radius: 8px;
+      color: #fffdf8;
+      background: rgba(16, 23, 25, 0.76);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      font-size: 1.05rem;
+      transition: transform 260ms var(--ease-out), background 220ms ease, color 220ms ease;
+    }
+
+    .project-tile:hover .project-open,
+    .project-tile:focus-visible .project-open {
+      color: #fff;
+      background: var(--tile-accent);
+      transform: translate(2px, -2px);
+    }
+
+    .references-block {
+      margin-top: 118px;
+      padding-top: 76px;
+      border-top: 1px solid rgba(255, 253, 248, 0.12);
+    }
+
+    .references-heading {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 38px;
+      align-items: start;
+    }
+
+    .references-heading .section-kicker {
+      margin: 8px 0 0;
+    }
+
+    .references-heading h3 {
+      margin: 0;
+      font-size: 2rem;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+    }
+
+    .references-heading p {
+      max-width: 640px;
+      margin: 14px 0 0;
+      color: rgba(255, 253, 248, 0.56);
+      font-size: 0.92rem;
+    }
+
+    .reference-list {
+      margin: 48px 0 0;
+      padding: 0;
+      border-top: 1px solid rgba(255, 253, 248, 0.12);
+      list-style: none;
+    }
+
+    .reference-item {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: start;
+      padding: 30px 0;
+      border-bottom: 1px solid rgba(255, 253, 248, 0.1);
+    }
+
+    .reference-index {
+      color: #9ce0c8;
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+
+    .reference-citation {
+      margin: 0;
+      color: rgba(255, 253, 248, 0.68);
+      font-size: 0.94rem;
+      line-height: 1.72;
+    }
+
+    .reference-citation strong,
+    .reference-citation em {
+      color: #fffdf8;
+    }
+
+    .cofirst-mark {
+      margin-left: 2px;
+      color: #9ce0c8;
+      font-size: 0.72em;
+      font-weight: 900;
+      vertical-align: super;
+    }
+
+    .reference-note {
+      display: block;
+      margin-top: 7px;
+      color: rgba(255, 253, 248, 0.48);
+      font-size: 0.78rem;
+    }
+
+    .reference-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 10px;
+      border: 1px solid rgba(255, 253, 248, 0.18);
+      border-radius: 6px;
+      color: rgba(255, 253, 248, 0.72);
+      font-size: 0.74rem;
+      font-weight: 850;
+      white-space: nowrap;
+      transition: color 200ms ease, border-color 200ms ease, background 200ms ease, transform 200ms var(--ease-out);
+    }
+
+    .reference-link:hover,
+    .reference-link:focus-visible {
+      color: var(--night);
+      border-color: #9ce0c8;
+      background: #9ce0c8;
+      outline: none;
+      transform: translateY(-2px);
+    }
+
+    .theme-green { --tile-accent: #0f7b5c; }
+    .theme-coral { --tile-accent: #c9573b; }
+    .theme-gold { --tile-accent: #9a741f; }
+    .theme-blue { --tile-accent: #327ea3; }
+    .theme-violet { --tile-accent: #735a9b; }
+    .theme-pink { --tile-accent: #d975c6; }
+
+    .project-dialog {
+      width: min(1000px, calc(100% - 36px));
+      max-height: min(90dvh, 920px);
+      margin: auto;
+      padding: 0;
+      overflow: hidden auto;
+      border: 1px solid rgba(255, 253, 248, 0.14);
+      border-radius: 12px;
+      color: #fffdf8;
+      background: #121c1b;
+      box-shadow: 0 42px 140px rgba(6, 13, 14, 0.48);
+    }
+
+    .project-dialog::backdrop {
+      background: rgba(7, 13, 14, 0.74);
+      backdrop-filter: blur(8px);
+    }
+
+    .project-dialog[open] {
+      animation: modalIn 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .project-modal-shell {
+      position: relative;
+      min-height: 100%;
+    }
+
+    .project-modal-close {
+      position: absolute;
+      z-index: 3;
+      top: 16px;
+      right: 16px;
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      padding: 0 0 3px;
+      border: 1px solid rgba(255, 253, 248, 0.2);
+      border-radius: 50%;
+      color: #fffdf8;
+      background: rgba(16, 23, 25, 0.86);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+      font: 400 1.8rem/1 system-ui, sans-serif;
+      cursor: pointer;
+    }
+
+    .project-modal-close:hover,
+    .project-modal-close:focus-visible {
+      color: var(--night);
+      background: #fffdf8;
+      outline: none;
+    }
+
+    .project-modal-image {
+      width: 100%;
+      height: 310px;
+      object-fit: contain;
+      padding: 30px;
+      background: #edf0eb;
+      border-bottom: 1px solid rgba(255, 253, 248, 0.12);
+    }
+
+    .project-modal-abstract {
+      min-height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      padding: 48px;
+      color: #45315e;
+      background:
+        radial-gradient(circle at 25% 30%, rgba(255, 255, 255, 0.72), transparent 24%),
+        linear-gradient(135deg, #eee4f8, #d8ece7 58%, #f4e0d8);
+    }
+
+    .project-modal-abstract span,
+    .project-modal-abstract b {
+      padding: 12px 16px;
+      border: 1px solid rgba(69, 49, 94, 0.18);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.65);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+    }
+
+    .project-modal-abstract i {
+      width: 70px;
+      height: 1px;
+      background: currentColor;
+    }
+
+    .project-modal-abstract--tcla {
+      color: #642c5b;
+      background:
+        radial-gradient(circle at 22% 26%, rgba(255, 255, 255, 0.76), transparent 25%),
+        linear-gradient(135deg, #f2e4f1, #e4e9f6 52%, #dceee8);
+    }
+
+    .project-modal-abstract--tcla b {
+      color: #fffdf8;
+      border-color: rgba(100, 44, 91, 0.22);
+      background: #9b4b8e;
+      box-shadow: 0 12px 34px rgba(100, 44, 91, 0.22);
+    }
+
+    .project-modal-body {
+      padding: 48px 52px 54px;
+      background:
+        linear-gradient(rgba(255, 253, 248, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 253, 248, 0.025) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    .project-modal-kicker {
+      margin: 0 0 8px;
+      color: #9ce0c8;
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .project-modal-body h2 {
+      max-width: 800px;
+      margin: 0;
+      font-size: 2.45rem;
+      line-height: 1.02;
+      letter-spacing: -0.035em;
+    }
+
+    .project-modal-summary {
+      max-width: 800px;
+      margin: 18px 0 0;
+      color: rgba(255, 253, 248, 0.62);
+      font-size: 1.06rem;
+    }
+
+    .project-modal-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .project-modal-metrics div {
+      padding: 22px;
+      border: 1px solid rgba(255, 253, 248, 0.13);
+      border-radius: 8px;
+      background: rgba(255, 253, 248, 0.045);
+    }
+
+    .project-modal-metrics strong,
+    .project-modal-metrics span {
+      display: block;
+    }
+
+    .project-modal-metrics strong {
+      font-size: 1.62rem;
+      line-height: 1;
+    }
+
+    .project-modal-metrics span {
+      margin-top: 8px;
+      color: rgba(255, 253, 248, 0.56);
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+
+    .project-modal-columns {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 36px;
+      margin-top: 38px;
+      padding-top: 34px;
+      border-top: 1px solid rgba(255, 253, 248, 0.12);
+    }
+
+    .project-modal-columns h3 {
+      margin: 0 0 8px;
+      font-size: 1.03rem;
+    }
+
+    .project-modal-columns p,
+    .project-availability {
+      margin: 0;
+      color: rgba(255, 253, 248, 0.6);
+      font-size: 0.94rem;
+    }
+
+    .project-modal-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 36px;
+    }
+
+    .project-modal-links a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 0 15px;
+      border-radius: 8px;
+      color: var(--night);
+      background: #9ce0c8;
+      font-size: 0.84rem;
+      font-weight: 900;
+      transition: transform 180ms ease, background 180ms ease;
+    }
+
+    .project-modal-links a:hover {
+      transform: translateY(-2px);
+      background: #fffdf8;
+    }
+
+    .project-availability {
+      margin-top: 28px;
+      padding: 13px 15px;
+      border-left: 3px solid #735a9b;
+      background: rgba(115, 90, 155, 0.15);
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(14px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    body:has(.project-dialog[open]) {
+      overflow: hidden;
+    }
+
+    .about-section {
+      position: relative;
+      padding: 150px 0 158px;
+      overflow: hidden;
+      isolation: isolate;
+      color: #fffdf8;
+      border-top: 1px solid rgba(255, 253, 248, 0.08);
+      background:
+        radial-gradient(circle at 86% 18%, rgba(15, 123, 92, 0.16), transparent 26%),
+        radial-gradient(circle at 12% 88%, rgba(114, 184, 214, 0.08), transparent 28%),
+        #121c1b;
+    }
+
+    .about-heading {
+      position: relative;
+      max-width: 840px;
+      padding-left: 26px;
+    }
+
+    .about-overview {
+      display: block;
+    }
+
+    .about-statement,
+    .about-card {
+      border: 1px solid rgba(255, 253, 248, 0.13);
+      border-radius: 10px;
+      background: rgba(255, 253, 248, 0.045);
+    }
+
+    .about-statement {
+      position: relative;
+      padding: 54px;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(255, 253, 248, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 253, 248, 0.035) 1px, transparent 1px),
+        rgba(255, 253, 248, 0.04);
+      background-size: 30px 30px;
+      box-shadow: 0 18px 58px rgba(0, 0, 0, 0.16);
+      transition: transform 320ms var(--ease-out), border-color 240ms ease, box-shadow 320ms var(--ease-out);
+    }
+
+    .about-statement::after {
+      content: "";
+      position: absolute;
+      left: 54px;
+      right: 54px;
+      bottom: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green), var(--coral), transparent 78%);
+      transform: scaleX(0.34);
+      transform-origin: left;
+      transition: transform 440ms var(--ease-out);
+    }
+
+    .about-statement:hover {
+      border-color: rgba(156, 224, 200, 0.32);
+      box-shadow: 0 28px 76px rgba(0, 0, 0, 0.25);
+      transform: translateY(-4px);
+    }
+
+    .about-statement:hover::after {
+      transform: scaleX(1);
+    }
+
+    .about-statement p {
+      margin: 0;
+      color: rgba(255, 253, 248, 0.62);
+    }
+
+    .about-statement .about-lede {
+      max-width: 850px;
+      color: #fffdf8;
+      font-size: 1.38rem;
+      font-weight: 760;
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+    }
+
+    .about-statement p + p {
+      max-width: 900px;
+      margin-top: 20px;
+    }
+
+    .about-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .about-card {
+      padding: 30px;
+    }
+
+    .education-stack {
+      display: grid;
+      grid-template-columns: minmax(150px, 0.34fr) repeat(2, minmax(0, 1fr));
+      align-items: stretch;
+      padding: 0;
+      overflow: hidden;
+      box-shadow: 0 18px 58px rgba(0, 0, 0, 0.13);
+    }
+
+    .education-stack .card-label {
+      display: flex;
+      align-items: center;
+      margin: 0;
+      padding: 34px 30px;
+    }
+
+    .card-label {
+      margin: 0 0 16px;
+      color: var(--green);
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .education-row strong {
+      margin: 0;
+      font-size: 1.28rem;
+    }
+
+    .education-row p {
+      margin: 3px 0 0;
+      color: rgba(255, 253, 248, 0.58);
+    }
+
+    .education-row {
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 34px 30px;
+      border-left: 1px solid rgba(255, 253, 248, 0.12);
+      transition: color 220ms ease, background 220ms ease;
+    }
+
+    .education-row + .education-row {
+      border-top: 0;
+    }
+
+    .education-row::after {
+      content: "";
+      position: absolute;
+      left: -1px;
+      top: 22%;
+      bottom: 22%;
+      width: 2px;
+      background: var(--green);
+      transform: scaleY(0);
+      transition: transform 260ms var(--ease-out);
+    }
+
+    .education-row:hover {
+      background: rgba(156, 224, 200, 0.055);
+    }
+
+    .education-row:hover::after {
+      transform: scaleY(1);
+    }
+
+    .education-row strong {
+      font-size: 1.04rem;
+    }
+
+    .education-row p {
+      font-size: 0.85rem;
+    }
+
+    .capability-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .capability-row span {
+      padding: 10px 15px;
+      border: 1px solid rgba(255, 253, 248, 0.14);
+      border-radius: 7px;
+      color: rgba(255, 253, 248, 0.66);
+      background: rgba(255, 253, 248, 0.035);
+      font-size: 0.8rem;
+      font-weight: 800;
+      transition: color 220ms ease, border-color 220ms ease, background 220ms ease, transform 220ms var(--ease-out);
+    }
+
+    .capability-row span:hover {
+      color: #9ce0c8;
+      border-color: rgba(156, 224, 200, 0.34);
+      background: rgba(156, 224, 200, 0.07);
+      transform: translateY(-3px);
+    }
+
+    .about-contact {
+      position: relative;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 32px;
+      margin-top: 24px;
+      padding: 38px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 253, 248, 0.14);
+      border-radius: 10px;
+      color: #fffdf8;
+      background:
+        linear-gradient(rgba(255, 253, 248, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 253, 248, 0.035) 1px, transparent 1px),
+        rgba(255, 253, 248, 0.035);
+      background-size: 30px 30px;
+    }
+
+    .about-contact::before {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      right: -110px;
+      top: -140px;
+      border: 1px solid rgba(156, 224, 200, 0.24);
+      border-radius: 50%;
+      box-shadow: 0 0 70px rgba(15, 123, 92, 0.12);
+      transition: transform 600ms var(--ease-out);
+    }
+
+    .about-contact:hover::before {
+      transform: translate(-28px, 28px) scale(1.08);
+    }
+
+    .about-contact > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-contact div {
+      display: grid;
+      gap: 4px;
+    }
+
+    .about-contact span {
+      color: rgba(255, 253, 248, 0.58);
+      font-size: 0.8rem;
+    }
+
+    .about-contact strong {
+      max-width: 650px;
+      font-size: 1.12rem;
+    }
+
+    .about-contact a {
+      flex: 0 0 auto;
+      padding: 10px 14px;
+      border: 1px solid rgba(255, 253, 248, 0.3);
+      border-radius: 7px;
+      font-weight: 850;
+      transition: color 220ms ease, background 220ms ease, transform 220ms var(--ease-out);
+    }
+
+    .about-contact a:hover,
+    .about-contact a:focus-visible {
+      color: var(--night);
+      background: #9ce0c8;
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .blogs-section {
+      position: relative;
+      min-height: 52vh;
+      display: flex;
+      align-items: center;
+      padding: 156px 0;
+      overflow: hidden;
+      isolation: isolate;
+      color: #fffdf8;
+      border-top: 1px solid rgba(255, 253, 248, 0.08);
+      background:
+        radial-gradient(circle at 16% 82%, rgba(220, 109, 79, 0.11), transparent 27%),
+        radial-gradient(circle at 88% 20%, rgba(15, 123, 92, 0.12), transparent 25%),
+        #101819;
+    }
+
+    .blogs-section .section-head {
+      margin-bottom: 0;
     }
 
     .site-footer {
-      padding: 28px 0;
-      color: var(--muted);
+      padding: 38px 0;
+      border-top: 1px solid rgba(255, 253, 248, 0.08);
+      color: rgba(255, 253, 248, 0.48);
+      background: #0c1213;
       font-size: 0.95rem;
     }
 
     .footer-inner {
-      width: min(1120px, calc(100% - 40px));
+      width: min(var(--content-max), calc(100% - var(--page-gutter) - var(--page-gutter)));
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
       gap: 20px;
     }
 
+    @keyframes sectionNode {
+      70% {
+        box-shadow: 0 0 0 14px rgba(15, 123, 92, 0), 0 0 22px rgba(15, 123, 92, 0.24);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(15, 123, 92, 0), 0 0 22px rgba(15, 123, 92, 0.24);
+      }
+    }
+
     @media (max-width: 820px) {
+      :root {
+        --page-gutter: 28px;
+      }
+
+      html {
+        scroll-padding-top: 76px;
+      }
+
+      .section {
+        padding: 82px 0;
+      }
+
+      .projects-section,
+      .about-section {
+        padding: 104px 0 110px;
+      }
+
+      .blogs-section {
+        min-height: 44vh;
+        padding: 110px 0;
+      }
+
+      .projects-heading,
+      .about-heading {
+        margin-bottom: 48px;
+      }
+
+      .section-float-nav {
+        left: 50%;
+        top: auto;
+        bottom: 14px;
+        padding: 10px 14px;
+        transform: translateX(-50%);
+      }
+
+      .section-float-nav ul {
+        display: flex;
+        gap: 14px;
+      }
+
+      .section-float-nav ul::before {
+        left: 10px;
+        right: 10px;
+        top: 50%;
+        bottom: auto;
+        border-top: 1px dashed rgba(255, 253, 248, 0.34);
+        border-left: 0;
+        transform: translateY(-50%);
+      }
+
+      .float-nav-label {
+        left: 50%;
+        top: auto;
+        bottom: 31px;
+        transform: translate(-50%, 8px);
+      }
+
+      .section-float-nav a:hover .float-nav-label,
+      .section-float-nav a:focus-visible .float-nav-label {
+        transform: translate(-50%, 0);
+      }
+
       .nav {
         min-height: 64px;
         gap: 16px;
@@ -1007,20 +1819,12 @@
         display: none;
       }
 
-      .nav-map-link {
-        font-size: 1.55rem;
-      }
-
       h1 {
-        font-size: 4.8rem;
+        font-size: 4rem;
       }
 
       h2 {
         font-size: 2.55rem;
-      }
-
-      .contact h2 {
-        font-size: 2.35rem;
       }
 
       .hero {
@@ -1030,7 +1834,7 @@
       .hero::before {
         background:
           linear-gradient(180deg, rgba(16, 23, 25, 0.94) 0%, rgba(16, 23, 25, 0.62) 56%, rgba(16, 23, 25, 0.36) 100%),
-          url("assets/hero-tinda.png") center / cover no-repeat;
+          url("assets/hero-background.png") center / cover no-repeat;
       }
 
       .research-section {
@@ -1038,16 +1842,25 @@
       }
 
       .research-board {
-        min-height: 960px;
+        min-height: 1280px;
       }
 
-      .map-lines {
-        opacity: 0.58;
+      .research-board::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 64px;
+        bottom: 64px;
+        z-index: 1;
+        border-left: 1px dashed rgba(255, 253, 248, 0.22);
+        transform: translateX(-50%);
+        pointer-events: none;
       }
 
-      .axis-y,
+      .map-lines,
+      .axis-arrow,
       .axis-x {
-        font-size: 0.72rem;
+        display: none;
       }
 
       .map-node {
@@ -1055,61 +1868,133 @@
       }
 
       .map-node:hover,
-      .map-node:focus-visible,
-      .map-node.is-active {
+      .map-node:focus-visible {
         width: min(260px, calc(100% - 48px));
       }
 
       .map-node[data-topic="observe"] {
         --x: 50%;
-        --y: 13%;
-      }
-
-      .map-node[data-topic="encode"] {
-        --x: 50%;
-        --y: 27%;
+        --y: 8%;
       }
 
       .map-node[data-topic="dynamics"] {
         --x: 50%;
-        --y: 42%;
+        --y: 43%;
       }
 
       .map-node[data-topic="fusion"] {
         --x: 50%;
-        --y: 57%;
+        --y: 29%;
       }
 
       .map-node[data-topic="action"] {
         --x: 50%;
-        --y: 72%;
+        --y: 70%;
       }
 
-      .map-node[data-topic="distance"] {
+      .map-project-module {
         --x: 50%;
-        --y: 86%;
+        top: calc(8% + 88px);
+        width: min(280px, calc(100% - 72px));
       }
 
-      .research-panel {
-        left: 28px;
-        right: 28px;
-        bottom: 28px;
-        width: auto;
+      .map-project-module[data-project="autospeed"] {
+        --x: 50%;
+        top: calc(70% + 88px);
       }
 
-      .life-section {
-        padding: 72px 0 78px;
+      .map-project-module[data-project="lam"] {
+        --x: 50%;
+        top: calc(56% - 36px);
       }
 
-      .about-grid,
-      .work-grid,
-      .skills,
-      .contact {
+      .map-project-module--upcoming {
+        --x: 50%;
+        top: calc(70% + 186px);
+      }
+
+      .map-project-module--upcoming::before {
+        top: -27px;
+        bottom: auto;
+        height: 26px;
+      }
+
+      .map-project-module--upcoming::after {
+        top: -31px;
+        bottom: auto;
+      }
+
+      .projects-heading,
+      .blogs-heading,
+      .about-overview,
+      .about-detail-grid {
         grid-template-columns: 1fr;
+        gap: 22px;
       }
 
-      .contact-links {
-        justify-content: flex-start;
+      .education-stack {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .education-stack .card-label {
+        grid-column: 1 / -1;
+        padding: 20px 24px;
+        border-bottom: 1px solid rgba(255, 253, 248, 0.12);
+      }
+
+      .education-row {
+        padding: 24px;
+        border-left: 0;
+      }
+
+      .education-row + .education-row {
+        border-left: 1px solid rgba(255, 253, 248, 0.12);
+      }
+
+      .project-bento {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .project-tile,
+      .project-tile--tall,
+      .project-tile--wide {
+        grid-column: 1;
+        min-height: 0;
+      }
+
+      .project-tile {
+        grid-template-columns: minmax(0, 1fr) minmax(130px, auto) 34px;
+        gap: 18px;
+        padding: 20px 24px;
+      }
+
+      .references-block {
+        margin-top: 92px;
+        padding-top: 62px;
+      }
+
+      .references-heading {
+        grid-template-columns: 120px minmax(0, 1fr);
+        gap: 28px;
+      }
+
+      .reference-item {
+        grid-template-columns: 36px minmax(0, 1fr);
+        gap: 18px;
+      }
+
+      .reference-link {
+        grid-column: 2;
+        justify-self: start;
+      }
+
+      .project-modal-image {
+        height: 270px;
+      }
+
+      .project-modal-body h2 {
+        font-size: 2.1rem;
       }
 
       .footer-inner {
@@ -1118,29 +2003,39 @@
     }
 
     @media (max-width: 520px) {
-      .wrap,
-      .nav,
-      .hero-content,
-      .footer-inner {
-        width: min(100% - 28px, 1120px);
+      :root {
+        --page-gutter: 14px;
+      }
+
+      .section-float-nav {
+        bottom: 10px;
+        padding: 8px 10px;
+      }
+
+      .section-float-nav ul {
+        gap: 9px;
       }
 
       .section {
         padding: 64px 0;
       }
 
-      .statement,
-      .contact {
-        padding: 24px;
+      .projects-section,
+      .about-section {
+        padding: 78px 0 84px;
       }
 
-      .hero-actions,
-      .contact-links {
+      .blogs-section {
+        min-height: 40vh;
+        padding: 84px 0;
+      }
+
+      .hero-actions {
         display: grid;
       }
 
       h1 {
-        font-size: 3.35rem;
+        font-size: 2.8rem;
       }
 
       h2 {
@@ -1151,54 +2046,226 @@
         font-size: 1rem;
       }
 
-      .word-cloud .primary-word {
-        font-size: 92px;
-      }
-
-      .word-cloud .large-word {
-        font-size: 66px;
-      }
-
-      .word-cloud .mid-word {
-        font-size: 46px;
-      }
-
-      .word-cloud .small-word {
-        font-size: 32px;
-      }
-
-      .button,
-      .contact-links a {
+      .button {
         width: 100%;
+      }
+
+      .project-bento {
+        grid-template-columns: 1fr;
+      }
+
+      .project-tile,
+      .project-tile--wide,
+      .project-tile--tall {
+        grid-column: 1;
+        min-height: 0;
+      }
+
+      .project-tile {
+        grid-template-columns: minmax(0, 1fr) 36px;
+        gap: 14px;
+        padding: 18px 20px;
+      }
+
+      .project-tile-metric {
+        grid-column: 1 / -1;
+        padding-top: 12px;
+        border-top: 1px solid rgba(255, 253, 248, 0.1);
+        text-align: left;
+      }
+
+      .project-open {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: start;
+      }
+
+      .references-block {
+        margin-top: 72px;
+        padding-top: 50px;
+      }
+
+      .references-heading {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .references-heading .section-kicker {
+        margin-top: 0;
+      }
+
+      .references-heading h3 {
+        font-size: 1.65rem;
+      }
+
+      .reference-list {
+        margin-top: 36px;
+      }
+
+      .reference-item {
+        grid-template-columns: 28px minmax(0, 1fr);
+        gap: 14px;
+        padding: 24px 0;
+      }
+
+      .reference-link {
+        grid-column: 2;
+      }
+
+      .project-dialog {
+        width: calc(100% - 20px);
+        max-height: calc(100dvh - 20px);
+        border-radius: 14px;
+      }
+
+      .project-modal-image {
+        height: 215px;
+        padding: 22px 14px;
+      }
+
+      .project-modal-abstract {
+        min-height: 210px;
+        gap: 8px;
+        padding: 36px 14px;
+      }
+
+      .project-modal-abstract i {
+        width: 24px;
+      }
+
+      .project-modal-abstract span,
+      .project-modal-abstract b {
+        padding: 8px;
+        font-size: 0.62rem;
+      }
+
+      .project-modal-body {
+        padding: 28px 22px 32px;
+      }
+
+      .project-modal-body h2 {
+        padding-right: 18px;
+        font-size: 1.78rem;
+      }
+
+      .project-modal-metrics,
+      .project-modal-columns {
+        grid-template-columns: 1fr;
+      }
+
+      .about-statement,
+      .about-contact {
+        padding: 24px;
+      }
+
+      .about-statement::after {
+        left: 24px;
+        right: 24px;
+      }
+
+      .education-stack {
+        grid-template-columns: 1fr;
+      }
+
+      .education-row,
+      .education-row + .education-row {
+        padding: 22px 24px;
+        border-top: 0;
+        border-left: 0;
+      }
+
+      .education-row + .education-row {
+        border-top: 1px solid rgba(255, 253, 248, 0.12);
+      }
+
+      .about-contact {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .about-contact a {
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .float-nav-dot::after {
+        animation: none !important;
+      }
+
+      .projects-heading::after,
+      .about-heading::after,
+      .blogs-heading::after {
+        animation: none !important;
       }
     }
   </style>
 </head>
 <body>
   <header class="site-header">
-    <nav class="nav" aria-label="主要导航">
-      <a class="brand" href="#top" aria-label="Tinda 首页">
-        <span class="brand-mark">T</span>
-        <span>Tinda</span>
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="#top" aria-label="Home">
+        <span class="brand-mark">Q</span>
+        <span>Qingda Hu</span>
       </a>
-      <a class="nav-map-link" href="#research-map">科研地图</a>
       <div class="nav-links">
-        <a href="#about">关于</a>
-        <a href="#work">作品与聚焦</a>
-        <a href="#contact">联系</a>
-        <a href="#aesthetic-life">审美与生活</a>
+        <a href="#research-map">Research Map</a>
+        <a href="#projects">Projects</a>
+        <a href="#about">About</a>
+        <a href="#blogs">Blogs</a>
       </div>
     </nav>
   </header>
 
+  <nav class="section-float-nav" aria-label="Page sections">
+    <ul>
+      <li>
+        <a href="#top" aria-label="Home" data-section="top">
+          <span class="float-nav-dot" aria-hidden="true"></span>
+          <span class="float-nav-label">Home</span>
+        </a>
+      </li>
+      <li>
+        <a href="#research-map" aria-label="Research Map" data-section="research-map">
+          <span class="float-nav-dot" aria-hidden="true"></span>
+          <span class="float-nav-label">Research Map</span>
+        </a>
+      </li>
+      <li>
+        <a href="#projects" aria-label="Projects" data-section="projects">
+          <span class="float-nav-dot" aria-hidden="true"></span>
+          <span class="float-nav-label">Projects</span>
+        </a>
+      </li>
+      <li>
+        <a href="#about" aria-label="About" data-section="about">
+          <span class="float-nav-dot" aria-hidden="true"></span>
+          <span class="float-nav-label">About</span>
+        </a>
+      </li>
+      <li>
+        <a href="#blogs" aria-label="Blogs" data-section="blogs">
+          <span class="float-nav-dot" aria-hidden="true"></span>
+          <span class="float-nav-label">Blogs</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
   <section id="top" class="hero">
     <div class="hero-content">
-      <p class="eyebrow">Creative Technologist / Builder</p>
-      <h1>把想法做成可以被体验的东西。</h1>
-      <p class="hero-copy">你好，我是 Tinda。这里收集我的项目、实验和正在形成的作品方向：从产品原型到前端体验，从工具搭建到一点点视觉表达。</p>
+      <p class="eyebrow">Embodied AI Researcher / Robot Learning</p>
+      <h2>Building Minds for Robots</h2>
+      <p class="hero-copy">Hello, I'm Qingda Hu. My research focuses on robot manipulation, action representation learning, long-horizon modeling, and memory mechanisms.</p>
       <div class="hero-actions">
-        <a class="button primary" href="#research-map">进入科研地图</a>
-        <a class="button secondary" href="#work">作品与聚焦</a>
+        <a class="button primary" href="#research-map">Research Map</a>
+        <a class="button secondary" href="#projects">Projects</a>
+        <a class="button secondary" href="#about">About</a>
       </div>
     </div>
   </section>
@@ -1208,260 +2275,394 @@
       <div class="wrap">
         <div class="section-head">
           <p class="section-kicker">Research Map</p>
-          <h2>科研地图</h2>
-          <p class="lead">把观测、历史编码、动力场、融合表征和行动输出放在同一张动态地图里，呈现我对多模态时序研究的理解路径。</p>
+          <h2>Research Map</h2>
+          <p class="lead"><strong class="research-focus">I focus on 4D representations and the intrinsic structure of robot cognition.</strong>A unified view of my research： </p>
         </div>
 
-        <div class="research-board" aria-label="交互式科研地图">
+        <div class="research-board" aria-label="Research Map">
           <span class="axis-arrow x" aria-hidden="true"></span>
           <span class="axis-arrow y" aria-hidden="true"></span>
-          <span class="map-axis axis-y">Temporal Advance</span>
-          <span class="map-axis axis-x">Modality Distance</span>
+          <span class="map-axis axis-x">Representation Flow</span>
 
           <svg class="map-lines" viewBox="0 0 1000 620" preserveAspectRatio="none" aria-hidden="true">
-            <path class="route-line" data-route="observe encode dynamics action" stroke="#15cdbc" d="M120 214 C230 110 330 112 438 246 S672 315 790 214"></path>
-            <path class="route-line secondary" data-route="encode action" stroke="#dca637" d="M292 124 C454 70 640 118 784 206"></path>
-            <path class="route-line" data-route="observe dynamics fusion distance" stroke="#dc6d4f" d="M128 234 C286 338 414 398 584 420 S704 432 772 430"></path>
-            <path class="route-line secondary" data-route="dynamics fusion action" stroke="#72b8d6" d="M458 276 C522 350 578 390 620 420 C690 360 718 268 786 212"></path>
-            <path class="route-line secondary" data-route="fusion distance action" stroke="#8ccf74" d="M602 432 C690 492 776 482 830 426 C832 340 822 270 790 216"></path>
+            <defs>
+              <marker id="latent-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M0 0 L8 4 L0 8 Z" fill="#8ccf74"></path>
+              </marker>
+            </defs>
+            <path class="route-line" data-route="observe dynamics action" stroke="#15cdbc" d="M180 214 C270 235 370 270 460 273 S680 250 780 214"></path>
+            <path class="route-line" data-route="observe dynamics fusion" stroke="#dc6d4f" d="M158 206 C270 150 400 118 520 118"></path>
+            <path class="route-line secondary" data-route="dynamics fusion action" stroke="#72b8d6" d="M458 276 C470 220 488 160 520 118 C630 118 710 160 786 212"></path>
+            <path class="route-line secondary" data-route="observe latent" stroke="#8ccf74" marker-end="url(#latent-arrow)" d="M180 240 C260 330 330 410 405 446"></path>
+            <path class="route-line secondary" data-route="dynamics latent" stroke="#8ccf74" marker-end="url(#latent-arrow)" d="M460 300 C465 350 485 390 500 410"></path>
+            <path class="route-line" data-route="latent action" stroke="#8ccf74" marker-end="url(#latent-arrow)" d="M635 446 C720 420 740 300 780 240"></path>
           </svg>
 
-          <button class="map-node" type="button" data-topic="observe" data-panel-title="OBS 观测入口" data-panel-body="从多源观测中整理时序线索，先压低噪声，再保留能推动推理的状态变化。" data-tags="OBS, State, Clarity">
+          <article class="map-node" data-topic="observe" tabindex="0">
             <span class="node-core" aria-hidden="true">
               <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
               <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
             </span>
-            <strong class="node-title">OBS 观测入口</strong>
-            <span class="node-meta">时序前堆叠</span>
-            <p class="node-detail">聚焦“看见什么”和“哪些变化值得被编码”。</p>
+            <strong class="node-title">Observation Input</strong>
+            <span class="node-meta">Temporal Stacking</span>
+            <p class="node-detail">What should the robot perceive, and which changes are worth encoding?</p>
+          </article>
+
+          <button class="map-project-module" type="button" data-topic="observe" data-project="pam" aria-haspopup="dialog" aria-label="Open PAM project details">
+            <span class="map-project-module-copy">
+              <span class="map-project-label">PAM</span>
+              <strong>Adaptive Memory Recoding</strong>
+            </span>
+            <span class="map-project-arrow" aria-hidden="true">↗</span>
           </button>
 
-          <button class="map-node" type="button" data-topic="encode" data-panel-title="History Encode 历史编码" data-panel-body="把历史片段压缩成可被后续模块读取的上下文，让模型记住趋势，而不是只记住单帧。" data-tags="History, Context, Encode">
+          <article class="map-node" data-topic="dynamics" tabindex="0">
             <span class="node-core" aria-hidden="true">
               <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
               <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
             </span>
-            <strong class="node-title">History Encode</strong>
-            <span class="node-meta">上下文压缩</span>
-            <p class="node-detail">为后续动力场提供更稳定的上下文坐标。</p>
-          </button>
+            <strong class="node-title">Contextual Dynamics</strong>
+            <span class="node-meta">Forces &amp; Trajectories</span>
+            <p class="node-detail">Connects temporal progression with cross-modal evolution.</p>
+          </article>
 
-          <button class="map-node" type="button" data-topic="dynamics" data-panel-title="Contextual 动力场" data-panel-body="在时序推进和跨模态变化之间建立桥梁，让运动、语义和场景状态可以一起演化。" data-tags="IDM, FDM, Dynamics">
+          <article class="map-node" data-topic="fusion" tabindex="0">
             <span class="node-core" aria-hidden="true">
               <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
               <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
             </span>
-            <strong class="node-title">Contextual 动力场</strong>
-            <span class="node-meta">场力与轨迹</span>
-            <p class="node-detail">对应参考图中的“时序前进”和“共模态前进”。</p>
-          </button>
+            <strong class="node-title">Fused Observations</strong>
+            <span class="node-meta">Multimodal Alignment</span>
+            <p class="node-detail">Transforms heterogeneous inputs into comparable feature representations.</p>
+          </article>
 
-          <button class="map-node" type="button" data-topic="fusion" data-panel-title="LA 融合观测" data-panel-body="把点云、光流、占用、BEV 和语义特征对齐到同一个决策视角，减少信息孤岛。" data-tags="LA, BEV, Features">
+          <article class="map-node" data-topic="action" tabindex="0">
             <span class="node-core" aria-hidden="true">
               <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
               <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
             </span>
-            <strong class="node-title">LA 融合观测</strong>
-            <span class="node-meta">多模态对齐</span>
-            <p class="node-detail">把异构输入转成更容易比较的特征面。</p>
-          </button>
+            <strong class="node-title">Action Output</strong>
+            <span class="node-meta">Policy &amp; Decision</span>
+            <p class="node-detail">Translates representations into policy choices and predictive outputs.</p>
+          </article>
 
-          <button class="map-node" type="button" data-topic="action" data-panel-title="Action 行动输出" data-panel-body="将上下文表征转成可执行的策略或预测结果，同时保留链路可解释性。" data-tags="Action, Policy, Output">
-            <span class="node-core" aria-hidden="true">
-              <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
-              <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
+          <button class="map-project-module map-project-module--upcoming" type="button" data-topic="action" data-project="tcla" aria-haspopup="dialog" aria-label="Open TCLA project details">
+            <span class="map-project-module-copy">
+              <span class="map-project-label">TCLA</span>
+              <strong>Action Representation Learning</strong>
+              <span class="map-project-status">To be refreshed</span>
             </span>
-            <strong class="node-title">Action 行动输出</strong>
-            <span class="node-meta">策略与决策</span>
-            <p class="node-detail">把表征转化为策略选择和预测输出。</p>
+            <span class="map-project-arrow" aria-hidden="true">↗</span>
           </button>
 
-          <button class="map-node" type="button" data-topic="distance" data-panel-title="Modality Distance 模态距离" data-panel-body="把不同维度的信息差异显式摆出来，观察哪些表征更接近行动，哪些仍需要对齐。" data-tags="Distance, Alignment, Space">
-            <span class="node-core" aria-hidden="true">
-              <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
-              <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
+          <button class="map-project-module" type="button" data-topic="action" data-project="autospeed" aria-haspopup="dialog" aria-label="Open AutoSpeed project details">
+            <span class="map-project-module-copy">
+              <span class="map-project-label">AutoSpeed</span>
+              <strong>Better-than-Expert Motion Speed</strong>
             </span>
-            <strong class="node-title">Modality Distance</strong>
-            <span class="node-meta">高维距离轴</span>
-            <p class="node-detail">以距离变化呈现表征之间的结构关系。</p>
+            <span class="map-project-arrow" aria-hidden="true">↗</span>
           </button>
 
-          <aside class="research-panel" aria-live="polite" aria-hidden="true">
-            <p class="panel-kicker">Selected Focus</p>
-            <h3></h3>
-            <p></p>
-            <div class="panel-tags"></div>
-          </aside>
+          <button class="map-project-module" type="button" data-topic="latent" data-project="lam" aria-haspopup="dialog" aria-label="Open latent-action project details">
+            <span class="map-project-module-copy">
+              <span class="map-project-label">Latent Actions</span>
+              <strong>What Matters for Latent Actions?</strong>
+            </span>
+            <span class="map-project-arrow" aria-hidden="true">↗</span>
+          </button>
         </div>
       </div>
     </section>
 
-    <section id="about" class="section">
+    <section id="projects" class="section projects-section">
       <div class="wrap">
-        <div class="section-head">
-          <p class="section-kicker">About</p>
-          <h2>关注清晰、好用，并且有温度的数字体验。</h2>
-        </div>
-        <div class="about-grid">
-          <article class="statement">
-            <p>我喜欢把模糊的想法拆成结构，把结构做成界面，再通过细节让它真正可用。这个网站是一个起点：用来展示我做过的项目、记录正在学习的方向，也方便新的合作和交流发生。</p>
-          </article>
-          <div class="stats" aria-label="个人亮点">
-            <div class="stat">
-              <strong>01</strong>
-              <span>从问题定义到原型落地</span>
-            </div>
-            <div class="stat">
-              <strong>02</strong>
-              <span>重视视觉细节与交互节奏</span>
-            </div>
-            <div class="stat">
-              <strong>03</strong>
-              <span>持续记录、复盘和迭代</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="work" class="section alt">
-      <div class="wrap">
-        <div class="section-head">
-          <p class="section-kicker">Selected Work</p>
-          <h2>近期项目</h2>
-          <p class="lead">围绕具身操作、长时序建模、视角鲁棒表征和 3D-aware 预训练，我持续把研究问题拆成可验证的算法框架与真实机器人实验。</p>
-        </div>
-        <div class="work-grid">
-          <article class="work-card">
-            <div>
-              <h3>PAM 自适应工作记忆策略</h3>
-              <p>面向机器人操作中的遮挡、阶段相似和历史依赖问题，提出长历史建模框架，将策略可利用历史窗口扩展至 300 帧，并保持 20Hz 推理频率。</p>
-            </div>
-            <div class="tag-list">
-              <span class="tag">RA-L Accepted</span>
-              <span class="tag">Long-Horizon</span>
-              <span class="tag">VLA</span>
-            </div>
-          </article>
-          <article class="work-card">
-            <div>
-              <h3>AutoSpeed 阶段自适应速度学习</h3>
-              <p>提出无标注阶段自适应速度学习框架，使操作策略根据任务阶段自动调整动作节奏，在仿真和真实任务中同时提升执行效率与成功率。</p>
-            </div>
-            <div class="tag-list">
-              <span class="tag">ECCV Review</span>
-              <span class="tag">Speed Policy</span>
-              <span class="tag">Real Robot</span>
-            </div>
-          </article>
-          <article class="work-card">
-            <div>
-              <h3>BPP 视角无关动态表征学习</h3>
-              <p>参与自监督表征学习框架设计与实验分析，通过跨视角点轨迹预测和双路径信息瓶颈，增强机器人策略对未见视角和视觉扰动的鲁棒性。</p>
-            </div>
-            <div class="tag-list">
-              <span class="tag">NeurIPS Review</span>
-              <span class="tag">View-Invariant</span>
-              <span class="tag">Flow Matching</span>
-            </div>
-          </article>
-          <article class="work-card">
-            <div>
-              <h3>DiffuView 多视角扩散预训练</h3>
-              <p>参与 3D-aware 机器人表征学习框架，负责模仿学习 Codebase 构建、Franka Arm 真机遥操作映射、模型训练与策略测评。</p>
-            </div>
-            <div class="tag-list">
-              <span class="tag">CVPR Accepted</span>
-              <span class="tag">3D-Aware</span>
-              <span class="tag">Franka</span>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="skills" class="section">
-      <div class="wrap">
-        <div class="section-head">
-          <p class="section-kicker">Skills</p>
-          <h2>我正在打磨的能力</h2>
-        </div>
-        <div class="skills">
-          <div class="skill">
-            <strong>具身操作算法栈</strong>
-            <span>熟悉 ACT、Diffusion Policy、RDT、TinyVLA、Pi0.5 等主流策略与 VLA 框架。</span>
-          </div>
-          <div class="skill">
-            <strong>工程实现与调试</strong>
-            <span>熟练使用 PyTorch 与 ROS，具备规范 Git 流程和 AI 协同开发经验。</span>
-          </div>
-          <div class="skill">
-            <strong>真机与仿真实验</strong>
-            <span>在 Mobile ALOHA、Franka、RoboTwin、RLBench、LIBERO、RoboCasa、CALVIN 等平台部署与评测。</span>
-          </div>
-          <div class="skill">
-            <strong>研究聚焦</strong>
-            <span>长期跟踪具身操作前沿，在长时序建模、表征学习和动作速度优化方向具备 SOTA 项目经验。</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="section">
-      <div class="wrap">
-        <div class="contact">
+        <div class="section-head projects-heading">
           <div>
-            <h2>有想法，欢迎来聊。</h2>
-            <p>如果你正在做一个产品、内容项目或有趣的网页实验，我很愿意听听它现在长什么样。</p>
+            <p class="section-kicker">Selected Research</p>
+            <h2>Projects, made tangible.</h2>
           </div>
-          <div class="contact-links" aria-label="联系方式">
-            <a href="mailto:hello@example.com">Email</a>
-            <a href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
-            <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn</a>
+          <p class="lead">Six research threads across memory, motion speed, action representations, and viewpoint-robust control. Select a project to explore the method, evidence, and my contribution.</p>
+        </div>
+
+        <div class="project-bento">
+          <button class="project-tile project-tile--wide theme-green" type="button" data-project="pam" aria-haspopup="dialog">
+            <span class="project-tile-copy">
+              <span class="project-eyebrow">IEEE RA-L · Lead Project</span>
+              <strong>PAM</strong>
+              <span>Adaptive working memory for state-ambiguous manipulation.</span>
+            </span>
+            <span class="project-tile-metric">300 frames · 20-30 Hz</span>
+            <span class="project-open" aria-hidden="true">↗</span>
+          </button>
+
+          <button class="project-tile project-tile--tall theme-coral" type="button" data-project="autospeed" aria-haspopup="dialog">
+            <span class="project-tile-copy">
+              <span class="project-eyebrow">ECCV 2026 · Lead Project</span>
+              <strong>AutoSpeed</strong>
+              <span>Learning when a robot should move fast—and when it should slow down.</span>
+            </span>
+            <span class="project-tile-metric">1.8× real-robot speedup</span>
+            <span class="project-open" aria-hidden="true">↗</span>
+          </button>
+
+          <button class="project-tile theme-pink" type="button" data-project="tcla" aria-haspopup="dialog">
+            <span class="project-tile-copy">
+              <span class="project-eyebrow">To Be Refreshed</span>
+              <strong>TCLA</strong>
+              <span>Self-supervised action representations for faster, stronger robot-policy learning.</span>
+            </span>
+            <span class="project-tile-metric">Up to +55.4% · ≈9× fewer steps</span>
+            <span class="project-open" aria-hidden="true">↗</span>
+          </button>
+
+          <button class="project-tile theme-gold" type="button" data-project="lam" aria-haspopup="dialog">
+            <span class="project-tile-copy">
+              <span class="project-eyebrow">IJCV · Under Review</span>
+              <strong>What Matters for Latent Actions?</strong>
+              <span>A controlled study of the choices that actually improve robot learning.</span>
+            </span>
+            <span class="project-tile-metric">41 designs · 59M frames</span>
+            <span class="project-open" aria-hidden="true">↗</span>
+          </button>
+
+          <button class="project-tile theme-blue" type="button" data-project="diffuview" aria-haspopup="dialog">
+            <span class="project-tile-copy">
+              <span class="project-eyebrow">CVPR 2026</span>
+              <strong>DiffuView</strong>
+              <span>3D-aware representations through multi-view diffusion pretraining.</span>
+            </span>
+            <span class="project-tile-metric">Nearly +20% under view shifts</span>
+            <span class="project-open" aria-hidden="true">↗</span>
+          </button>
+
+          <button class="project-tile theme-violet" type="button" data-project="bpp" aria-haspopup="dialog">
+            <span class="project-tile-copy">
+              <span class="project-eyebrow">NeurIPS 2026 · Under Review</span>
+              <strong>BPP</strong>
+              <span>View-invariant motion representations without depth or calibration.</span>
+            </span>
+            <span class="project-tile-metric">91.9% across LIBERO</span>
+            <span class="project-open" aria-hidden="true">↗</span>
+          </button>
+        </div>
+
+        <section class="references-block" aria-labelledby="references-title">
+          <div class="references-heading">
+            <p class="section-kicker">References</p>
+            <div>
+              <h3 id="references-title">Citation-ready publications.</h3>
+              <p>IEEE-style references based on the latest publicly available journal, conference, and arXiv records.</p>
+            </div>
           </div>
+
+          <ol class="reference-list">
+            <li class="reference-item">
+              <span class="reference-index">01</span>
+              <p class="reference-citation"><strong>Q. Hu</strong>, Z. Qiu, Z. Xu, K. Zhang, X. Bu, Z. Sun, B. Zhang, J. Zhao, Z. Gan, and W. Ding, “Resolving State Ambiguity in Robot Manipulation via Adaptive Working Memory Recoding,” <em>IEEE Robotics and Automation Letters</em>, vol. 11, no. 7, pp. 8439–8446, Jul. 2026.</p>
+              <a class="reference-link" href="https://doi.org/10.1109/LRA.2026.3693565" target="_blank" rel="noreferrer">DOI ↗</a>
+            </li>
+            <li class="reference-item">
+              <span class="reference-index">02</span>
+              <p class="reference-citation"><strong>Q. Hu</strong>, Z. Qiu, J. Zhao, Z. Gan, and W. Ding, “AutoSpeed: Annotation-Free Stage-Adaptive Motion Speed Learning for Robot Manipulation,” in <em>European Conference on Computer Vision (ECCV)</em>, 2026. arXiv:2607.01051.</p>
+              <a class="reference-link" href="https://arxiv.org/abs/2607.01051" target="_blank" rel="noreferrer">arXiv ↗</a>
+            </li>
+            <li class="reference-item">
+              <span class="reference-index">03</span>
+              <p class="reference-citation">X. Bu<sup class="cofirst-mark">*</sup>, <strong>Q. Hu<sup class="cofirst-mark">*</sup></strong>, L. Zhou, L. Zhang, Y. Tang, Z. Liu, X. Tao, Z. Ma, Q. Huang, C. Tang, H. Wang, J. Zhang, J. Ma, H. Ye, W. Li, and X. Hao, “What Matters for Latent Actions in Robot Learning,” <em>arXiv preprint arXiv:2608.19613</em>, 2026.<span class="reference-note"><sup class="cofirst-mark">*</sup> Equal contribution.</span></p>
+              <a class="reference-link" href="https://arxiv.org/abs/2608.19613" target="_blank" rel="noreferrer">arXiv ↗</a>
+            </li>
+            <li class="reference-item">
+              <span class="reference-index">04</span>
+              <p class="reference-citation">K. Zhang, T. Niu, T. Liu, C. Guo, Z. Xu, <strong>Q. Hu</strong>, and W. Ding, “DiffuView: Multi-View Diffusion Pretraining for 3D Aware Robotic Manipulation,” in <em>Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)</em>, 2026, pp. 23601–23611.</p>
+              <a class="reference-link" href="https://openaccess.thecvf.com/content/CVPR2026/html/Zhang_DiffuView_Multi-View_Diffusion_Pretraining_for_3D_Aware_Robotic_Manipulation_CVPR_2026_paper.html" target="_blank" rel="noreferrer">CVF ↗</a>
+            </li>
+          </ol>
+        </section>
+      </div>
+    </section>
+
+    <section id="about" class="section about-section">
+      <div class="wrap">
+        <div class="section-head about-heading">
+          <p class="section-kicker">About</p>
+          <h2>Research that survives contact with the real robot.</h2>
+        </div>
+
+        <div class="about-overview">
+          <article class="about-statement">
+            <p class="about-lede">I am Qingda Hu, an M.S. student at Fudan University working on robotic manipulation, action representations, long-horizon memory, and scalable learning.</p>
+            <p>I care about complete research loops: a precise problem, an efficient method, reproducible evaluation, and a system that still works outside the training codebase. My experience spans model design, data collection, large-scale training, simulation, and deployment on physical robots.</p>
+          </article>
+        </div>
+
+        <div class="about-detail-grid">
+          <article class="about-card education-stack">
+            <p class="card-label">Education</p>
+            <div class="education-row">
+              <div><strong>Fudan University</strong><p>M.S. in Computer Science and Technology</p></div>
+            </div>
+            <div class="education-row">
+              <div><strong>Tsinghua University</strong><p>B.Eng. in Vehicle Engineering</p></div>
+            </div>
+          </article>
+        </div>
+
+        <div class="capability-row" aria-label="Research capabilities">
+          <span>Robot Manipulation</span><span>VLA Models</span><span>Long-Horizon Memory</span><span>Latent Actions</span><span>Diffusion &amp; Flow Matching</span><span>Real-Robot Deployment</span>
+        </div>
+
+        <div class="about-contact">
+          <div><span>Open to research conversations and embodied AI collaborations.</span><strong>Let's make robot learning more capable—and more deployable.</strong></div>
+          <a href="mailto:qdhu24@m.fudan.edu.cn">qdhu24@m.fudan.edu.cn ↗</a>
         </div>
       </div>
     </section>
 
-    <section id="aesthetic-life" class="life-section">
+    <section id="blogs" class="section blogs-section">
       <div class="wrap">
-        <div class="section-head">
-          <p class="section-kicker">Aesthetic Life</p>
-          <h2>审美与生活</h2>
-        </div>
-        <div class="word-cloud-frame" role="img" aria-label="审美与生活关键词词云">
-          <svg class="word-cloud" viewBox="0 0 2100 900" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-            <text class="primary-word" x="640" y="455">显著性</text>
-            <text class="large-word green-word" x="180" y="230">真实反馈</text>
-            <text class="large-word coral-word" x="1280" y="250">听无的间</text>
-            <text class="mid-word gold-word" x="320" y="595">生活审美化</text>
-            <text class="mid-word blue-word" x="1180" y="590">注意力生态位</text>
-            <text class="mid-word green-word" x="820" y="185">创造具象化</text>
-            <text class="small-word coral-word" x="1480" y="430">外部形式</text>
-            <text class="small-word gold-word" x="125" y="430">被抛</text>
-            <text class="small-word blue-word" x="780" y="705">解释系统</text>
-            <text class="small-word green-word" x="1540" y="720">亲力亲为</text>
-            <text class="small-word coral-word" x="540" y="760">复利动机</text>
-            <text class="small-word gold-word" x="1520" y="130">Awe</text>
-            <text class="small-word blue-word" x="240" y="755">共在推演</text>
-            <text class="small-word green-word" x="1010" y="795">选择成本</text>
-            <text class="small-word coral-word" x="1740" y="555">关系厚度</text>
-            <text class="small-word gold-word" x="310" y="120">经验整理</text>
-            <text class="small-word blue-word" x="970" y="315">反攫取</text>
-            <text class="small-word green-word" x="1360" y="805">具体语境</text>
-          </svg>
-        </div>
-        <div class="life-more">
-          <a href="aesthetic-life/">了解更多……</a>
+        <div class="section-head blogs-heading">
+          <div>
+            <p class="section-kicker">Blogs</p>
+            <h2>正在建设中 😊</h2>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
+  <dialog id="project-dialog" class="project-dialog" aria-labelledby="project-dialog-title">
+    <div class="project-modal-shell">
+      <button class="project-modal-close" type="button" aria-label="Close project details">×</button>
+      <div id="project-dialog-content"></div>
+    </div>
+  </dialog>
+
+  <template id="project-pam">
+    <article class="project-detail-view">
+      <img class="project-modal-image" src="assets/pam-overview.png" alt="PAM state ambiguity and adaptive working memory overview">
+      <div class="project-modal-body">
+        <p class="project-modal-kicker">IEEE Robotics and Automation Letters · Lead Project</p>
+        <h2 id="project-dialog-title">PAM: Adaptive Working Memory Recoding</h2>
+        <p class="project-modal-summary">PAM treats long-history manipulation as streaming inference rather than a larger static input. It relaxes the Markov assumption by carrying forward a compact, adaptive working memory that selects the historical evidence needed to resolve the current task phase.</p>
+        <div class="project-modal-metrics">
+          <div><strong>300</strong><span>history frames<br>≈ 10 seconds</span></div>
+          <div><strong>20-30 Hz</strong><span>real-time inference<br>with long history</span></div>
+          <div><strong>7</strong><span>real-world tasks<br>across ambiguity types</span></div>
+        </div>
+        <div class="project-modal-columns">
+          <div><h3>Core design</h3><p>A hierarchical frame feature extractor separates motion primitives from temporal disambiguation cues. A range-aware Context Router compresses multiple history scales, while a reconstruction objective keeps the memory bottleneck informative.</p></div>
+          <div><h3>My contribution</h3><p>Led the project from problem formulation and model design through the two-stage training strategy, real-robot benchmark design, evaluation, and interpretability analysis.</p></div>
+        </div>
+        <div class="project-modal-links"><a href="https://tinda24.github.io/pam/" target="_blank" rel="noreferrer">Project Page ↗</a><a href="https://arxiv.org/abs/2512.24638" target="_blank" rel="noreferrer">Paper ↗</a><a href="https://github.com/tinda24/pam_code_public" target="_blank" rel="noreferrer">Code ↗</a></div>
+      </div>
+    </article>
+  </template>
+
+  <template id="project-autospeed">
+    <article class="project-detail-view">
+      <img class="project-modal-image" src="assets/autospeed-overview.png" alt="AutoSpeed stage-adaptive motion speed overview">
+      <div class="project-modal-body">
+        <p class="project-modal-kicker">ECCV 2026 · Lead Project</p>
+        <h2 id="project-dialog-title">AutoSpeed: Stage-Adaptive Motion Speed</h2>
+        <p class="project-modal-summary">AutoSpeed is a model-agnostic framework that learns appropriate execution speeds and effective prediction horizons for different manipulation stages—without speed or stage annotations.</p>
+        <div class="project-modal-metrics">
+          <div><strong>1.5×</strong><span>average speedup<br>in simulation</span></div>
+          <div><strong>+6.5 pp</strong><span>average simulation<br>success-rate gain</span></div>
+          <div><strong>1.8×</strong><span>average speedup<br>on real robots</span></div>
+        </div>
+        <div class="project-modal-columns">
+          <div><h3>Core design</h3><p>Multi-target selective optimization chooses among speed-varied trajectory targets using prediction error and effective horizon. DCT-II retiming preserves smooth motion at non-integer rates, and a lightweight RatioHead adapts speed online.</p></div>
+          <div><h3>My contribution</h3><p>Led the method and end-to-end evaluation across MLP, diffusion, and flow-matching policies. On real robots, average success improved from 61.8% to 67.3% while execution became faster.</p></div>
+        </div>
+        <div class="project-modal-links"><a href="https://zihengqiu.github.io/AutoSpeed/" target="_blank" rel="noreferrer">Project Page ↗</a><a href="https://arxiv.org/abs/2607.01051" target="_blank" rel="noreferrer">Paper ↗</a><a href="https://github.com/tinda24/autospeed" target="_blank" rel="noreferrer">Code ↗</a></div>
+      </div>
+    </article>
+  </template>
+
+  <template id="project-tcla">
+    <article class="project-detail-view">
+      <div class="project-modal-abstract project-modal-abstract--tcla" aria-hidden="true"><span>RAW ACTION</span><i></i><b>TCLA</b><i></i><span>ACTION LATENT</span></div>
+      <div class="project-modal-body">
+        <p class="project-modal-kicker">To Be Refreshed</p>
+        <h2 id="project-dialog-title">TCLA: Self-Supervised Action Representation Learning</h2>
+        <p class="project-modal-summary">TCLA learns structured action representations that can be integrated into different robot-policy families. The representation provides a more learnable target than raw controls, improving optimization efficiency, downstream success, and motion quality.</p>
+        <div class="project-modal-metrics">
+          <div><strong>89.0%</strong><span>X-VLA success<br>after 10K steps</span></div>
+          <div><strong>≈9×</strong><span>fewer steps to match<br>the 90K-step baseline</span></div>
+          <div><strong>+55.4%</strong><span>relative gain for<br>Flow Matching Policy</span></div>
+        </div>
+        <p class="project-availability">Project materials and manuscript details will be refreshed following public release.</p>
+      </div>
+    </article>
+  </template>
+
+  <template id="project-lam">
+    <article class="project-detail-view">
+      <img class="project-modal-image" src="assets/latent-actions-overview.png" alt="Unified three-stage latent action study">
+      <div class="project-modal-body">
+        <p class="project-modal-kicker">IJCV · Under Review · Co-Lead</p>
+        <h2 id="project-dialog-title">What Matters for Latent Actions in Robot Learning?</h2>
+        <p class="project-modal-summary">A large-scale empirical study that puts fragmented latent-action methods into one controlled framework, separating what genuinely improves downstream manipulation from what merely looks promising in representation space.</p>
+        <div class="project-modal-metrics">
+          <div><strong>41</strong><span>LAM design<br>choices</span></div>
+          <div><strong>4</strong><span>representation-quality<br>proxy metrics</span></div>
+          <div><strong>59M</strong><span>video frames in<br>scaling studies</span></div>
+        </div>
+        <div class="project-modal-columns">
+          <div><h3>Core design</h3><p>A unified three-stage pipeline standardizes representation pretraining, VLM mid-training, and policy post-training. It compares modeling paradigms, objectives, regularization, latent dimensions, and integration strategies.</p></div>
+          <div><h3>My contribution</h3><p>Co-led the systematic study across LIBERO, LIBERO-Plus, RoboTwin 2.0, and a real Franka robot. Results show that 32-dimensional latent actions and reconstruction-based proxies provide strong practical starting points.</p></div>
+        </div>
+        <div class="project-modal-links"><a href="https://carldegio.github.io/latent_action.github.io/" target="_blank" rel="noreferrer">Project Page ↗</a><a href="https://arxiv.org/abs/2608.19613" target="_blank" rel="noreferrer">Paper ↗</a></div>
+      </div>
+    </article>
+  </template>
+
+  <template id="project-diffuview">
+    <article class="project-detail-view">
+      <img class="project-modal-image" src="assets/diffuview-overview.png" alt="DiffuView multi-view diffusion pretraining method">
+      <div class="project-modal-body">
+        <p class="project-modal-kicker">CVPR 2026 · Published</p>
+        <h2 id="project-dialog-title">DiffuView: Multi-View Diffusion Pretraining</h2>
+        <p class="project-modal-summary">DiffuView casts novel-view generation as a pretraining objective, forcing a diffusion backbone to recover 3D-consistent visual structure before it is used for robotic imitation learning.</p>
+        <div class="project-modal-metrics">
+          <div><strong>≈20%</strong><span>success-rate gain<br>under view shifts</span></div>
+          <div><strong>2</strong><span>simulation<br>benchmarks</span></div>
+          <div><strong>3D-aware</strong><span>features from<br>multiview generation</span></div>
+        </div>
+        <div class="project-modal-columns">
+          <div><h3>Core design</h3><p>Conditional multiview diffusion learns cross-view correspondences and implicit scene geometry. The pretrained U-Net then provides robust visual features to a task-conditioned action policy.</p></div>
+          <div><h3>My contribution</h3><p>Contributed to the imitation-learning codebase and led the full Franka real-robot pipeline: hardware setup, teleoperation mapping, data collection, preprocessing, training, and policy evaluation.</p></div>
+        </div>
+        <div class="project-modal-links"><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Zhang_DiffuView_Multi-View_Diffusion_Pretraining_for_3D_Aware_Robotic_Manipulation_CVPR_2026_paper.html" target="_blank" rel="noreferrer">CVPR Paper ↗</a></div>
+      </div>
+    </article>
+  </template>
+
+  <template id="project-bpp">
+    <article class="project-detail-view">
+      <div class="project-modal-abstract" aria-hidden="true"><span>VIEW A</span><i></i><b>GLOBAL MOTION</b><i></i><span>VIEW B</span></div>
+      <div class="project-modal-body">
+        <p class="project-modal-kicker">NeurIPS 2026 · Under Review · Co-Lead</p>
+        <h2 id="project-dialog-title">BPP: Beyond Pixels and Points</h2>
+        <p class="project-modal-summary">BPP distills viewpoint-invariant manipulation dynamics from multiview RGB video, enabling robust closed-loop control without depth sensing or camera extrinsic calibration.</p>
+        <div class="project-modal-metrics">
+          <div><strong>91.9%</strong><span>average success<br>across LIBERO</span></div>
+          <div><strong>+15.4 pp</strong><span>improvement over<br>the baseline</span></div>
+          <div><strong>4 suites</strong><span>plus real-robot<br>robustness tests</span></div>
+        </div>
+        <div class="project-modal-columns">
+          <div><h3>Core design</h3><p>Cross-view dense trajectory prediction provides a self-supervised objective, while a dual-pathway information bottleneck isolates global motion from viewpoint-specific appearance. Wrist-camera feedback closes the control loop.</p></div>
+          <div><h3>My contribution</h3><p>Co-led the project, from the view-invariant representation objective through Flow Matching Policy integration and validation under unseen viewpoints and texture shifts on a real ARX robot.</p></div>
+        </div>
+        <p class="project-availability">Manuscript details are limited while the paper is under review.</p>
+      </div>
+    </article>
+  </template>
+
   <footer class="site-footer">
     <div class="footer-inner">
-      <span>© 2026 Tinda</span>
-      <span>Built with curiosity and care.</span>
+      <span>© 2026 Qingda Hu</span>
+      <span>Robot learning, from idea to deployment.</span>
     </div>
   </footer>
 
@@ -1472,110 +2673,123 @@
         return;
       }
 
-      const nodes = Array.from(board.querySelectorAll(".map-node"));
-      const panel = board.querySelector(".research-panel");
-      const panelTitle = panel.querySelector("h3");
-      const panelBody = panel.querySelector("p:not(.panel-kicker)");
-      const panelTags = panel.querySelector(".panel-tags");
-      let activeNode = null;
+      const nodes = Array.from(board.querySelectorAll(".map-node, .map-project-module"));
 
       const clearPreview = () => {
-        if (activeNode) {
-          return;
-        }
-
         board.classList.remove("is-previewing");
         board.removeAttribute("data-active");
       };
 
       const showPreview = (node) => {
-        if (activeNode) {
-          return;
-        }
-
         board.dataset.active = node.dataset.topic;
         board.classList.add("is-previewing");
       };
 
-      const renderPanel = (node) => {
-        panelTitle.textContent = node.dataset.panelTitle;
-        panelBody.textContent = node.dataset.panelBody;
-        panelTags.replaceChildren(
-          ...node.dataset.tags.split(",").map((tag) => {
-            const item = document.createElement("span");
-            item.textContent = tag.trim();
-            return item;
-          })
-        );
-      };
-
-      const clearActive = () => {
-        if (!activeNode) {
-          clearPreview();
-          return;
-        }
-
-        activeNode.classList.remove("is-active");
-        activeNode.setAttribute("aria-pressed", "false");
-        activeNode = null;
-        board.classList.remove("has-active");
-        board.removeAttribute("data-active");
-        panel.classList.remove("is-visible");
-        panel.setAttribute("aria-hidden", "true");
-      };
-
-      const activateNode = (node) => {
-        if (activeNode === node) {
-          clearActive();
-          return;
-        }
-
-        if (activeNode) {
-          activeNode.classList.remove("is-active");
-          activeNode.setAttribute("aria-pressed", "false");
-        }
-
-        activeNode = node;
-        node.classList.add("is-active");
-        node.setAttribute("aria-pressed", "true");
-        board.classList.remove("is-previewing");
-        board.classList.add("has-active");
-        board.dataset.active = node.dataset.topic;
-        renderPanel(node);
-        panel.classList.add("is-visible");
-        panel.setAttribute("aria-hidden", "false");
-      };
-
       nodes.forEach((node) => {
-        node.setAttribute("aria-pressed", "false");
-
         node.addEventListener("pointerenter", () => showPreview(node));
         node.addEventListener("pointerleave", clearPreview);
         node.addEventListener("focus", () => showPreview(node));
         node.addEventListener("blur", clearPreview);
-        node.addEventListener("click", (event) => {
-          event.stopPropagation();
-          activateNode(node);
-        });
       });
 
       board.addEventListener("pointerleave", clearPreview);
-      board.addEventListener("click", (event) => {
-        if (!event.target.closest(".map-node") && !event.target.closest(".research-panel")) {
-          clearActive();
-        }
+    })();
+
+    (() => {
+      const links = Array.from(document.querySelectorAll(".section-float-nav a[data-section]"));
+      const sections = links
+        .map((link) => document.getElementById(link.dataset.section))
+        .filter(Boolean);
+
+      if (!links.length || !sections.length) {
+        return;
+      }
+
+      const setActive = (sectionId) => {
+        links.forEach((link) => {
+          const isActive = link.dataset.section === sectionId;
+          link.classList.toggle("is-active", isActive);
+
+          if (isActive) {
+            link.setAttribute("aria-current", "location");
+          } else {
+            link.removeAttribute("aria-current");
+          }
+        });
+      };
+
+      const updateActiveSection = () => {
+        const focusLine = window.innerHeight * 0.42;
+        let activeSection = sections[0];
+
+        sections.forEach((section) => {
+          if (section.getBoundingClientRect().top <= focusLine) {
+            activeSection = section;
+          }
+        });
+
+        setActive(activeSection.id);
+      };
+
+      links.forEach((link) => {
+        link.addEventListener("click", () => setActive(link.dataset.section));
       });
 
-      document.addEventListener("click", (event) => {
-        if (activeNode && !board.contains(event.target)) {
-          clearActive();
+      let scrollFrame = null;
+      window.addEventListener("scroll", () => {
+        if (scrollFrame) {
+          return;
         }
+
+        scrollFrame = window.requestAnimationFrame(() => {
+          updateActiveSection();
+          scrollFrame = null;
+        });
+      }, { passive: true });
+
+      window.addEventListener("resize", updateActiveSection);
+      updateActiveSection();
+    })();
+
+    (() => {
+      const dialog = document.getElementById("project-dialog");
+      const content = document.getElementById("project-dialog-content");
+      const closeButton = dialog?.querySelector(".project-modal-close");
+      const projectTiles = Array.from(document.querySelectorAll("[data-project]"));
+      let lastTrigger = null;
+
+      if (!dialog || !content || !closeButton) {
+        return;
+      }
+
+      const closeDialog = () => {
+        if (dialog.open) {
+          dialog.close();
+        }
+      };
+
+      projectTiles.forEach((tile) => {
+        tile.addEventListener("click", () => {
+          const template = document.getElementById(`project-${tile.dataset.project}`);
+          if (!template) {
+            return;
+          }
+
+          lastTrigger = tile;
+          content.replaceChildren(template.content.cloneNode(true));
+          dialog.showModal();
+          closeButton.focus();
+        });
       });
 
-      document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") {
-          clearActive();
+      closeButton.addEventListener("click", closeDialog);
+      dialog.addEventListener("click", (event) => {
+        if (event.target === dialog) {
+          closeDialog();
         }
+      });
+      dialog.addEventListener("close", () => {
+        lastTrigger?.focus();
       });
     })();
   </script>
