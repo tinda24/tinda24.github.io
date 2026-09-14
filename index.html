@@ -137,28 +137,32 @@
       background: linear-gradient(180deg, transparent, var(--paper));
     }
 
-    .hero-content {
-      position: relative;
+    .hero-mascot {
+      position: absolute;
+      right: max(24px, calc((100vw - var(--content-max)) / 2 - 34px));
+      bottom: 56px;
       z-index: 1;
-      width: min(var(--content-max), calc(100% - var(--page-gutter) - var(--page-gutter)));
-      margin: 0 auto;
-      padding: 128px 0 92px;
+      width: clamp(390px, 39vw, 590px);
+      height: auto;
+      filter: drop-shadow(0 28px 38px rgba(0, 0, 0, 0.28));
+      pointer-events: none;
+      user-select: none;
+      animation: mascotFloat 6.8s ease-in-out infinite;
     }
 
-    .eyebrow {
-      margin: 0 0 18px;
-      color: #9ce0c8;
-      font-size: 0.82rem;
-      font-weight: 800;
-      letter-spacing: 0;
-      text-transform: uppercase;
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: min(var(--content-max), calc(100% - var(--page-gutter) - var(--page-gutter)));
+      margin: 0 auto;
+      padding: 128px clamp(320px, 38vw, 560px) 92px 0;
     }
 
     h1 {
       max-width: 760px;
       margin: 0;
-      font-size: 5.5rem;
-      line-height: 0.95;
+      font-size: 3.2rem;
+      line-height: 1.08;
       letter-spacing: 0;
     }
 
@@ -406,6 +410,25 @@
         radial-gradient(circle at 16% 18%, rgba(15, 123, 92, 0.25), transparent 28%),
         radial-gradient(circle at 82% 26%, rgba(220, 109, 79, 0.18), transparent 30%),
         linear-gradient(135deg, #101719 0%, #172220 52%, #111818 100%);
+    }
+
+    .section-mascot {
+      --mascot-rotate: 0deg;
+      position: absolute;
+      z-index: 0;
+      height: auto;
+      filter: drop-shadow(0 22px 32px rgba(0, 0, 0, 0.22));
+      pointer-events: none;
+      user-select: none;
+      animation: mascotFloat 7.6s ease-in-out infinite;
+    }
+
+    .research-mascot {
+      --mascot-rotate: 2deg;
+      top: 42px;
+      right: max(10px, calc((100vw - var(--content-max)) / 2 - 76px));
+      width: clamp(180px, 18vw, 270px);
+      opacity: 0.28;
     }
 
     .research-section .section-kicker {
@@ -869,6 +892,15 @@
         radial-gradient(circle at 8% 12%, rgba(15, 123, 92, 0.2), transparent 30%),
         radial-gradient(circle at 92% 82%, rgba(220, 109, 79, 0.11), transparent 32%),
         linear-gradient(145deg, #111a19 0%, #16211f 52%, #101819 100%);
+    }
+
+    .projects-mascot {
+      --mascot-rotate: -3deg;
+      top: 54px;
+      right: max(8px, calc((100vw - var(--content-max)) / 2 - 88px));
+      width: clamp(190px, 19vw, 285px);
+      opacity: 0.22;
+      animation-delay: -1.7s;
     }
 
     .projects-section::before,
@@ -1444,6 +1476,15 @@
         #121c1b;
     }
 
+    .about-mascot {
+      --mascot-rotate: 2deg;
+      top: 76px;
+      right: max(8px, calc((100vw - var(--content-max)) / 2 - 96px));
+      width: clamp(190px, 19vw, 290px);
+      opacity: 0.24;
+      animation-delay: -3.2s;
+    }
+
     .about-heading {
       position: relative;
       max-width: 840px;
@@ -1717,6 +1758,16 @@
         #101819;
     }
 
+    .blogs-mascot {
+      --mascot-rotate: -2deg;
+      right: max(20px, calc((100vw - var(--content-max)) / 2));
+      bottom: -48px;
+      z-index: 1;
+      width: clamp(280px, 31vw, 440px);
+      opacity: 0.88;
+      animation-delay: -2.4s;
+    }
+
     .blogs-section .section-head {
       margin-bottom: 0;
     }
@@ -1735,6 +1786,17 @@
       display: flex;
       justify-content: space-between;
       gap: 20px;
+    }
+
+    @keyframes mascotFloat {
+      0%,
+      100% {
+        transform: translateY(0) rotate(var(--mascot-rotate, 0deg));
+      }
+
+      50% {
+        transform: translateY(-9px) rotate(var(--mascot-rotate, 0deg));
+      }
     }
 
     @keyframes sectionNode {
@@ -1820,7 +1882,7 @@
       }
 
       h1 {
-        font-size: 4rem;
+        font-size: 2.55rem;
       }
 
       h2 {
@@ -1831,6 +1893,17 @@
         min-height: 88vh;
       }
 
+      .hero-mascot {
+        right: -7vw;
+        bottom: 30px;
+        width: min(390px, 62vw);
+        opacity: 0.38;
+      }
+
+      .hero-content {
+        padding-right: 0;
+      }
+
       .hero::before {
         background:
           linear-gradient(180deg, rgba(16, 23, 25, 0.94) 0%, rgba(16, 23, 25, 0.62) 56%, rgba(16, 23, 25, 0.36) 100%),
@@ -1839,6 +1912,21 @@
 
       .research-section {
         padding: 76px 0 82px;
+      }
+
+      .research-mascot,
+      .projects-mascot,
+      .about-mascot {
+        right: -38px;
+        width: 180px;
+        opacity: 0.14;
+      }
+
+      .blogs-mascot {
+        right: -24px;
+        bottom: -24px;
+        width: 280px;
+        opacity: 0.58;
       }
 
       .research-board {
@@ -2035,7 +2123,7 @@
       }
 
       h1 {
-        font-size: 2.8rem;
+        font-size: 2.1rem;
       }
 
       h2 {
@@ -2044,6 +2132,27 @@
 
       .hero-copy {
         font-size: 1rem;
+      }
+
+      .hero-mascot {
+        right: -118px;
+        bottom: 24px;
+        width: 310px;
+        opacity: 0.22;
+      }
+
+      .research-mascot,
+      .projects-mascot,
+      .about-mascot {
+        right: -62px;
+        width: 150px;
+        opacity: 0.1;
+      }
+
+      .blogs-mascot {
+        right: -46px;
+        width: 235px;
+        opacity: 0.45;
       }
 
       .button {
@@ -2203,6 +2312,11 @@
       .blogs-heading::after {
         animation: none !important;
       }
+
+      .hero-mascot,
+      .section-mascot {
+        animation: none !important;
+      }
     }
   </style>
 </head>
@@ -2258,8 +2372,9 @@
   </nav>
 
   <section id="top" class="hero">
+    <img class="hero-mascot" src="assets/mascot-coding.png" alt="" aria-hidden="true" fetchpriority="high">
     <div class="hero-content">
-      <h2>Building Minds for Robots</h2>
+      <h1>Building Minds for Robots</h1>
       <p class="hero-copy">Hello, I'm Qingda Hu. Welcome here!</p>
       <div class="hero-actions">
         <a class="button primary" href="#research-map">Research Map</a>
@@ -2271,6 +2386,7 @@
 
   <main>
     <section id="research-map" class="research-section">
+      <img class="section-mascot research-mascot" src="assets/mascot-research.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
       <div class="wrap">
         <div class="section-head">
           <p class="section-kicker">Research Map</p>
@@ -2374,6 +2490,7 @@
     </section>
 
     <section id="projects" class="section projects-section">
+      <img class="section-mascot projects-mascot" src="assets/mascot-engineering.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
       <div class="wrap">
         <div class="section-head projects-heading">
           <div>
@@ -2481,6 +2598,7 @@
     </section>
 
     <section id="about" class="section about-section">
+      <img class="section-mascot about-mascot" src="assets/mascot-collaboration.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
       <div class="wrap">
         <div class="section-head about-heading">
           <p class="section-kicker">About</p>
@@ -2518,6 +2636,7 @@
     </section>
 
     <section id="blogs" class="section blogs-section">
+      <img class="section-mascot blogs-mascot" src="assets/mascot-companion.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
       <div class="wrap">
         <div class="section-head blogs-heading">
           <div>
