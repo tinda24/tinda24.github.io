@@ -2,12 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script>
+    (function () {
+      try {
+        var theme = localStorage.getItem("site-theme");
+        var lang = localStorage.getItem("site-lang");
+        document.documentElement.dataset.theme = theme === "light" ? "light" : "dark";
+        document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+        document.documentElement.dataset.lang = lang === "zh" ? "zh" : "en";
+      } catch (error) {
+        document.documentElement.dataset.theme = "dark";
+        document.documentElement.dataset.lang = "en";
+      }
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Qingda Hu's research homepage, focusing on robot manipulation, action representation learning, long-horizon modeling, and memory mechanisms.">
   <title>Qingda Hu | Robotics Research</title>
   <style>
     :root {
-      color-scheme: light;
+      color-scheme: dark;
       --ink: #18201d;
       --muted: #5d6762;
       --paper: #f7f4ed;
@@ -105,6 +119,99 @@
 
     .nav-links a:hover {
       color: #fffdf8;
+    }
+
+    .site-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: 18px;
+      flex: 0 0 auto;
+    }
+
+    .seg-switch {
+      display: inline-flex;
+      align-items: center;
+      height: 34px;
+      padding: 3px;
+      border: 1px solid rgba(255, 253, 248, 0.22);
+      border-radius: 999px;
+      background: rgba(255, 253, 248, 0.08);
+    }
+
+    .seg-option,
+    .theme-toggle {
+      appearance: none;
+      margin: 0;
+      border: 0;
+      font: inherit;
+      cursor: pointer;
+      color: rgba(255, 253, 248, 0.82);
+      background: transparent;
+    }
+
+    .seg-option {
+      min-width: 36px;
+      height: 28px;
+      padding: 0 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .seg-option.is-active {
+      color: var(--night);
+      background: #fffdf8;
+    }
+
+    .seg-option:hover:not(.is-active),
+    .theme-toggle:hover {
+      color: #fffdf8;
+    }
+
+    .theme-toggle {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 253, 248, 0.22);
+      border-radius: 50%;
+      background: rgba(255, 253, 248, 0.08);
+    }
+
+    .theme-toggle svg {
+      width: 16px;
+      height: 16px;
+      display: block;
+    }
+
+    .theme-toggle .icon-moon {
+      display: none;
+    }
+
+    html[data-theme="light"] .theme-toggle .icon-sun {
+      display: none;
+    }
+
+    html[data-theme="light"] .theme-toggle .icon-moon {
+      display: block;
+    }
+
+    .seg-option:focus-visible,
+    .theme-toggle:focus-visible {
+      outline: 2px solid #9ce0c8;
+      outline-offset: 2px;
+    }
+
+    html[lang="zh-CN"] body {
+      line-height: 1.75;
+    }
+
+    html[lang="zh-CN"] h1,
+    html[lang="zh-CN"] h2,
+    html[lang="zh-CN"] .project-modal-body h2 {
+      line-height: 1.25;
     }
 
     .hero {
@@ -442,7 +549,7 @@
     .research-focus {
       display: block;
       margin-bottom: 8px;
-      color: #9f9cff;
+      color: #fffdf8;
       font-weight: 900;
     }
 
@@ -922,12 +1029,15 @@
     .projects-heading,
     .blogs-heading {
       position: relative;
+      max-width: none;
+      padding-left: 26px;
+    }
+
+    .blogs-heading {
       display: grid;
       grid-template-columns: 1fr minmax(320px, 0.72fr);
       align-items: end;
       gap: 48px;
-      max-width: none;
-      padding-left: 26px;
     }
 
     .projects-heading,
@@ -1710,7 +1820,7 @@
       z-index: 1;
     }
 
-    .about-contact div {
+    .about-contact > div:first-child {
       display: grid;
       gap: 4px;
     }
@@ -1725,20 +1835,77 @@
       font-size: 1.12rem;
     }
 
-    .about-contact a {
+    .about-emails {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
       flex: 0 0 auto;
-      padding: 10px 14px;
+    }
+
+    .email-pill {
+      display: inline-flex;
+      flex-wrap: nowrap;
+      align-items: center;
       border: 1px solid rgba(255, 253, 248, 0.3);
       border-radius: 7px;
       font-weight: 850;
-      transition: color 220ms ease, background 220ms ease, transform 220ms var(--ease-out);
+      white-space: nowrap;
+      transition: color 220ms ease, background 220ms ease, border-color 220ms ease, transform 220ms var(--ease-out);
     }
 
-    .about-contact a:hover,
-    .about-contact a:focus-visible {
+    .email-pill a {
+      padding: 10px 2px 10px 14px;
+      border: 0;
+      background: transparent;
+      white-space: nowrap;
+      user-select: text;
+    }
+
+    .email-copy {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      display: grid;
+      place-items: center;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 7px;
+      color: inherit;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .email-copy svg {
+      width: 15px;
+      height: 15px;
+      display: block;
+    }
+
+    .email-copy .icon-check {
+      display: none;
+    }
+
+    .email-pill:hover,
+    .email-pill:focus-within,
+    .email-pill.is-copied {
       color: var(--night);
       background: #9ce0c8;
+      border-color: #9ce0c8;
       transform: translateY(-2px);
+    }
+
+    .email-pill.is-copied .icon-copy {
+      display: none;
+    }
+
+    .email-pill.is-copied .icon-check {
+      display: block;
+    }
+
+    .email-copy:focus-visible {
       outline: none;
     }
 
@@ -1879,6 +2046,10 @@
 
       .nav-links {
         display: none;
+      }
+
+      .site-controls {
+        margin-left: auto;
       }
 
       h1 {
@@ -2292,9 +2463,479 @@
         flex-direction: column;
       }
 
-      .about-contact a {
-        white-space: normal;
+      .about-emails {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .email-pill a {
         overflow-wrap: anywhere;
+      }
+    }
+
+    [data-theme="light"] {
+      color-scheme: light;
+    }
+
+    [data-theme="light"] .site-header {
+      border-bottom-color: rgba(24, 32, 29, 0.08);
+      background: rgba(247, 244, 237, 0.86);
+      color: var(--ink);
+    }
+
+    [data-theme="light"] .brand-mark {
+      background: var(--night);
+      color: #fffdf8;
+    }
+
+    [data-theme="light"] .nav-links,
+    [data-theme="light"] .nav-links a:hover,
+    [data-theme="light"] .seg-option,
+    [data-theme="light"] .theme-toggle {
+      color: rgba(24, 32, 29, 0.72);
+    }
+
+    [data-theme="light"] .nav-links a:hover {
+      color: var(--ink);
+    }
+
+    [data-theme="light"] .seg-switch,
+    [data-theme="light"] .theme-toggle {
+      border-color: rgba(24, 32, 29, 0.14);
+      background: rgba(24, 32, 29, 0.04);
+    }
+
+    [data-theme="light"] .seg-option.is-active {
+      color: #fffdf8;
+      background: var(--night);
+    }
+
+    [data-theme="light"] .seg-option:hover:not(.is-active),
+    [data-theme="light"] .theme-toggle:hover {
+      color: var(--ink);
+    }
+
+    [data-theme="light"] .seg-option:focus-visible,
+    [data-theme="light"] .theme-toggle:focus-visible {
+      outline-color: var(--green);
+    }
+
+    [data-theme="light"] .hero {
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    [data-theme="light"] .hero::before {
+      background:
+        linear-gradient(90deg, rgba(247, 244, 237, 0.97) 0%, rgba(247, 244, 237, 0.9) 36%, rgba(247, 244, 237, 0.42) 68%, rgba(247, 244, 237, 0.16) 100%),
+        url("assets/hero-background.png") center / cover no-repeat;
+    }
+
+    [data-theme="light"] .hero-copy {
+      color: rgba(24, 32, 29, 0.72);
+    }
+
+    [data-theme="light"] .button {
+      border-color: rgba(24, 32, 29, 0.16);
+    }
+
+    [data-theme="light"] .button.primary {
+      background: var(--night);
+      color: #fffdf8;
+    }
+
+    [data-theme="light"] .button.secondary {
+      color: var(--ink);
+    }
+
+    [data-theme="light"] .section-float-nav {
+      border-color: rgba(24, 32, 29, 0.1);
+      background: rgba(255, 253, 248, 0.92);
+      box-shadow: 0 16px 40px rgba(24, 32, 29, 0.1);
+    }
+
+    [data-theme="light"] .section-float-nav ul::before {
+      border-left-color: rgba(24, 32, 29, 0.22);
+    }
+
+    [data-theme="light"] .section-float-nav a,
+    [data-theme="light"] .float-nav-label {
+      color: var(--ink);
+    }
+
+    [data-theme="light"] .float-nav-dot {
+      border-color: rgba(24, 32, 29, 0.72);
+      background: #fffdf8;
+      box-shadow: 0 0 0 3px rgba(255, 253, 248, 0.92);
+    }
+
+    [data-theme="light"] .float-nav-label {
+      border-color: rgba(24, 32, 29, 0.08);
+      background: rgba(255, 253, 248, 0.96);
+      box-shadow: 0 10px 28px rgba(24, 32, 29, 0.1);
+    }
+
+    [data-theme="light"] .section-float-nav a:hover .float-nav-dot,
+    [data-theme="light"] .section-float-nav a:focus-visible .float-nav-dot,
+    [data-theme="light"] .section-float-nav a.is-active .float-nav-dot {
+      border-color: var(--green);
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(15, 123, 92, 0.14), 0 0 18px rgba(15, 123, 92, 0.28);
+    }
+
+    [data-theme="light"] .section-float-nav a.is-active .float-nav-label {
+      color: var(--green);
+    }
+
+    [data-theme="light"] .research-section,
+    [data-theme="light"] .projects-section,
+    [data-theme="light"] .about-section,
+    [data-theme="light"] .blogs-section {
+      color: var(--ink);
+      border-top-color: rgba(24, 32, 29, 0.06);
+    }
+
+    [data-theme="light"] .research-section {
+      background:
+        radial-gradient(circle at 16% 18%, rgba(15, 123, 92, 0.12), transparent 28%),
+        radial-gradient(circle at 82% 26%, rgba(220, 109, 79, 0.1), transparent 30%),
+        linear-gradient(180deg, #f7f4ed 0%, #f3eee4 100%);
+    }
+
+    [data-theme="light"] .projects-section {
+      background:
+        radial-gradient(circle at 8% 12%, rgba(15, 123, 92, 0.1), transparent 30%),
+        radial-gradient(circle at 92% 82%, rgba(220, 109, 79, 0.08), transparent 32%),
+        #f6f1e8;
+    }
+
+    [data-theme="light"] .about-section {
+      background:
+        radial-gradient(circle at 86% 18%, rgba(15, 123, 92, 0.1), transparent 26%),
+        radial-gradient(circle at 12% 88%, rgba(114, 184, 214, 0.1), transparent 28%),
+        #f7f4ed;
+    }
+
+    [data-theme="light"] .blogs-section {
+      background:
+        radial-gradient(circle at 16% 82%, rgba(220, 109, 79, 0.1), transparent 27%),
+        radial-gradient(circle at 88% 20%, rgba(15, 123, 92, 0.1), transparent 25%),
+        #f3eee4;
+    }
+
+    [data-theme="light"] .projects-section::before,
+    [data-theme="light"] .about-section::before,
+    [data-theme="light"] .blogs-section::before {
+      background-image:
+        linear-gradient(rgba(24, 32, 29, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(24, 32, 29, 0.045) 1px, transparent 1px);
+    }
+
+    [data-theme="light"] .research-section .section-kicker,
+    [data-theme="light"] .projects-section .section-kicker,
+    [data-theme="light"] .about-section .section-kicker,
+    [data-theme="light"] .blogs-section .section-kicker,
+    [data-theme="light"] .project-modal-kicker,
+    [data-theme="light"] .reference-index,
+    [data-theme="light"] .cofirst-mark,
+    [data-theme="light"] .card-label {
+      color: var(--green);
+    }
+
+    [data-theme="light"] .research-section .lead,
+    [data-theme="light"] .projects-section .lead,
+    [data-theme="light"] .about-section .lead,
+    [data-theme="light"] .blogs-section .lead,
+    [data-theme="light"] .references-heading p,
+    [data-theme="light"] .reference-citation,
+    [data-theme="light"] .project-modal-summary,
+    [data-theme="light"] .project-modal-columns p,
+    [data-theme="light"] .project-availability,
+    [data-theme="light"] .about-statement p,
+    [data-theme="light"] .education-row p,
+    [data-theme="light"] .about-contact span,
+    [data-theme="light"] .node-meta,
+    [data-theme="light"] .node-detail,
+    [data-theme="light"] .project-tile-copy > span:last-child,
+    [data-theme="light"] .project-modal-metrics span {
+      color: var(--muted);
+    }
+
+    [data-theme="light"] .research-focus {
+      color: var(--ink);
+    }
+
+    [data-theme="light"] .reference-note {
+      color: rgba(24, 32, 29, 0.48);
+    }
+
+    [data-theme="light"] .reference-citation strong,
+    [data-theme="light"] .reference-citation em,
+    [data-theme="light"] .about-statement .about-lede,
+    [data-theme="light"] .about-contact,
+    [data-theme="light"] .about-contact strong {
+      color: var(--ink);
+    }
+
+    [data-theme="light"] .research-board {
+      border-color: rgba(24, 32, 29, 0.1);
+      background:
+        linear-gradient(rgba(24, 32, 29, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(24, 32, 29, 0.05) 1px, transparent 1px),
+        rgba(255, 253, 248, 0.72);
+      box-shadow: 0 24px 70px rgba(24, 32, 29, 0.08);
+    }
+
+    [data-theme="light"] .research-board::before,
+    [data-theme="light"] .research-board::after {
+      border-color: rgba(24, 32, 29, 0.1);
+    }
+
+    [data-theme="light"] .map-axis,
+    [data-theme="light"] .axis-x {
+      color: rgba(24, 32, 29, 0.5);
+    }
+
+    [data-theme="light"] .axis-arrow.x {
+      background: linear-gradient(90deg, rgba(15, 123, 92, 0.45), rgba(24, 32, 29, 0.38));
+    }
+
+    [data-theme="light"] .axis-arrow.y {
+      background: linear-gradient(0deg, rgba(15, 123, 92, 0.45), rgba(24, 32, 29, 0.38));
+    }
+
+    [data-theme="light"] .axis-arrow.x::before {
+      border-color: rgba(15, 123, 92, 0.7);
+      background: #fffdf8;
+    }
+
+    [data-theme="light"] .axis-arrow::after {
+      border-top-color: rgba(24, 32, 29, 0.7);
+      border-right-color: rgba(24, 32, 29, 0.7);
+    }
+
+    [data-theme="light"] .map-node {
+      color: var(--ink);
+      background: color-mix(in srgb, var(--node-color), #fffdf8 84%);
+      border-color: color-mix(in srgb, var(--node-color), #18201d 22%);
+      box-shadow: 0 14px 36px rgba(24, 32, 29, 0.08);
+    }
+
+    [data-theme="light"] .map-node::before {
+      border-color: rgba(24, 32, 29, 0.06);
+    }
+
+    [data-theme="light"] .map-node:hover,
+    [data-theme="light"] .map-node:focus-visible {
+      background: color-mix(in srgb, var(--node-color), #fffdf8 74%);
+      border-color: color-mix(in srgb, var(--node-color), #18201d 12%);
+      box-shadow: 0 22px 54px color-mix(in srgb, var(--node-color), rgba(24, 32, 29, 0.18) 72%);
+    }
+
+    [data-theme="light"] .map-project-module {
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, color-mix(in srgb, var(--module-color), transparent 82%) 1px, transparent 1px),
+        color-mix(in srgb, var(--module-color), #fffdf8 86%);
+      box-shadow: 0 12px 30px rgba(24, 32, 29, 0.08);
+    }
+
+    [data-theme="light"] .map-project-module:hover,
+    [data-theme="light"] .map-project-module:focus-visible {
+      border-color: color-mix(in srgb, var(--module-color), #18201d 18%);
+      background-color: color-mix(in srgb, var(--module-color), #fffdf8 76%);
+      box-shadow: 0 18px 42px color-mix(in srgb, var(--module-color), rgba(24, 32, 29, 0.16) 78%);
+    }
+
+    [data-theme="light"] .map-project-label {
+      color: color-mix(in srgb, var(--module-color), #18201d 28%);
+    }
+
+    [data-theme="light"] .map-project-status {
+      color: rgba(24, 32, 29, 0.5);
+    }
+
+    [data-theme="light"] .map-project-arrow {
+      border-color: rgba(24, 32, 29, 0.14);
+      background: rgba(255, 253, 248, 0.72);
+    }
+
+    [data-theme="light"] .map-project-module:hover .map-project-arrow,
+    [data-theme="light"] .map-project-module:focus-visible .map-project-arrow {
+      color: #fffdf8;
+      background: var(--night);
+    }
+
+    [data-theme="light"] .project-tile,
+    [data-theme="light"] .about-statement,
+    [data-theme="light"] .about-card,
+    [data-theme="light"] .about-contact {
+      color: var(--ink);
+      border-color: rgba(24, 32, 29, 0.1);
+      background: rgba(255, 253, 248, 0.78);
+      box-shadow: 0 16px 44px rgba(24, 32, 29, 0.06);
+    }
+
+    [data-theme="light"] .about-statement,
+    [data-theme="light"] .about-contact {
+      background:
+        linear-gradient(rgba(24, 32, 29, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(24, 32, 29, 0.035) 1px, transparent 1px),
+        rgba(255, 253, 248, 0.78);
+      background-size: 30px 30px;
+    }
+
+    [data-theme="light"] .project-tile-metric {
+      color: var(--ink);
+      border-top-color: rgba(24, 32, 29, 0.1);
+    }
+
+    [data-theme="light"] .project-open,
+    [data-theme="light"] .project-modal-close {
+      color: var(--ink);
+      border-color: rgba(24, 32, 29, 0.14);
+      background: rgba(255, 253, 248, 0.92);
+      box-shadow: 0 8px 20px rgba(24, 32, 29, 0.08);
+    }
+
+    [data-theme="light"] .project-tile:hover,
+    [data-theme="light"] .project-tile:focus-visible {
+      border-color: color-mix(in srgb, var(--tile-accent), transparent 40%);
+      box-shadow: 0 24px 60px rgba(24, 32, 29, 0.12);
+    }
+
+    [data-theme="light"] .project-tile:hover .project-open,
+    [data-theme="light"] .project-tile:focus-visible .project-open {
+      color: #fffdf8;
+      background: var(--tile-accent);
+    }
+
+    [data-theme="light"] .references-block,
+    [data-theme="light"] .reference-list,
+    [data-theme="light"] .reference-item,
+    [data-theme="light"] .project-modal-columns,
+    [data-theme="light"] .education-row,
+    [data-theme="light"] .education-row + .education-row,
+    [data-theme="light"] .education-stack .card-label {
+      border-color: rgba(24, 32, 29, 0.1);
+    }
+
+    [data-theme="light"] .reference-link {
+      color: var(--ink);
+      border-color: rgba(24, 32, 29, 0.16);
+    }
+
+    [data-theme="light"] .reference-link:hover,
+    [data-theme="light"] .reference-link:focus-visible,
+    [data-theme="light"] .email-pill:hover,
+    [data-theme="light"] .email-pill:focus-within,
+    [data-theme="light"] .email-pill.is-copied,
+    [data-theme="light"] .project-modal-close:hover,
+    [data-theme="light"] .project-modal-close:focus-visible {
+      color: #fffdf8;
+      border-color: var(--green);
+      background: var(--green);
+    }
+
+    [data-theme="light"] .education-row:hover {
+      background: rgba(15, 123, 92, 0.06);
+    }
+
+    [data-theme="light"] .capability-row span {
+      color: rgba(24, 32, 29, 0.72);
+      border-color: rgba(24, 32, 29, 0.12);
+      background: rgba(255, 253, 248, 0.55);
+    }
+
+    [data-theme="light"] .capability-row span:hover {
+      color: var(--green);
+      border-color: rgba(15, 123, 92, 0.35);
+      background: rgba(15, 123, 92, 0.08);
+    }
+
+    [data-theme="light"] .email-pill {
+      border-color: rgba(24, 32, 29, 0.2);
+    }
+
+    [data-theme="light"] .about-contact::before {
+      border-color: rgba(15, 123, 92, 0.28);
+    }
+
+    [data-theme="light"] .about-statement:hover {
+      border-color: rgba(15, 123, 92, 0.32);
+      box-shadow: 0 24px 60px rgba(24, 32, 29, 0.1);
+    }
+
+    [data-theme="light"] .project-dialog {
+      color: var(--ink);
+      border-color: rgba(24, 32, 29, 0.1);
+      background: #fffdf8;
+      box-shadow: 0 42px 120px rgba(24, 32, 29, 0.18);
+    }
+
+    [data-theme="light"] .project-dialog::backdrop {
+      background: rgba(24, 32, 29, 0.36);
+    }
+
+    [data-theme="light"] .project-modal-image {
+      border-bottom-color: rgba(24, 32, 29, 0.08);
+    }
+
+    [data-theme="light"] .project-modal-body {
+      background:
+        linear-gradient(rgba(24, 32, 29, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(24, 32, 29, 0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    [data-theme="light"] .project-modal-metrics div {
+      border-color: rgba(24, 32, 29, 0.1);
+      background: rgba(24, 32, 29, 0.03);
+    }
+
+    [data-theme="light"] .project-modal-links a {
+      color: #fffdf8;
+      background: var(--green);
+    }
+
+    [data-theme="light"] .project-modal-links a:hover {
+      color: #fffdf8;
+      background: var(--night);
+    }
+
+    [data-theme="light"] .project-availability {
+      background: rgba(115, 90, 155, 0.1);
+    }
+
+    [data-theme="light"] .site-footer {
+      border-top-color: rgba(24, 32, 29, 0.08);
+      color: rgba(24, 32, 29, 0.58);
+      background: #efeae0;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      [data-theme="light"] .section-float-nav:has(a:hover) .float-nav-label {
+        color: rgba(24, 32, 29, 0.46);
+      }
+
+      [data-theme="light"] .section-float-nav:has(a:hover) a:hover .float-nav-label {
+        color: var(--green);
+      }
+
+      [data-theme="light"] .section-float-nav:has(a:hover) a.is-active:not(:hover) .float-nav-label {
+        color: rgba(15, 123, 92, 0.72);
+      }
+    }
+
+    @media (max-width: 820px) {
+      [data-theme="light"] .hero::before {
+        background:
+          linear-gradient(180deg, rgba(247, 244, 237, 0.97) 0%, rgba(247, 244, 237, 0.9) 62%, rgba(247, 244, 237, 0.62) 100%),
+          url("assets/hero-background.png") center / cover no-repeat;
+      }
+
+      [data-theme="light"] .section-float-nav ul::before {
+        border-top-color: rgba(24, 32, 29, 0.22);
       }
     }
 
@@ -2322,50 +2963,65 @@
 </head>
 <body>
   <header class="site-header">
-    <nav class="nav" aria-label="Primary navigation">
-      <a class="brand" href="#top" aria-label="Home">
+    <nav class="nav" data-i18n-aria="nav.primary" aria-label="Primary navigation">
+      <a class="brand" href="#top" data-i18n-aria="nav.home" aria-label="Home">
         <span class="brand-mark">Q</span>
-        <span>Qingda Hu</span>
+        <span data-i18n="brand">Qingda Hu</span>
       </a>
       <div class="nav-links">
-        <a href="#research-map">Research Map</a>
-        <a href="#projects">Projects</a>
-        <a href="#about">About</a>
-        <a href="#blogs">Blogs</a>
+        <a href="#research-map" data-i18n="nav.research">Research map</a>
+        <a href="#projects" data-i18n="nav.projects">Projects</a>
+        <a href="#about" data-i18n="nav.about">About me</a>
+        <a href="#blogs" data-i18n="nav.blogs">Blogs</a>
+      </div>
+      <div class="site-controls">
+        <div class="seg-switch" role="group" data-i18n-aria="controls.language" aria-label="Language">
+          <button class="seg-option is-active" type="button" data-set-lang="en" aria-pressed="true">EN</button>
+          <button class="seg-option" type="button" data-set-lang="zh" aria-pressed="false">中</button>
+        </div>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Switch to light mode">
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 14.5A8.5 8.5 0 1 1 9.5 3 7 7 0 0 0 21 14.5z"></path>
+          </svg>
+        </button>
       </div>
     </nav>
   </header>
 
-  <nav class="section-float-nav" aria-label="Page sections">
+  <nav class="section-float-nav" data-i18n-aria="nav.sections" aria-label="Page sections">
     <ul>
       <li>
-        <a href="#top" aria-label="Home" data-section="top">
+        <a href="#top" data-i18n-aria="nav.home" aria-label="Home" data-section="top">
           <span class="float-nav-dot" aria-hidden="true"></span>
-          <span class="float-nav-label">Home</span>
+          <span class="float-nav-label" data-i18n="nav.home">Home</span>
         </a>
       </li>
       <li>
-        <a href="#research-map" aria-label="Research Map" data-section="research-map">
+        <a href="#research-map" data-i18n-aria="nav.research" aria-label="Research map" data-section="research-map">
           <span class="float-nav-dot" aria-hidden="true"></span>
-          <span class="float-nav-label">Research Map</span>
+          <span class="float-nav-label" data-i18n="nav.research">Research map</span>
         </a>
       </li>
       <li>
-        <a href="#projects" aria-label="Projects" data-section="projects">
+        <a href="#projects" data-i18n-aria="nav.projects" aria-label="Projects" data-section="projects">
           <span class="float-nav-dot" aria-hidden="true"></span>
-          <span class="float-nav-label">Projects</span>
+          <span class="float-nav-label" data-i18n="nav.projects">Projects</span>
         </a>
       </li>
       <li>
-        <a href="#about" aria-label="About" data-section="about">
+        <a href="#about" data-i18n-aria="nav.about" aria-label="About me" data-section="about">
           <span class="float-nav-dot" aria-hidden="true"></span>
-          <span class="float-nav-label">About</span>
+          <span class="float-nav-label" data-i18n="nav.about">About me</span>
         </a>
       </li>
       <li>
-        <a href="#blogs" aria-label="Blogs" data-section="blogs">
+        <a href="#blogs" data-i18n-aria="nav.blogs" aria-label="Blogs" data-section="blogs">
           <span class="float-nav-dot" aria-hidden="true"></span>
-          <span class="float-nav-label">Blogs</span>
+          <span class="float-nav-label" data-i18n="nav.blogs">Blogs</span>
         </a>
       </li>
     </ul>
@@ -2374,12 +3030,12 @@
   <section id="top" class="hero">
     <img class="hero-mascot" src="assets/mascot-coding.png" alt="" aria-hidden="true" fetchpriority="high">
     <div class="hero-content">
-      <h1>Building Minds for Robots</h1>
-      <p class="hero-copy">Hello, I'm Qingda Hu. Welcome here!</p>
+      <h1 data-i18n-html="hero.title">Building Minds for Robots</h1>
+      <p class="hero-copy" data-i18n="hero.copy">Hello, I'm Qingda Hu. Welcome here!</p>
       <div class="hero-actions">
-        <a class="button primary" href="#research-map">Research Map</a>
-        <a class="button secondary" href="#projects">Projects</a>
-        <a class="button secondary" href="#about">About</a>
+        <a class="button primary" href="#research-map" data-i18n="nav.research">Research map</a>
+        <a class="button secondary" href="#projects" data-i18n="nav.projects">Projects</a>
+        <a class="button secondary" href="#about" data-i18n="nav.about">About me</a>
       </div>
     </div>
   </section>
@@ -2389,15 +3045,14 @@
       <img class="section-mascot research-mascot" src="assets/mascot-research.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
       <div class="wrap">
         <div class="section-head">
-          <p class="section-kicker">Research Map</p>
-          <h2>Research Map</h2>
-          <p class="lead"><strong class="research-focus">I focus on 4D representations and the intrinsic structure of robot cognition.</strong>A unified view of my research： </p>
+          <p class="section-kicker" data-i18n="nav.research">Research map</p>
+          <p class="lead"><strong class="research-focus" data-i18n="research.focus">I focus on general robot representations in the spatiotemporal (4D) domain, seeking completeness in the definition and modeling of robot mind.</strong></p>
         </div>
 
-        <div class="research-board" aria-label="Research Map">
+        <div class="research-board" data-i18n-aria="nav.research" aria-label="Research map">
           <span class="axis-arrow x" aria-hidden="true"></span>
           <span class="axis-arrow y" aria-hidden="true"></span>
-          <span class="map-axis axis-x">Representation Flow</span>
+          <span class="map-axis axis-x" data-i18n="research.axis">Representation Flow</span>
 
           <svg class="map-lines" viewBox="0 0 1000 620" preserveAspectRatio="none" aria-hidden="true">
             <defs>
@@ -2418,15 +3073,15 @@
               <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
               <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
             </span>
-            <strong class="node-title">Observation Input</strong>
-            <span class="node-meta">Temporal Stacking</span>
-            <p class="node-detail">What should the robot perceive, and which changes are worth encoding?</p>
+            <strong class="node-title" data-i18n="node.observe.title">Observation Input</strong>
+            <span class="node-meta" data-i18n="node.observe.meta">Temporal Modeling</span>
+            <p class="node-detail" data-i18n="node.observe.detail">What should the robot perceive, and which changes are worth encoding?</p>
           </article>
 
-          <button class="map-project-module" type="button" data-topic="observe" data-project="pam" aria-haspopup="dialog" aria-label="Open PAM project details">
+          <button class="map-project-module" type="button" data-topic="observe" data-project="pam" aria-haspopup="dialog" data-i18n-aria="map.pam.aria" aria-label="Open PAM project details">
             <span class="map-project-module-copy">
               <span class="map-project-label">PAM</span>
-              <strong>Adaptive Memory Recoding</strong>
+              <strong data-i18n="map.pam.title">Adaptive Memory Recoding</strong>
             </span>
             <span class="map-project-arrow" aria-hidden="true">↗</span>
           </button>
@@ -2436,9 +3091,9 @@
               <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
               <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
             </span>
-            <strong class="node-title">Contextual Dynamics</strong>
-            <span class="node-meta">Forces &amp; Trajectories</span>
-            <p class="node-detail">Connects temporal progression with cross-modal evolution.</p>
+            <strong class="node-title" data-i18n="node.dynamics.title">Contextual Dynamics</strong>
+            <span class="node-meta" data-i18n="node.dynamics.meta">Forces &amp; Trajectories</span>
+            <p class="node-detail" data-i18n="node.dynamics.detail">Connects temporal progression with cross-modal evolution.</p>
           </article>
 
           <article class="map-node" data-topic="fusion" tabindex="0">
@@ -2446,9 +3101,9 @@
               <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
               <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
             </span>
-            <strong class="node-title">Fused Observations</strong>
-            <span class="node-meta">Multimodal Alignment</span>
-            <p class="node-detail">Transforms heterogeneous inputs into comparable feature representations.</p>
+            <strong class="node-title" data-i18n="node.fusion.title">Fused Features</strong>
+            <span class="node-meta" data-i18n="node.fusion.meta">Multimodal Alignment</span>
+            <p class="node-detail" data-i18n="node.fusion.detail">Transforms heterogeneous inputs into comparable feature representations.</p>
           </article>
 
           <article class="map-node" data-topic="action" tabindex="0">
@@ -2456,32 +3111,32 @@
               <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
               <span class="node-dot"></span><span class="node-dot"></span><span class="node-dot"></span>
             </span>
-            <strong class="node-title">Action Output</strong>
-            <span class="node-meta">Policy &amp; Decision</span>
-            <p class="node-detail">Translates representations into policy choices and predictive outputs.</p>
+            <strong class="node-title" data-i18n="node.action.title">Action Output</strong>
+            <span class="node-meta" data-i18n="node.action.meta">Policy &amp; Decision</span>
+            <p class="node-detail" data-i18n="node.action.detail">Translates representations into policy choices and predictive outputs.</p>
           </article>
 
-          <button class="map-project-module map-project-module--upcoming" type="button" data-topic="action" data-project="tcla" aria-haspopup="dialog" aria-label="Open TCLA project details">
+          <button class="map-project-module map-project-module--upcoming" type="button" data-topic="action" data-project="tcla" aria-haspopup="dialog" data-i18n-aria="map.tcla.aria" aria-label="Open TCLA project details">
             <span class="map-project-module-copy">
               <span class="map-project-label">TCLA</span>
-              <strong>Action Representation Learning</strong>
-              <span class="map-project-status">To be refreshed</span>
+              <strong data-i18n="map.tcla.title">Action Representation Learning</strong>
+              <span class="map-project-status" data-i18n="map.tcla.status">To be refreshed</span>
             </span>
             <span class="map-project-arrow" aria-hidden="true">↗</span>
           </button>
 
-          <button class="map-project-module" type="button" data-topic="action" data-project="autospeed" aria-haspopup="dialog" aria-label="Open AutoSpeed project details">
+          <button class="map-project-module" type="button" data-topic="action" data-project="autospeed" aria-haspopup="dialog" data-i18n-aria="map.autospeed.aria" aria-label="Open AutoSpeed project details">
             <span class="map-project-module-copy">
               <span class="map-project-label">AutoSpeed</span>
-              <strong>Better-than-Expert Motion Speed</strong>
+              <strong data-i18n="map.autospeed.title">Better-than-Expert Motion Speed</strong>
             </span>
             <span class="map-project-arrow" aria-hidden="true">↗</span>
           </button>
 
-          <button class="map-project-module" type="button" data-topic="latent" data-project="lam" aria-haspopup="dialog" aria-label="Open latent-action project details">
+          <button class="map-project-module" type="button" data-topic="latent" data-project="lam" aria-haspopup="dialog" data-i18n-aria="map.lam.aria" aria-label="Open latent-action project details">
             <span class="map-project-module-copy">
-              <span class="map-project-label">Latent Actions</span>
-              <strong>What Matters for Latent Actions?</strong>
+              <span class="map-project-label" data-i18n="map.lam.label">Latent Actions</span>
+              <strong data-i18n="map.lam.title">What Matters for Latent Actions?</strong>
             </span>
             <span class="map-project-arrow" aria-hidden="true">↗</span>
           </button>
@@ -2494,50 +3149,49 @@
       <div class="wrap">
         <div class="section-head projects-heading">
           <div>
-            <p class="section-kicker">Selected Research</p>
-            <h2>Projects, made tangible.</h2>
+            <p class="section-kicker" data-i18n="projects.kicker">Selected Research</p>
+            <h2 data-i18n="projects.title">Project List</h2>
           </div>
-          <p class="lead">Six research threads across memory, motion speed, action representations, and viewpoint-robust control. Select a project to explore the method, evidence, and my contribution.</p>
         </div>
 
         <div class="project-bento">
           <button class="project-tile project-tile--wide theme-green" type="button" data-project="pam" aria-haspopup="dialog">
             <span class="project-tile-copy">
-              <span class="project-eyebrow">IEEE RA-L · Lead Project</span>
+              <span class="project-eyebrow" data-i18n="tile.pam.eyebrow">IEEE RA-L · Lead Project</span>
               <strong>PAM</strong>
-              <span>Adaptive working memory for state-ambiguous manipulation.</span>
+              <span data-i18n="tile.pam.desc">Adaptive working memory for state-ambiguous manipulation.</span>
             </span>
-            <span class="project-tile-metric">300 frames · 20-30 Hz</span>
+            <span class="project-tile-metric" data-i18n="tile.pam.metric">300 frames · 20-30 Hz</span>
             <span class="project-open" aria-hidden="true">↗</span>
           </button>
 
           <button class="project-tile project-tile--tall theme-coral" type="button" data-project="autospeed" aria-haspopup="dialog">
             <span class="project-tile-copy">
-              <span class="project-eyebrow">ECCV 2026 · Lead Project</span>
+              <span class="project-eyebrow" data-i18n="tile.autospeed.eyebrow">ECCV 2026 · Lead Project</span>
               <strong>AutoSpeed</strong>
-              <span>Learning when a robot should move fast—and when it should slow down.</span>
+              <span data-i18n="tile.autospeed.desc">Learning when a robot should move fast—and when it should slow down.</span>
             </span>
-            <span class="project-tile-metric">1.8× real-robot speedup</span>
+            <span class="project-tile-metric" data-i18n="tile.autospeed.metric">1.8× real-robot speedup</span>
             <span class="project-open" aria-hidden="true">↗</span>
           </button>
 
           <button class="project-tile theme-pink" type="button" data-project="tcla" aria-haspopup="dialog">
             <span class="project-tile-copy">
-              <span class="project-eyebrow">To Be Refreshed</span>
+              <span class="project-eyebrow" data-i18n="tile.tcla.eyebrow">To Be Refreshed</span>
               <strong>TCLA</strong>
-              <span>Self-supervised action representations for faster, stronger robot-policy learning.</span>
+              <span data-i18n="tile.tcla.desc">Self-supervised action representations for faster, stronger robot-policy learning.</span>
             </span>
-            <span class="project-tile-metric">Up to +55.4% · ≈9× fewer steps</span>
+            <span class="project-tile-metric" data-i18n="tile.tcla.metric">Up to +55.4% · ≈9× fewer steps</span>
             <span class="project-open" aria-hidden="true">↗</span>
           </button>
 
           <button class="project-tile theme-gold" type="button" data-project="lam" aria-haspopup="dialog">
             <span class="project-tile-copy">
-              <span class="project-eyebrow">IJCV · Under Review</span>
-              <strong>What Matters for Latent Actions?</strong>
-              <span>A controlled study of the choices that actually improve robot learning.</span>
+              <span class="project-eyebrow" data-i18n="tile.lam.eyebrow">IJCV · Under Review</span>
+              <strong data-i18n="map.lam.title">What Matters for Latent Actions?</strong>
+              <span data-i18n="tile.lam.desc">A controlled study of the choices that actually improve robot learning.</span>
             </span>
-            <span class="project-tile-metric">41 designs · 59M frames</span>
+            <span class="project-tile-metric" data-i18n="tile.lam.metric">41 designs · 59M frames</span>
             <span class="project-open" aria-hidden="true">↗</span>
           </button>
 
@@ -2545,29 +3199,29 @@
             <span class="project-tile-copy">
               <span class="project-eyebrow">CVPR 2026</span>
               <strong>DiffuView</strong>
-              <span>3D-aware representations through multi-view diffusion pretraining.</span>
+              <span data-i18n="tile.diffuview.desc">3D-aware representations through multi-view diffusion pretraining.</span>
             </span>
-            <span class="project-tile-metric">Nearly +20% under view shifts</span>
+            <span class="project-tile-metric" data-i18n="tile.diffuview.metric">Nearly +20% under view shifts</span>
             <span class="project-open" aria-hidden="true">↗</span>
           </button>
 
           <button class="project-tile theme-violet" type="button" data-project="bpp" aria-haspopup="dialog">
             <span class="project-tile-copy">
-              <span class="project-eyebrow">NeurIPS 2026 · Under Review</span>
+              <span class="project-eyebrow" data-i18n="tile.bpp.eyebrow">NeurIPS 2026 · Under Review</span>
               <strong>BPP</strong>
-              <span>View-invariant motion representations without depth or calibration.</span>
+              <span data-i18n="tile.bpp.desc">View-invariant motion representations without depth or calibration.</span>
             </span>
-            <span class="project-tile-metric">91.9% across LIBERO</span>
+            <span class="project-tile-metric" data-i18n="tile.bpp.metric">91.9% across LIBERO</span>
             <span class="project-open" aria-hidden="true">↗</span>
           </button>
         </div>
 
         <section class="references-block" aria-labelledby="references-title">
           <div class="references-heading">
-            <p class="section-kicker">References</p>
+            <p class="section-kicker" data-i18n="ref.kicker">References</p>
             <div>
-              <h3 id="references-title">Citation-ready publications.</h3>
-              <p>IEEE-style references based on the latest publicly available journal, conference, and arXiv records.</p>
+              <h3 id="references-title" data-i18n="ref.title">Citation-ready publications.</h3>
+              <p data-i18n="ref.lead">IEEE-style references based on the latest publicly available journal, conference, and arXiv records.</p>
             </div>
           </div>
 
@@ -2584,7 +3238,7 @@
             </li>
             <li class="reference-item">
               <span class="reference-index">03</span>
-              <p class="reference-citation">X. Bu<sup class="cofirst-mark">*</sup>, <strong>Q. Hu<sup class="cofirst-mark">*</sup></strong>, L. Zhou, L. Zhang, Y. Tang, Z. Liu, X. Tao, Z. Ma, Q. Huang, C. Tang, H. Wang, J. Zhang, J. Ma, H. Ye, W. Li, and X. Hao, “What Matters for Latent Actions in Robot Learning,” <em>arXiv preprint arXiv:2608.19613</em>, 2026.<span class="reference-note"><sup class="cofirst-mark">*</sup> Equal contribution.</span></p>
+              <p class="reference-citation">X. Bu<sup class="cofirst-mark">*</sup>, <strong>Q. Hu<sup class="cofirst-mark">*</sup></strong>, L. Zhou, L. Zhang, Y. Tang, Z. Liu, X. Tao, Z. Ma, Q. Huang, C. Tang, H. Wang, J. Zhang, J. Ma, H. Ye, W. Li, and X. Hao, “What Matters for Latent Actions in Robot Learning,” <em>arXiv preprint arXiv:2608.19613</em>, 2026.<span class="reference-note"><sup class="cofirst-mark">*</sup> <span data-i18n="ref.equal">Equal contribution.</span></span></p>
               <a class="reference-link" href="https://arxiv.org/abs/2608.19613" target="_blank" rel="noreferrer">arXiv ↗</a>
             </li>
             <li class="reference-item">
@@ -2601,36 +3255,51 @@
       <img class="section-mascot about-mascot" src="assets/mascot-collaboration.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
       <div class="wrap">
         <div class="section-head about-heading">
-          <p class="section-kicker">About</p>
-          <h2>Research that survives contact with the real robot.</h2>
+          <p class="section-kicker" data-i18n="nav.about">About me</p>
+          <h2 data-i18n="about.title">My Growth</h2>
         </div>
 
         <div class="about-overview">
           <article class="about-statement">
-            <p class="about-lede">I am Qingda Hu, an M.S. student at Fudan University working on robotic manipulation, action representations, long-horizon memory, and scalable learning.</p>
-            <p>I care about complete research loops: a precise problem, an efficient method, reproducible evaluation, and a system that still works outside the training codebase. My experience spans model design, data collection, large-scale training, simulation, and deployment on physical robots.</p>
+            <p class="about-lede" data-i18n="about.lede">I am passionate about research into the robot mind, and I care about the relationship and interaction between humans and machines.</p>
+            <p data-i18n="about.body">I am grateful that my past education brought me into contact with beautiful things across many disciplines, and I love each moment of epiphany. Whether scientific, philosophical, artistic, or humanistic, they all point toward creation. Infinite experience lies enfolded in nature's mysterious implicate order.</p>
           </article>
         </div>
 
         <div class="about-detail-grid">
           <article class="about-card education-stack">
-            <p class="card-label">Education</p>
+            <p class="card-label" data-i18n="about.edu">Education</p>
             <div class="education-row">
-              <div><strong>Fudan University</strong><p>M.S. in Computer Science and Technology</p></div>
+              <div><strong data-i18n="about.fudan">Fudan University</strong><p data-i18n="about.fudan.degree">M.S. in Computer Science and Technology</p></div>
             </div>
             <div class="education-row">
-              <div><strong>Tsinghua University</strong><p>B.Eng. in Vehicle Engineering</p></div>
+              <div><strong data-i18n="about.tsinghua">Tsinghua University</strong><p data-i18n="about.tsinghua.degree">B.Eng. in Vehicle Engineering</p></div>
             </div>
           </article>
         </div>
 
-        <div class="capability-row" aria-label="Research capabilities">
-          <span>Robot Manipulation</span><span>VLA Models</span><span>Long-Horizon Memory</span><span>Latent Actions</span><span>Diffusion &amp; Flow Matching</span><span>Real-Robot Deployment</span>
+        <div class="capability-row" data-i18n-aria="about.caps" aria-label="Research capabilities">
+          <span data-i18n="cap.1">Long-History Modeling</span><span data-i18n="cap.2">VLA Models</span><span data-i18n="cap.3">WAM Models</span><span data-i18n="cap.4">Latent Action Models</span><span data-i18n="cap.5">Generative Models</span><span data-i18n="cap.6">Action Representation Learning</span>
         </div>
 
         <div class="about-contact">
-          <div><span>Open to research conversations and embodied AI collaborations.</span><strong>Let's make robot learning more capable—and more deployable.</strong></div>
-          <a href="mailto:qdhu24@m.fudan.edu.cn">qdhu24@m.fudan.edu.cn ↗</a>
+          <div><span data-i18n="about.contact.span">Open to research conversations and embodied AI collaborations.</span><strong data-i18n="about.contact.strong">My Emails :</strong></div>
+          <div class="about-emails">
+            <div class="email-pill">
+              <a href="mailto:qdhu24@m.fudan.edu.cn">qdhu24@m.fudan.edu.cn</a>
+              <button class="email-copy" type="button" data-copy="qdhu24@m.fudan.edu.cn" data-i18n-aria="email.copyAria" aria-label="Copy email">
+                <svg class="icon-copy" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h10"></path></svg>
+                <svg class="icon-check" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+              </button>
+            </div>
+            <div class="email-pill">
+              <a href="mailto:tinda24@163.com">tinda24@163.com</a>
+              <button class="email-copy" type="button" data-copy="tinda24@163.com" data-i18n-aria="email.copyAria" aria-label="Copy email">
+                <svg class="icon-copy" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h10"></path></svg>
+                <svg class="icon-check" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -2640,8 +3309,8 @@
       <div class="wrap">
         <div class="section-head blogs-heading">
           <div>
-            <p class="section-kicker">Blogs</p>
-            <h2>正在建设中 😊</h2>
+            <p class="section-kicker" data-i18n="nav.blogs">Blogs</p>
+            <h2 data-i18n="blogs.title">Under construction 😊</h2>
           </div>
         </div>
       </div>
@@ -2650,137 +3319,137 @@
 
   <dialog id="project-dialog" class="project-dialog" aria-labelledby="project-dialog-title">
     <div class="project-modal-shell">
-      <button class="project-modal-close" type="button" aria-label="Close project details">×</button>
+      <button class="project-modal-close" type="button" data-i18n-aria="dialog.close" aria-label="Close project details">×</button>
       <div id="project-dialog-content"></div>
     </div>
   </dialog>
 
   <template id="project-pam">
     <article class="project-detail-view">
-      <img class="project-modal-image" src="assets/pam-overview.png" alt="PAM state ambiguity and adaptive working memory overview">
+      <img class="project-modal-image" src="assets/pam-overview.png" data-i18n-alt="pam.alt" alt="PAM state ambiguity and adaptive working memory overview">
       <div class="project-modal-body">
-        <p class="project-modal-kicker">IEEE Robotics and Automation Letters · Lead Project</p>
-        <h2 id="project-dialog-title">PAM: Adaptive Working Memory Recoding</h2>
-        <p class="project-modal-summary">PAM treats long-history manipulation as streaming inference rather than a larger static input. It relaxes the Markov assumption by carrying forward a compact, adaptive working memory that selects the historical evidence needed to resolve the current task phase.</p>
+        <p class="project-modal-kicker" data-i18n="pam.kicker">IEEE Robotics and Automation Letters · Lead Project</p>
+        <h2 id="project-dialog-title" data-i18n="pam.title">PAM: Adaptive Working Memory Recoding</h2>
+        <p class="project-modal-summary" data-i18n="pam.summary">PAM treats long-history manipulation as streaming inference rather than a larger static input. It relaxes the Markov assumption by carrying forward a compact, adaptive working memory that selects the historical evidence needed to resolve the current task phase.</p>
         <div class="project-modal-metrics">
-          <div><strong>300</strong><span>history frames<br>≈ 10 seconds</span></div>
-          <div><strong>20-30 Hz</strong><span>real-time inference<br>with long history</span></div>
-          <div><strong>7</strong><span>real-world tasks<br>across ambiguity types</span></div>
+          <div><strong>300</strong><span data-i18n-html="pam.m1">history frames<br>≈ 10 seconds</span></div>
+          <div><strong>20-30 Hz</strong><span data-i18n-html="pam.m2">real-time inference<br>with long history</span></div>
+          <div><strong>7</strong><span data-i18n-html="pam.m3">real-world tasks<br>across ambiguity types</span></div>
         </div>
         <div class="project-modal-columns">
-          <div><h3>Core design</h3><p>A hierarchical frame feature extractor separates motion primitives from temporal disambiguation cues. A range-aware Context Router compresses multiple history scales, while a reconstruction objective keeps the memory bottleneck informative.</p></div>
-          <div><h3>My contribution</h3><p>Led the project from problem formulation and model design through the two-stage training strategy, real-robot benchmark design, evaluation, and interpretability analysis.</p></div>
+          <div><h3 data-i18n="modal.core">Core design</h3><p data-i18n="pam.core">A hierarchical frame feature extractor separates motion primitives from temporal disambiguation cues. A range-aware Context Router compresses multiple history scales, while a reconstruction objective keeps the memory bottleneck informative.</p></div>
+          <div><h3 data-i18n="modal.contrib">My contribution</h3><p data-i18n="pam.contrib">Led the project from problem formulation and model design through the two-stage training strategy, real-robot benchmark design, evaluation, and interpretability analysis.</p></div>
         </div>
-        <div class="project-modal-links"><a href="https://tinda24.github.io/pam/" target="_blank" rel="noreferrer">Project Page ↗</a><a href="https://arxiv.org/abs/2512.24638" target="_blank" rel="noreferrer">Paper ↗</a><a href="https://github.com/tinda24/pam_code_public" target="_blank" rel="noreferrer">Code ↗</a></div>
+        <div class="project-modal-links"><a href="https://tinda24.github.io/pam/" target="_blank" rel="noreferrer" data-i18n="link.page">Project Page ↗</a><a href="https://arxiv.org/abs/2512.24638" target="_blank" rel="noreferrer" data-i18n="link.paper">Paper ↗</a><a href="https://github.com/tinda24/pam_code_public" target="_blank" rel="noreferrer" data-i18n="link.code">Code ↗</a></div>
       </div>
     </article>
   </template>
 
   <template id="project-autospeed">
     <article class="project-detail-view">
-      <img class="project-modal-image" src="assets/autospeed-overview.png" alt="AutoSpeed stage-adaptive motion speed overview">
+      <img class="project-modal-image" src="assets/autospeed-overview.png" data-i18n-alt="autospeed.alt" alt="AutoSpeed stage-adaptive motion speed overview">
       <div class="project-modal-body">
-        <p class="project-modal-kicker">ECCV 2026 · Lead Project</p>
-        <h2 id="project-dialog-title">AutoSpeed: Stage-Adaptive Motion Speed</h2>
-        <p class="project-modal-summary">AutoSpeed is a model-agnostic framework that learns appropriate execution speeds and effective prediction horizons for different manipulation stages—without speed or stage annotations.</p>
+        <p class="project-modal-kicker" data-i18n="autospeed.kicker">ECCV 2026 · Lead Project</p>
+        <h2 id="project-dialog-title" data-i18n="autospeed.title">AutoSpeed: Stage-Adaptive Motion Speed</h2>
+        <p class="project-modal-summary" data-i18n="autospeed.summary">AutoSpeed is a model-agnostic framework that learns appropriate execution speeds and effective prediction horizons for different manipulation stages—without speed or stage annotations.</p>
         <div class="project-modal-metrics">
-          <div><strong>1.5×</strong><span>average speedup<br>in simulation</span></div>
-          <div><strong>+6.5 pp</strong><span>average simulation<br>success-rate gain</span></div>
-          <div><strong>1.8×</strong><span>average speedup<br>on real robots</span></div>
+          <div><strong>1.5×</strong><span data-i18n-html="autospeed.m1">average speedup<br>in simulation</span></div>
+          <div><strong>+6.5 pp</strong><span data-i18n-html="autospeed.m2">average simulation<br>success-rate gain</span></div>
+          <div><strong>1.8×</strong><span data-i18n-html="autospeed.m3">average speedup<br>on real robots</span></div>
         </div>
         <div class="project-modal-columns">
-          <div><h3>Core design</h3><p>Multi-target selective optimization chooses among speed-varied trajectory targets using prediction error and effective horizon. DCT-II retiming preserves smooth motion at non-integer rates, and a lightweight RatioHead adapts speed online.</p></div>
-          <div><h3>My contribution</h3><p>Led the method and end-to-end evaluation across MLP, diffusion, and flow-matching policies. On real robots, average success improved from 61.8% to 67.3% while execution became faster.</p></div>
+          <div><h3 data-i18n="modal.core">Core design</h3><p data-i18n="autospeed.core">Multi-target selective optimization chooses among speed-varied trajectory targets using prediction error and effective horizon. DCT-II retiming preserves smooth motion at non-integer rates, and a lightweight RatioHead adapts speed online.</p></div>
+          <div><h3 data-i18n="modal.contrib">My contribution</h3><p data-i18n="autospeed.contrib">Led the method and end-to-end evaluation across MLP, diffusion, and flow-matching policies. On real robots, average success improved from 61.8% to 67.3% while execution became faster.</p></div>
         </div>
-        <div class="project-modal-links"><a href="https://zihengqiu.github.io/AutoSpeed/" target="_blank" rel="noreferrer">Project Page ↗</a><a href="https://arxiv.org/abs/2607.01051" target="_blank" rel="noreferrer">Paper ↗</a><a href="https://github.com/tinda24/autospeed" target="_blank" rel="noreferrer">Code ↗</a></div>
+        <div class="project-modal-links"><a href="https://zihengqiu.github.io/AutoSpeed/" target="_blank" rel="noreferrer" data-i18n="link.page">Project Page ↗</a><a href="https://arxiv.org/abs/2607.01051" target="_blank" rel="noreferrer" data-i18n="link.paper">Paper ↗</a><a href="https://github.com/tinda24/autospeed" target="_blank" rel="noreferrer" data-i18n="link.code">Code ↗</a></div>
       </div>
     </article>
   </template>
 
   <template id="project-tcla">
     <article class="project-detail-view">
-      <div class="project-modal-abstract project-modal-abstract--tcla" aria-hidden="true"><span>RAW ACTION</span><i></i><b>TCLA</b><i></i><span>ACTION LATENT</span></div>
+      <div class="project-modal-abstract project-modal-abstract--tcla" aria-hidden="true"><span data-i18n="tcla.raw">RAW ACTION</span><i></i><b>TCLA</b><i></i><span data-i18n="tcla.latent">ACTION LATENT</span></div>
       <div class="project-modal-body">
-        <p class="project-modal-kicker">To Be Refreshed</p>
-        <h2 id="project-dialog-title">TCLA: Self-Supervised Action Representation Learning</h2>
-        <p class="project-modal-summary">TCLA learns structured action representations that can be integrated into different robot-policy families. The representation provides a more learnable target than raw controls, improving optimization efficiency, downstream success, and motion quality.</p>
+        <p class="project-modal-kicker" data-i18n="tile.tcla.eyebrow">To Be Refreshed</p>
+        <h2 id="project-dialog-title" data-i18n="tcla.title">TCLA: Self-Supervised Action Representation Learning</h2>
+        <p class="project-modal-summary" data-i18n="tcla.summary">TCLA learns structured action representations that can be integrated into different robot-policy families. The representation provides a more learnable target than raw controls, improving optimization efficiency, downstream success, and motion quality.</p>
         <div class="project-modal-metrics">
-          <div><strong>89.0%</strong><span>X-VLA success<br>after 10K steps</span></div>
-          <div><strong>≈9×</strong><span>fewer steps to match<br>the 90K-step baseline</span></div>
-          <div><strong>+55.4%</strong><span>relative gain for<br>Flow Matching Policy</span></div>
+          <div><strong>89.0%</strong><span data-i18n-html="tcla.m1">X-VLA success<br>after 10K steps</span></div>
+          <div><strong>≈9×</strong><span data-i18n-html="tcla.m2">fewer steps to match<br>the 90K-step baseline</span></div>
+          <div><strong>+55.4%</strong><span data-i18n-html="tcla.m3">relative gain for<br>Flow Matching Policy</span></div>
         </div>
-        <p class="project-availability">Project materials and manuscript details will be refreshed following public release.</p>
+        <p class="project-availability" data-i18n="tcla.note">Project materials and manuscript details will be refreshed following public release.</p>
       </div>
     </article>
   </template>
 
   <template id="project-lam">
     <article class="project-detail-view">
-      <img class="project-modal-image" src="assets/latent-actions-overview.png" alt="Unified three-stage latent action study">
+      <img class="project-modal-image" src="assets/latent-actions-overview.png" data-i18n-alt="lam.alt" alt="Unified three-stage latent action study">
       <div class="project-modal-body">
-        <p class="project-modal-kicker">IJCV · Under Review · Co-Lead</p>
-        <h2 id="project-dialog-title">What Matters for Latent Actions in Robot Learning?</h2>
-        <p class="project-modal-summary">A large-scale empirical study that puts fragmented latent-action methods into one controlled framework, separating what genuinely improves downstream manipulation from what merely looks promising in representation space.</p>
+        <p class="project-modal-kicker" data-i18n="lam.kicker">IJCV · Under Review · Co-Lead</p>
+        <h2 id="project-dialog-title" data-i18n="lam.title">What Matters for Latent Actions in Robot Learning?</h2>
+        <p class="project-modal-summary" data-i18n="lam.summary">A large-scale empirical study that puts fragmented latent-action methods into one controlled framework, separating what genuinely improves downstream manipulation from what merely looks promising in representation space.</p>
         <div class="project-modal-metrics">
-          <div><strong>41</strong><span>LAM design<br>choices</span></div>
-          <div><strong>4</strong><span>representation-quality<br>proxy metrics</span></div>
-          <div><strong>59M</strong><span>video frames in<br>scaling studies</span></div>
+          <div><strong>41</strong><span data-i18n-html="lam.m1">LAM design<br>choices</span></div>
+          <div><strong>4</strong><span data-i18n-html="lam.m2">representation-quality<br>proxy metrics</span></div>
+          <div><strong>59M</strong><span data-i18n-html="lam.m3">video frames in<br>scaling studies</span></div>
         </div>
         <div class="project-modal-columns">
-          <div><h3>Core design</h3><p>A unified three-stage pipeline standardizes representation pretraining, VLM mid-training, and policy post-training. It compares modeling paradigms, objectives, regularization, latent dimensions, and integration strategies.</p></div>
-          <div><h3>My contribution</h3><p>Co-led the systematic study across LIBERO, LIBERO-Plus, RoboTwin 2.0, and a real Franka robot. Results show that 32-dimensional latent actions and reconstruction-based proxies provide strong practical starting points.</p></div>
+          <div><h3 data-i18n="modal.core">Core design</h3><p data-i18n="lam.core">A unified three-stage pipeline standardizes representation pretraining, VLM mid-training, and policy post-training. It compares modeling paradigms, objectives, regularization, latent dimensions, and integration strategies.</p></div>
+          <div><h3 data-i18n="modal.contrib">My contribution</h3><p data-i18n="lam.contrib">Co-led the systematic study across LIBERO, LIBERO-Plus, RoboTwin 2.0, and a real Franka robot. Results show that 32-dimensional latent actions and reconstruction-based proxies provide strong practical starting points.</p></div>
         </div>
-        <div class="project-modal-links"><a href="https://carldegio.github.io/latent_action.github.io/" target="_blank" rel="noreferrer">Project Page ↗</a><a href="https://arxiv.org/abs/2608.19613" target="_blank" rel="noreferrer">Paper ↗</a></div>
+        <div class="project-modal-links"><a href="https://carldegio.github.io/latent_action.github.io/" target="_blank" rel="noreferrer" data-i18n="link.page">Project Page ↗</a><a href="https://arxiv.org/abs/2608.19613" target="_blank" rel="noreferrer" data-i18n="link.paper">Paper ↗</a></div>
       </div>
     </article>
   </template>
 
   <template id="project-diffuview">
     <article class="project-detail-view">
-      <img class="project-modal-image" src="assets/diffuview-overview.png" alt="DiffuView multi-view diffusion pretraining method">
+      <img class="project-modal-image" src="assets/diffuview-overview.png" data-i18n-alt="diffuview.alt" alt="DiffuView multi-view diffusion pretraining method">
       <div class="project-modal-body">
-        <p class="project-modal-kicker">CVPR 2026 · Published</p>
-        <h2 id="project-dialog-title">DiffuView: Multi-View Diffusion Pretraining</h2>
-        <p class="project-modal-summary">DiffuView casts novel-view generation as a pretraining objective, forcing a diffusion backbone to recover 3D-consistent visual structure before it is used for robotic imitation learning.</p>
+        <p class="project-modal-kicker" data-i18n="diffuview.kicker">CVPR 2026 · Published</p>
+        <h2 id="project-dialog-title" data-i18n="diffuview.title">DiffuView: Multi-View Diffusion Pretraining</h2>
+        <p class="project-modal-summary" data-i18n="diffuview.summary">DiffuView casts novel-view generation as a pretraining objective, forcing a diffusion backbone to recover 3D-consistent visual structure before it is used for robotic imitation learning.</p>
         <div class="project-modal-metrics">
-          <div><strong>≈20%</strong><span>success-rate gain<br>under view shifts</span></div>
-          <div><strong>2</strong><span>simulation<br>benchmarks</span></div>
-          <div><strong>3D-aware</strong><span>features from<br>multiview generation</span></div>
+          <div><strong>≈20%</strong><span data-i18n-html="diffuview.m1">success-rate gain<br>under view shifts</span></div>
+          <div><strong>2</strong><span data-i18n-html="diffuview.m2">simulation<br>benchmarks</span></div>
+          <div><strong data-i18n="diffuview.strong">3D-aware</strong><span data-i18n-html="diffuview.m3">features from<br>multiview generation</span></div>
         </div>
         <div class="project-modal-columns">
-          <div><h3>Core design</h3><p>Conditional multiview diffusion learns cross-view correspondences and implicit scene geometry. The pretrained U-Net then provides robust visual features to a task-conditioned action policy.</p></div>
-          <div><h3>My contribution</h3><p>Contributed to the imitation-learning codebase and led the full Franka real-robot pipeline: hardware setup, teleoperation mapping, data collection, preprocessing, training, and policy evaluation.</p></div>
+          <div><h3 data-i18n="modal.core">Core design</h3><p data-i18n="diffuview.core">Conditional multiview diffusion learns cross-view correspondences and implicit scene geometry. The pretrained U-Net then provides robust visual features to a task-conditioned action policy.</p></div>
+          <div><h3 data-i18n="modal.contrib">My contribution</h3><p data-i18n="diffuview.contrib">Contributed to the imitation-learning codebase and led the full Franka real-robot pipeline: hardware setup, teleoperation mapping, data collection, preprocessing, training, and policy evaluation.</p></div>
         </div>
-        <div class="project-modal-links"><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Zhang_DiffuView_Multi-View_Diffusion_Pretraining_for_3D_Aware_Robotic_Manipulation_CVPR_2026_paper.html" target="_blank" rel="noreferrer">CVPR Paper ↗</a></div>
+        <div class="project-modal-links"><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Zhang_DiffuView_Multi-View_Diffusion_Pretraining_for_3D_Aware_Robotic_Manipulation_CVPR_2026_paper.html" target="_blank" rel="noreferrer" data-i18n="diffuview.link">CVPR Paper ↗</a></div>
       </div>
     </article>
   </template>
 
   <template id="project-bpp">
     <article class="project-detail-view">
-      <div class="project-modal-abstract" aria-hidden="true"><span>VIEW A</span><i></i><b>GLOBAL MOTION</b><i></i><span>VIEW B</span></div>
+      <div class="project-modal-abstract" aria-hidden="true"><span data-i18n="bpp.viewA">VIEW A</span><i></i><b data-i18n="bpp.motion">GLOBAL MOTION</b><i></i><span data-i18n="bpp.viewB">VIEW B</span></div>
       <div class="project-modal-body">
-        <p class="project-modal-kicker">NeurIPS 2026 · Under Review · Co-Lead</p>
-        <h2 id="project-dialog-title">BPP: Beyond Pixels and Points</h2>
-        <p class="project-modal-summary">BPP distills viewpoint-invariant manipulation dynamics from multiview RGB video, enabling robust closed-loop control without depth sensing or camera extrinsic calibration.</p>
+        <p class="project-modal-kicker" data-i18n="bpp.kicker">NeurIPS 2026 · Under Review · Co-Lead</p>
+        <h2 id="project-dialog-title" data-i18n="bpp.title">BPP: Beyond Pixels and Points</h2>
+        <p class="project-modal-summary" data-i18n="bpp.summary">BPP distills viewpoint-invariant manipulation dynamics from multiview RGB video, enabling robust closed-loop control without depth sensing or camera extrinsic calibration.</p>
         <div class="project-modal-metrics">
-          <div><strong>91.9%</strong><span>average success<br>across LIBERO</span></div>
-          <div><strong>+15.4 pp</strong><span>improvement over<br>the baseline</span></div>
-          <div><strong>4 suites</strong><span>plus real-robot<br>robustness tests</span></div>
+          <div><strong>91.9%</strong><span data-i18n-html="bpp.m1">average success<br>across LIBERO</span></div>
+          <div><strong>+15.4 pp</strong><span data-i18n-html="bpp.m2">improvement over<br>the baseline</span></div>
+          <div><strong data-i18n="bpp.strong">4 suites</strong><span data-i18n-html="bpp.m3">plus real-robot<br>robustness tests</span></div>
         </div>
         <div class="project-modal-columns">
-          <div><h3>Core design</h3><p>Cross-view dense trajectory prediction provides a self-supervised objective, while a dual-pathway information bottleneck isolates global motion from viewpoint-specific appearance. Wrist-camera feedback closes the control loop.</p></div>
-          <div><h3>My contribution</h3><p>Co-led the project, from the view-invariant representation objective through Flow Matching Policy integration and validation under unseen viewpoints and texture shifts on a real ARX robot.</p></div>
+          <div><h3 data-i18n="modal.core">Core design</h3><p data-i18n="bpp.core">Cross-view dense trajectory prediction provides a self-supervised objective, while a dual-pathway information bottleneck isolates global motion from viewpoint-specific appearance. Wrist-camera feedback closes the control loop.</p></div>
+          <div><h3 data-i18n="modal.contrib">My contribution</h3><p data-i18n="bpp.contrib">Co-led the project, from the view-invariant representation objective through Flow Matching Policy integration and validation under unseen viewpoints and texture shifts on a real ARX robot.</p></div>
         </div>
-        <p class="project-availability">Manuscript details are limited while the paper is under review.</p>
+        <p class="project-availability" data-i18n="bpp.note">Manuscript details are limited while the paper is under review.</p>
       </div>
     </article>
   </template>
 
   <footer class="site-footer">
     <div class="footer-inner">
-      <span>© 2026 Qingda Hu</span>
-      <span>Robot learning, from idea to deployment.</span>
+      <span data-i18n="footer.copy">© 2026 Qingda Hu</span>
+      <span data-i18n="footer.tag">Robot learning, from idea to deployment.</span>
     </div>
   </footer>
 
@@ -2894,10 +3563,24 @@
           }
 
           lastTrigger = tile;
+          dialog.dataset.project = tile.dataset.project;
           content.replaceChildren(template.content.cloneNode(true));
           dialog.showModal();
           closeButton.focus();
         });
+      });
+
+      document.addEventListener("site:langchange", () => {
+        if (!dialog.open || !dialog.dataset.project) {
+          return;
+        }
+
+        const template = document.getElementById(`project-${dialog.dataset.project}`);
+        if (!template) {
+          return;
+        }
+
+        content.replaceChildren(template.content.cloneNode(true));
       });
 
       closeButton.addEventListener("click", closeDialog);
@@ -2908,6 +3591,460 @@
       });
       dialog.addEventListener("close", () => {
         lastTrigger?.focus();
+      });
+    })();
+
+    (() => {
+      const copy = {
+        en: {
+          "meta.title": "Qingda Hu | Robotics Research",
+          "meta.description": "Qingda Hu's research homepage, focusing on robot manipulation, action representation learning, long-horizon modeling, and memory mechanisms.",
+          "controls.language": "Language",
+          "controls.themeToLight": "Switch to light mode",
+          "controls.themeToDark": "Switch to dark mode",
+          "nav.primary": "Primary navigation",
+          "nav.sections": "Page sections",
+          "nav.home": "Home",
+          "nav.research": "Research map",
+          "nav.projects": "Projects",
+          "nav.about": "About me",
+          "nav.blogs": "Blogs",
+          "brand": "Qingda Hu",
+          "hero.title": "Building Minds for Robots",
+          "hero.copy": "Hello, I'm Qingda Hu. Welcome here!",
+          "research.focus": "I focus on general robot representations in the spatiotemporal (4D) domain, seeking completeness in the definition and modeling of robot mind.",
+          "research.axis": "Representation Flow",
+          "node.observe.title": "Observation Input",
+          "node.observe.meta": "Temporal Modeling",
+          "node.observe.detail": "What should the robot perceive, and which changes are worth encoding?",
+          "node.dynamics.title": "Contextual Dynamics",
+          "node.dynamics.meta": "Causal Relations",
+          "node.dynamics.detail": "Connects temporal progression with cross-modal evolution.",
+          "node.fusion.title": "Fused Features",
+          "node.fusion.meta": "Multimodal Alignment",
+          "node.fusion.detail": "Transforms heterogeneous inputs into comparable feature representations.",
+          "node.action.title": "Action Output",
+          "node.action.meta": "Policy & Decision",
+          "node.action.detail": "Translates representations into policy choices and predictive outputs.",
+          "map.pam.aria": "Open PAM project details",
+          "map.pam.title": "Adaptive Memory Recoding",
+          "map.tcla.aria": "Open TCLA project details",
+          "map.tcla.title": "Action Representation Learning",
+          "map.tcla.status": "To be refreshed",
+          "map.autospeed.aria": "Open AutoSpeed project details",
+          "map.autospeed.title": "Better-than-Expert Motion Speed",
+          "map.lam.aria": "Open latent-action project details",
+          "map.lam.label": "Latent Actions",
+          "map.lam.title": "What Matters for Latent Actions?",
+          "projects.kicker": "Selected Research",
+          "projects.title": "Project List",
+          "tile.pam.eyebrow": "IEEE RA-L · Lead Project",
+          "tile.pam.desc": "Adaptive working memory for state-ambiguous manipulation.",
+          "tile.pam.metric": "300 frames · 20-30 Hz",
+          "tile.autospeed.eyebrow": "ECCV 2026 · Lead Project",
+          "tile.autospeed.desc": "Learning when a robot should move fast—and when it should slow down.",
+          "tile.autospeed.metric": "1.8× real-robot speedup",
+          "tile.tcla.eyebrow": "To Be Refreshed",
+          "tile.tcla.desc": "Self-supervised action representations for faster, stronger robot-policy learning.",
+          "tile.tcla.metric": "Up to +55.4% · ≈9× fewer steps",
+          "tile.lam.eyebrow": "IJCV · Under Review",
+          "tile.lam.desc": "A controlled study of the choices that actually improve robot learning.",
+          "tile.lam.metric": "41 designs · 59M frames",
+          "tile.diffuview.desc": "3D-aware representations through multi-view diffusion pretraining.",
+          "tile.diffuview.metric": "Nearly +20% under view shifts",
+          "tile.bpp.eyebrow": "NeurIPS 2026 · Under Review",
+          "tile.bpp.desc": "View-invariant motion representations without depth or calibration.",
+          "tile.bpp.metric": "91.9% across LIBERO",
+          "ref.kicker": "References",
+          "ref.title": "Citation-ready publications.",
+          "ref.lead": "IEEE-style references based on the latest publicly available journal, conference, and arXiv records.",
+          "ref.equal": "Equal contribution.",
+          "about.title": "My Growth",
+          "about.lede": "I am passionate about research into the robot mind, and I care about the relationship and interaction between humans and machines.",
+          "about.body": "I am grateful that my past education brought me into contact with beautiful things across many disciplines, and I love each moment of epiphany. Whether scientific, philosophical, artistic, or humanistic, they all point toward creation. Infinite experience lies enfolded in nature's mysterious implicate order.",
+          "about.edu": "Education",
+          "about.fudan": "Fudan University",
+          "about.fudan.degree": "M.S. in Computer Science and Technology",
+          "about.tsinghua": "Tsinghua University",
+          "about.tsinghua.degree": "B.Eng. in Vehicle Engineering",
+          "about.caps": "Research capabilities",
+          "cap.1": "Long-History Modeling",
+          "cap.2": "VLA Models",
+          "cap.3": "WAM Models",
+          "cap.4": "Latent Action Models",
+          "cap.5": "Generative Models",
+          "cap.6": "Action Representation Learning",
+          "about.contact.span": "Open to research conversations and embodied AI collaborations.",
+          "about.contact.strong": "My Emails :",
+          "email.copy": "Copy",
+          "email.copyAria": "Copy email",
+          "email.copied": "Copied",
+          "blogs.title": "Under construction 😊",
+          "footer.copy": "© 2026 Qingda Hu",
+          "footer.tag": "Robot learning, from idea to deployment.",
+          "dialog.close": "Close project details",
+          "modal.core": "Core design",
+          "modal.contrib": "My contribution",
+          "link.page": "Project Page ↗",
+          "link.paper": "Paper ↗",
+          "link.code": "Code ↗",
+          "pam.alt": "PAM state ambiguity and adaptive working memory overview",
+          "pam.kicker": "IEEE Robotics and Automation Letters · Lead Project",
+          "pam.title": "PAM: Adaptive Working Memory Recoding",
+          "pam.summary": "PAM treats long-history manipulation as streaming inference rather than a larger static input. It relaxes the Markov assumption by carrying forward a compact, adaptive working memory that selects the historical evidence needed to resolve the current task phase.",
+          "pam.m1": "history frames<br>≈ 10 seconds",
+          "pam.m2": "real-time inference<br>with long history",
+          "pam.m3": "real-world tasks<br>across ambiguity types",
+          "pam.core": "A hierarchical frame feature extractor separates motion primitives from temporal disambiguation cues. A range-aware Context Router compresses multiple history scales, while a reconstruction objective keeps the memory bottleneck informative.",
+          "pam.contrib": "Led the project from problem formulation and model design through the two-stage training strategy, real-robot benchmark design, evaluation, and interpretability analysis.",
+          "autospeed.alt": "AutoSpeed stage-adaptive motion speed overview",
+          "autospeed.kicker": "ECCV 2026 · Lead Project",
+          "autospeed.title": "AutoSpeed: Stage-Adaptive Motion Speed",
+          "autospeed.summary": "AutoSpeed is a model-agnostic framework that learns appropriate execution speeds and effective prediction horizons for different manipulation stages—without speed or stage annotations.",
+          "autospeed.m1": "average speedup<br>in simulation",
+          "autospeed.m2": "average simulation<br>success-rate gain",
+          "autospeed.m3": "average speedup<br>on real robots",
+          "autospeed.core": "Multi-target selective optimization chooses among speed-varied trajectory targets using prediction error and effective horizon. DCT-II retiming preserves smooth motion at non-integer rates, and a lightweight RatioHead adapts speed online.",
+          "autospeed.contrib": "Led the method and end-to-end evaluation across MLP, diffusion, and flow-matching policies. On real robots, average success improved from 61.8% to 67.3% while execution became faster.",
+          "tcla.raw": "RAW ACTION",
+          "tcla.latent": "ACTION LATENT",
+          "tcla.title": "TCLA: Self-Supervised Action Representation Learning",
+          "tcla.summary": "TCLA learns structured action representations that can be integrated into different robot-policy families. The representation provides a more learnable target than raw controls, improving optimization efficiency, downstream success, and motion quality.",
+          "tcla.m1": "X-VLA success<br>after 10K steps",
+          "tcla.m2": "fewer steps to match<br>the 90K-step baseline",
+          "tcla.m3": "relative gain for<br>Flow Matching Policy",
+          "tcla.note": "Project materials and manuscript details will be refreshed following public release.",
+          "lam.alt": "Unified three-stage latent action study",
+          "lam.kicker": "IJCV · Under Review · Co-Lead",
+          "lam.title": "What Matters for Latent Actions in Robot Learning?",
+          "lam.summary": "A large-scale empirical study that puts fragmented latent-action methods into one controlled framework, separating what genuinely improves downstream manipulation from what merely looks promising in representation space.",
+          "lam.m1": "LAM design<br>choices",
+          "lam.m2": "representation-quality<br>proxy metrics",
+          "lam.m3": "video frames in<br>scaling studies",
+          "lam.core": "A unified three-stage pipeline standardizes representation pretraining, VLM mid-training, and policy post-training. It compares modeling paradigms, objectives, regularization, latent dimensions, and integration strategies.",
+          "lam.contrib": "Co-led the systematic study across LIBERO, LIBERO-Plus, RoboTwin 2.0, and a real Franka robot. Results show that 32-dimensional latent actions and reconstruction-based proxies provide strong practical starting points.",
+          "diffuview.alt": "DiffuView multi-view diffusion pretraining method",
+          "diffuview.kicker": "CVPR 2026 · Published",
+          "diffuview.title": "DiffuView: Multi-View Diffusion Pretraining",
+          "diffuview.summary": "DiffuView casts novel-view generation as a pretraining objective, forcing a diffusion backbone to recover 3D-consistent visual structure before it is used for robotic imitation learning.",
+          "diffuview.m1": "success-rate gain<br>under view shifts",
+          "diffuview.m2": "simulation<br>benchmarks",
+          "diffuview.strong": "3D-aware",
+          "diffuview.m3": "features from<br>multiview generation",
+          "diffuview.core": "Conditional multiview diffusion learns cross-view correspondences and implicit scene geometry. The pretrained U-Net then provides robust visual features to a task-conditioned action policy.",
+          "diffuview.contrib": "Contributed to the imitation-learning codebase and led the full Franka real-robot pipeline: hardware setup, teleoperation mapping, data collection, preprocessing, training, and policy evaluation.",
+          "diffuview.link": "CVPR Paper ↗",
+          "bpp.viewA": "VIEW A",
+          "bpp.motion": "GLOBAL MOTION",
+          "bpp.viewB": "VIEW B",
+          "bpp.kicker": "NeurIPS 2026 · Under Review · Co-Lead",
+          "bpp.title": "BPP: Beyond Pixels and Points",
+          "bpp.summary": "BPP distills viewpoint-invariant manipulation dynamics from multiview RGB video, enabling robust closed-loop control without depth sensing or camera extrinsic calibration.",
+          "bpp.m1": "average success<br>across LIBERO",
+          "bpp.m2": "improvement over<br>the baseline",
+          "bpp.strong": "4 suites",
+          "bpp.m3": "plus real-robot<br>robustness tests",
+          "bpp.core": "Cross-view dense trajectory prediction provides a self-supervised objective, while a dual-pathway information bottleneck isolates global motion from viewpoint-specific appearance. Wrist-camera feedback closes the control loop.",
+          "bpp.contrib": "Co-led the project, from the view-invariant representation objective through Flow Matching Policy integration and validation under unseen viewpoints and texture shifts on a real ARX robot.",
+          "bpp.note": "Manuscript details are limited while the paper is under review."
+        },
+        zh: {
+          "meta.title": "扈庆达 | 机器人研究",
+          "meta.description": "扈庆达的研究主页，关注机器人操作、动作表征学习、长时程建模与记忆机制。",
+          "controls.language": "语言",
+          "controls.themeToLight": "切换到浅色模式",
+          "controls.themeToDark": "切换到深色模式",
+          "nav.primary": "主导航",
+          "nav.sections": "页面分区",
+          "nav.home": "首页",
+          "nav.research": "研究地图",
+          "nav.projects": "项目",
+          "nav.about": "关于我",
+          "nav.blogs": "博客",
+          "brand": "扈庆达",
+          "hero.title": "机器人的心智化<br>是什么？",
+          "hero.copy": "你好，我是扈庆达。欢迎来到这里！",
+          "research.focus": "我关注时空维度（4D）下的通用机器人表征，寻求面向心智化建构的定义与建模的完备性。",
+          "research.axis": "表征流",
+          "node.observe.title": "观测输入",
+          "node.observe.meta": "信念状态",
+          "node.observe.detail": "机器人应当感知什么，哪些变化值得被编码？",
+          "node.dynamics.title": "情境学习",
+          "node.dynamics.meta": "因果预测",
+          "node.dynamics.detail": "把时间上的推进和跨模态的演化接在一起。",
+          "node.fusion.title": "融合观测",
+          "node.fusion.meta": "多模态对齐",
+          "node.fusion.detail": "寻求环境和具身通用的跨模态抽象与表征方法",
+          "node.action.title": "动作输出",
+          "node.action.meta": "策略与决策",
+          "node.action.detail": "把表征变成策略选择和预测输出。",
+          "map.pam.aria": "打开 PAM 项目详情",
+          "map.pam.title": "自适应记忆重编码",
+          "map.tcla.aria": "打开 TCLA 项目详情",
+          "map.tcla.title": "通用动作表征预训练",
+          "map.tcla.status": "待更新",
+          "map.autospeed.aria": "打开 AutoSpeed 项目详情",
+          "map.autospeed.title": "超越专家的运动速度",
+          "map.lam.aria": "打开潜在动作项目详情",
+          "map.lam.label": "潜在动作",
+          "map.lam.title": "潜在动作究竟取决于什么？",
+          "projects.kicker": "精选研究",
+          "projects.title": "把研究落到实处。",
+          "tile.pam.eyebrow": "IEEE RA-L · 已发表",
+          "tile.pam.desc": "面向状态歧义操作的自适应工作记忆。",
+          "tile.pam.metric": "300 帧 · 20–30 Hz",
+          "tile.autospeed.eyebrow": "ECCV 2026 · 已发表",
+          "tile.autospeed.desc": "学习机器人什么时候该快，什么时候该慢下来。",
+          "tile.autospeed.metric": "真机加速 1.8×",
+          "tile.tcla.eyebrow": "待更新",
+          "tile.tcla.desc": "自监督动作表征，让机器人策略学得更快、更强。",
+          "tile.tcla.metric": "最高 +55.4% · 步数约少 9×",
+          "tile.lam.eyebrow": "IJCV · 审稿中",
+          "tile.lam.desc": "一项受控研究：哪些选择真正能提升机器人学习。",
+          "tile.lam.metric": "41 种设计 · 5900 万帧",
+          "tile.diffuview.desc": "用多视角扩散预训练得到三维感知表征。",
+          "tile.diffuview.metric": "视角变化下接近 +20%",
+          "tile.bpp.eyebrow": "NeurIPS 2026 · 审稿中",
+          "tile.bpp.desc": "不依赖深度或标定的视角不变运动表征。",
+          "tile.bpp.metric": "LIBERO 平均 91.9%",
+          "ref.kicker": "参考文献",
+          "ref.title": "可直接引用的论文。",
+          "ref.lead": "依据目前公开的期刊、会议和 arXiv 记录整理的 IEEE 格式参考文献。",
+          "ref.equal": "同等贡献。",
+          "about.title": "我的成长",
+          "about.lede": "我对机器人心智化的研究充满了热情，并关心人与机器的关系与交互。",
+          "about.body": "我感激过去的教育经历使我接触和学习了许多学科中的美的事物，我喜欢一个个“顿悟”的瞬间。无论是科学的、哲学的、艺术的还是人文的，它们都共同指向创造。无穷的体验，蕴藏在自然神秘的隐缠序中。",
+          "about.edu": "教育经历",
+          "about.fudan": "复旦大学",
+          "about.fudan.degree": "计算机科学与技术硕士",
+          "about.tsinghua": "清华大学",
+          "about.tsinghua.degree": "车辆工程学士",
+          "about.caps": "研究能力",
+          "cap.1": "长历史建模",
+          "cap.2": "VLA 模型",
+          "cap.3": "WAM 模型",
+          "cap.4": "隐式动作模型",
+          "cap.5": "生成式方法",
+          "cap.6": "动作表征学习",
+          "about.contact.span": "欢迎交流研究，也欢迎具身智能方面的合作。",
+          "about.contact.strong": "我的邮箱：",
+          "email.copy": "复制",
+          "email.copyAria": "复制邮箱",
+          "email.copied": "已复制",
+          "blogs.title": "正在建设中 😊",
+          "footer.copy": "© 2026 扈庆达",
+          "footer.tag": "机器人学习，从想法到落地。",
+          "dialog.close": "关闭项目详情",
+          "modal.core": "核心设计",
+          "modal.contrib": "我的贡献",
+          "link.page": "项目页 ↗",
+          "link.paper": "论文 ↗",
+          "link.code": "代码 ↗",
+          "pam.alt": "PAM 的状态歧义与自适应工作记忆概览",
+          "pam.kicker": "IEEE Robotics and Automation Letters · 已发表",
+          "pam.title": "PAM：自适应工作记忆重编码",
+          "pam.summary": "PAM 把长历史操作当成流式推理，而不是把输入窗口做得更大。它放宽马尔可夫假设，带着一份紧凑、会自适应的工作记忆，从历史里挑出判断当前任务阶段所需要的证据。",
+          "pam.m1": "历史帧<br>约 10 秒",
+          "pam.m2": "长历史下的<br>实时推理",
+          "pam.m3": "项真实任务<br>覆盖不同歧义",
+          "pam.core": "分层的帧特征提取器把运动基元和时序消歧线索分开。范围感知的 Context Router 压缩多个历史尺度，重建目标则让记忆瓶颈仍然保有信息。",
+          "pam.contrib": "从问题定义、模型设计，到两阶段训练、真机基准、评估和可解释性分析，这个项目由我主导。",
+          "autospeed.alt": "AutoSpeed 阶段自适应运动速度概览",
+          "autospeed.kicker": "ECCV 2026 · 已发表",
+          "autospeed.title": "AutoSpeed：阶段自适应的运动速度",
+          "autospeed.summary": "AutoSpeed 不依赖具体策略模型，也不需要速度或阶段标注。它为不同操作阶段学习合适的执行速度和有效预测时域。",
+          "autospeed.m1": "仿真中的<br>平均加速",
+          "autospeed.m2": "仿真成功率的<br>平均提升",
+          "autospeed.m3": "真机上的<br>平均加速",
+          "autospeed.core": "多目标选择性优化会根据预测误差和有效时域，在不同速度的轨迹目标里做选择。DCT-II 重定时让非整数倍率下的运动仍然平滑，轻量的 RatioHead 则在线调节速度。",
+          "autospeed.contrib": "方法和端到端评估由我主导，覆盖 MLP、扩散和流匹配策略。真机上平均成功率从 61.8% 提到 67.3%，执行也更快。",
+          "tcla.raw": "原始动作",
+          "tcla.latent": "动作潜变量",
+          "tcla.title": "TCLA：自监督动作表征学习",
+          "tcla.summary": "TCLA 学习的是可以接到不同机器人策略上的结构化动作表征。比起原始控制量，它是更好学的目标，优化更快，下游成功率更高，动作也更干净。",
+          "tcla.m1": "训练 1 万步后的<br>X-VLA 成功率",
+          "tcla.m2": "追平 9 万步基线<br>所需步数更少",
+          "tcla.m3": "Flow Matching Policy<br>的相对提升",
+          "tcla.note": "项目材料和文稿细节会在公开发布后更新。",
+          "lam.alt": "统一的三阶段潜在动作研究",
+          "lam.kicker": "IJCV · 审稿中 · 共同主导",
+          "lam.title": "机器人学习里，潜在动作究竟取决于什么？",
+          "lam.summary": "这是一项大规模实证。它把零散的潜在动作方法放进同一套受控流程，分开两件事：什么真的能提升下游操作，什么只是在表征空间里看上去不错。",
+          "lam.m1": "种 LAM<br>设计选择",
+          "lam.m2": "项表征质量<br>代理指标",
+          "lam.m3": "帧视频，用于<br>规模实验",
+          "lam.core": "统一的三阶段流程把表征预训练、VLM 中期训练和策略后训练对齐，并比较建模范式、目标函数、正则、潜变量维度和接入方式。",
+          "lam.contrib": "这项系统研究由我共同主导，覆盖 LIBERO、LIBERO-Plus、RoboTwin 2.0 和真实的 Franka。结果里，32 维潜在动作和基于重建的代理指标是比较稳妥的起点。",
+          "diffuview.alt": "DiffuView 多视角扩散预训练方法",
+          "diffuview.kicker": "CVPR 2026 · 已发表",
+          "diffuview.title": "DiffuView：多视角扩散预训练",
+          "diffuview.summary": "DiffuView 把新视角生成当作预训练目标，让扩散骨干在进入机器人模仿学习之前，先恢复出三维一致的视觉结构。",
+          "diffuview.m1": "视角变化下的<br>成功率提升",
+          "diffuview.m2": "个仿真<br>基准",
+          "diffuview.strong": "三维感知",
+          "diffuview.m3": "来自多视角生成<br>的特征",
+          "diffuview.core": "条件多视角扩散学习跨视角对应和隐式场景几何。预训练后的 U-Net 再给任务条件的动作策略提供更稳的视觉特征。",
+          "diffuview.contrib": "我参与了模仿学习代码，并负责完整的 Franka 真机流程：硬件、遥操作映射、采集、预处理、训练和策略评估。",
+          "diffuview.link": "CVPR 论文 ↗",
+          "bpp.viewA": "视角 A",
+          "bpp.motion": "全局运动",
+          "bpp.viewB": "视角 B",
+          "bpp.kicker": "NeurIPS 2026 · 审稿中 · 共同主导",
+          "bpp.title": "BPP：超越像素与点",
+          "bpp.summary": "BPP 从多视角 RGB 视频里抽出不随视角变化的操作动态，这样不需要深度，也不需要相机外参，仍然可以做鲁棒的闭环控制。",
+          "bpp.m1": "LIBERO 上的<br>平均成功率",
+          "bpp.m2": "相对基线的<br>提升",
+          "bpp.strong": "4 组",
+          "bpp.m3": "另含真机<br>鲁棒性测试",
+          "bpp.core": "跨视角的稠密轨迹预测提供自监督信号，双通路信息瓶颈把全局运动和某个视角的外观分开。腕部相机的反馈把控制环合上。",
+          "bpp.contrib": "项目由我共同主导：从视角不变的表征目标，到接入 Flow Matching Policy，再到真实 ARX 上对未见视角和纹理变化的验证。",
+          "bpp.note": "论文还在审稿，文稿细节暂时只公开一部分。"
+        }
+      };
+
+      const langButtons = Array.from(document.querySelectorAll("[data-set-lang]"));
+      const themeButton = document.querySelector("[data-theme-toggle]");
+
+      const getLang = () => (document.documentElement.dataset.lang === "zh" ? "zh" : "en");
+      const getTheme = () => (document.documentElement.dataset.theme === "light" ? "light" : "dark");
+
+      const applyToRoot = (root, dict) => {
+        root.querySelectorAll("[data-i18n], [data-i18n-html], [data-i18n-aria], [data-i18n-alt]").forEach((el) => {
+          const htmlKey = el.getAttribute("data-i18n-html");
+          const textKey = el.getAttribute("data-i18n");
+          const ariaKey = el.getAttribute("data-i18n-aria");
+          const altKey = el.getAttribute("data-i18n-alt");
+
+          if (htmlKey && Object.prototype.hasOwnProperty.call(dict, htmlKey)) {
+            el.innerHTML = dict[htmlKey];
+          } else if (textKey && Object.prototype.hasOwnProperty.call(dict, textKey)) {
+            el.textContent = dict[textKey];
+          }
+
+          if (ariaKey && Object.prototype.hasOwnProperty.call(dict, ariaKey)) {
+            el.setAttribute("aria-label", dict[ariaKey]);
+          }
+
+          if (altKey && Object.prototype.hasOwnProperty.call(dict, altKey)) {
+            el.setAttribute("alt", dict[altKey]);
+          }
+        });
+      };
+
+      const syncControls = (lang) => {
+        const dict = copy[lang];
+        langButtons.forEach((button) => {
+          const active = button.dataset.setLang === lang;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+
+        if (!themeButton) {
+          return;
+        }
+
+        const light = getTheme() === "light";
+        themeButton.setAttribute("aria-pressed", light ? "true" : "false");
+        themeButton.setAttribute("aria-label", light ? dict["controls.themeToDark"] : dict["controls.themeToLight"]);
+      };
+
+      const applyLanguage = (lang) => {
+        const nextLang = lang === "zh" ? "zh" : "en";
+        const dict = copy[nextLang];
+        document.documentElement.lang = nextLang === "zh" ? "zh-CN" : "en";
+        document.documentElement.dataset.lang = nextLang;
+        document.title = dict["meta.title"];
+        document.querySelector('meta[name="description"]')?.setAttribute("content", dict["meta.description"]);
+        applyToRoot(document, dict);
+        document.querySelectorAll("template").forEach((template) => applyToRoot(template.content, dict));
+        syncControls(nextLang);
+        document.dispatchEvent(new CustomEvent("site:langchange"));
+      };
+
+      const applyTheme = (theme) => {
+        const nextTheme = theme === "light" ? "light" : "dark";
+        document.documentElement.dataset.theme = nextTheme;
+        try {
+          localStorage.setItem("site-theme", nextTheme);
+        } catch (error) {
+          /* ignore private-mode storage failures */
+        }
+        syncControls(getLang());
+      };
+
+      langButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const nextLang = button.dataset.setLang === "zh" ? "zh" : "en";
+          try {
+            localStorage.setItem("site-lang", nextLang);
+          } catch (error) {
+            /* ignore private-mode storage failures */
+          }
+          applyLanguage(nextLang);
+        });
+      });
+
+      themeButton?.addEventListener("click", () => {
+        applyTheme(getTheme() === "light" ? "dark" : "light");
+      });
+
+      applyLanguage(getLang());
+    })();
+
+    (() => {
+      const labels = {
+        en: { copy: "Copy", copied: "Copied", copyAria: "Copy email", copiedAria: "Email copied" },
+        zh: { copy: "复制", copied: "已复制", copyAria: "复制邮箱", copiedAria: "邮箱已复制" }
+      };
+
+      const currentLang = () => (document.documentElement.dataset.lang === "zh" ? "zh" : "en");
+
+      const copyText = async (value) => {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(value);
+          return;
+        }
+
+        const field = document.createElement("textarea");
+        field.value = value;
+        field.setAttribute("readonly", "");
+        field.style.position = "fixed";
+        field.style.left = "-9999px";
+        document.body.appendChild(field);
+        field.select();
+        document.execCommand("copy");
+        field.remove();
+      };
+
+      document.querySelectorAll(".email-copy").forEach((button) => {
+        const pill = button.closest(".email-pill");
+        let resetTimer = 0;
+
+        button.addEventListener("click", async (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+
+          const value = button.dataset.copy;
+          if (!value) {
+            return;
+          }
+
+          try {
+            await copyText(value);
+          } catch (error) {
+            return;
+          }
+
+          const lang = currentLang();
+          button.setAttribute("aria-label", labels[lang].copiedAria);
+          pill?.classList.add("is-copied");
+          window.clearTimeout(resetTimer);
+          resetTimer = window.setTimeout(() => {
+            const nextLang = currentLang();
+            button.setAttribute("aria-label", labels[nextLang].copyAria);
+            pill?.classList.remove("is-copied");
+          }, 1600);
+        });
       });
     })();
   </script>
