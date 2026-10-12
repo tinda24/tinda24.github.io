@@ -557,25 +557,604 @@
       position: relative;
       min-height: 620px;
       margin-top: 38px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      overflow: visible;
+      background: transparent;
+      cursor: pointer;
+      isolation: isolate;
+      transform-style: preserve-3d;
+      transition:
+        margin-bottom 680ms var(--ease-out),
+        transform 320ms var(--ease-out);
+    }
+
+    .research-board:not(.is-spatial):hover {
+      transform: translateY(-5px);
+    }
+
+    .research-board.is-spatial {
+      margin-bottom: 344px;
+    }
+
+    .research-map-plane {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      overflow: hidden;
       border: 1px solid rgba(255, 253, 248, 0.16);
       border-radius: 8px;
-      overflow: hidden;
       background:
         linear-gradient(rgba(255, 253, 248, 0.045) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 253, 248, 0.045) 1px, transparent 1px),
         rgba(255, 253, 248, 0.045);
       background-size: 42px 42px;
       box-shadow: 0 28px 90px rgba(0, 0, 0, 0.28);
-      isolation: isolate;
+      backface-visibility: hidden;
+      transform: perspective(1500px) translate3d(0, 0, 0) rotateX(0) rotateY(0) scale(1);
+      transform-origin: 50% 72%;
+      transform-style: preserve-3d;
+      transition:
+        transform 760ms var(--ease-out),
+        border-color 260ms ease,
+        box-shadow 420ms ease;
     }
 
-    .research-board::before {
+    .research-board:not(.is-spatial):hover .research-map-plane {
+      border-color: rgba(156, 224, 200, 0.42);
+      box-shadow: 0 34px 100px rgba(0, 0, 0, 0.34), 0 0 0 1px rgba(156, 224, 200, 0.08);
+    }
+
+    .research-board.is-spatial .research-map-plane {
+      border-color: rgba(156, 224, 200, 0.5);
+      box-shadow:
+        24px 34px 0 -18px rgba(55, 91, 82, 0.44),
+        0 46px 110px rgba(0, 0, 0, 0.42),
+        inset 0 0 58px rgba(156, 224, 200, 0.04);
+      transform: perspective(1500px) translate3d(-8px, -30px, 72px) rotateX(7deg) rotateY(-6deg) scale(0.95);
+    }
+
+    .research-map-plane::before {
       content: "";
       position: absolute;
       inset: 20px;
       border: 1px solid rgba(255, 253, 248, 0.1);
       border-radius: 8px;
       pointer-events: none;
+    }
+
+    .research-frame-glow {
+      position: absolute;
+      inset: -2px;
+      z-index: 8;
+      overflow: hidden;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 240ms ease;
+    }
+
+    .research-frame-glow::after {
+      content: "";
+      position: absolute;
+      top: -35%;
+      bottom: -35%;
+      left: -34%;
+      width: 24%;
+      background: linear-gradient(90deg, transparent, rgba(156, 224, 200, 0.42), transparent);
+      filter: blur(2px);
+      transform: skewX(-18deg);
+    }
+
+    .research-board:hover .research-frame-glow,
+    .research-board:focus-within .research-frame-glow,
+    .research-board.is-spatial .research-frame-glow {
+      opacity: 1;
+    }
+
+    .research-board:hover .research-frame-glow::after,
+    .research-board:focus-within .research-frame-glow::after {
+      animation: frameSweep 1.8s var(--ease-out) both;
+    }
+
+    .research-spatial-toggle {
+      position: absolute;
+      left: 24px;
+      top: -18px;
+      z-index: 10;
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 13px 8px 10px;
+      border: 1px solid rgba(156, 224, 200, 0.38);
+      border-radius: 7px;
+      color: #d9f5eb;
+      background: rgba(16, 23, 25, 0.94);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+      font: inherit;
+      font-size: 0.72rem;
+      font-weight: 850;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      backdrop-filter: blur(14px);
+      transition: color 220ms ease, background 220ms ease, border-color 220ms ease, transform 260ms var(--ease-out);
+    }
+
+    .research-spatial-toggle:hover,
+    .research-spatial-toggle:focus-visible {
+      color: #101719;
+      border-color: #9ce0c8;
+      outline: none;
+      background: #9ce0c8;
+      transform: translateY(-2px);
+    }
+
+    .research-spatial-toggle svg {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 auto;
+      transition: transform 620ms var(--ease-out);
+    }
+
+    .research-board.is-spatial .research-spatial-toggle svg {
+      transform: rotateX(28deg) rotateY(34deg) rotateZ(8deg);
+    }
+
+    .research-spatial-toggle .toggle-close,
+    .research-board.is-spatial .research-spatial-toggle .toggle-open {
+      display: none;
+    }
+
+    .research-board.is-spatial .research-spatial-toggle .toggle-close {
+      display: inline;
+    }
+
+    .research-depth-geometry {
+      position: absolute;
+      inset: 0;
+      z-index: auto;
+      pointer-events: none;
+    }
+
+    .research-depth-side,
+    .research-depth-floor {
+      position: absolute;
+      z-index: 0;
+      opacity: 0;
+      background:
+        linear-gradient(rgba(156, 224, 200, 0.075) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(156, 224, 200, 0.075) 1px, transparent 1px),
+        linear-gradient(145deg, rgba(42, 72, 66, 0.94), rgba(12, 19, 19, 0.98));
+      background-size: 26px 26px;
+      filter: drop-shadow(0 24px 32px rgba(0, 0, 0, 0.24));
+      transition: opacity 280ms ease, transform 680ms var(--ease-out);
+    }
+
+    .research-depth-side {
+      left: 100%;
+      top: 0;
+      width: 84px;
+      height: calc(100% + 318px);
+      border-right: 1px solid rgba(156, 224, 200, 0.36);
+      clip-path: polygon(0 0, 100% 58px, 100% 100%, 0 calc(100% - 58px));
+      transform: scaleX(0);
+      transform-origin: left center;
+    }
+
+    .research-depth-floor {
+      left: 0;
+      top: 100%;
+      width: calc(100% + 84px);
+      height: 318px;
+      border-bottom: 1px solid rgba(156, 224, 200, 0.34);
+      clip-path: polygon(0 0, calc(100% - 84px) 0, 100% 100%, 84px 100%);
+      transform: scaleY(0);
+      transform-origin: top center;
+    }
+
+    .research-board.is-spatial .research-depth-side,
+    .research-board.is-spatial .research-depth-floor {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .skill-latent-axis {
+      position: absolute;
+      right: -62px;
+      top: 52px;
+      z-index: 7;
+      width: 176px;
+      display: grid;
+      gap: 4px;
+      padding: 12px 14px 13px;
+      border: 1px solid rgba(156, 224, 200, 0.42);
+      border-radius: 7px;
+      color: #fffdf8;
+      background: rgba(13, 27, 25, 0.94);
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(24px, -12px);
+      transition: opacity 320ms ease 80ms, transform 620ms var(--ease-out) 80ms;
+    }
+
+    .skill-latent-axis::before {
+      content: "";
+      position: absolute;
+      right: calc(100% + 8px);
+      top: 50%;
+      width: 82px;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(156, 224, 200, 0.08), #9ce0c8);
+      box-shadow: 0 0 12px rgba(156, 224, 200, 0.36);
+      transform: rotate(36deg);
+      transform-origin: right center;
+    }
+
+    .skill-latent-axis::after {
+      content: "";
+      position: absolute;
+      left: -12px;
+      top: calc(50% + 24px);
+      width: 7px;
+      height: 7px;
+      border-top: 1px solid #9ce0c8;
+      border-right: 1px solid #9ce0c8;
+      transform: rotate(81deg);
+    }
+
+    .skill-latent-axis span {
+      color: #9ce0c8;
+      font-size: 0.66rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .skill-latent-axis strong {
+      font-size: 0.9rem;
+      line-height: 1.2;
+    }
+
+    .research-board.is-spatial .skill-latent-axis {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+
+    .latent-regions {
+      position: absolute;
+      left: -4%;
+      right: -4%;
+      top: calc(100% + 60px);
+      z-index: 6;
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) minmax(184px, 0.72fr) minmax(220px, 1fr);
+      align-items: center;
+      gap: 32px;
+      cursor: default;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-26px) scale(0.94);
+      transform-origin: top center;
+      transition: opacity 300ms ease 120ms, transform 660ms var(--ease-out) 100ms;
+    }
+
+    .latent-regions::before {
+      content: "";
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      top: 50%;
+      height: 1px;
+      background: linear-gradient(90deg, #15cdbc, rgba(156, 224, 200, 0.24) 42%, #9ce0c8 50%, rgba(220, 109, 79, 0.24) 58%, #dc6d4f);
+      box-shadow: 0 0 14px rgba(156, 224, 200, 0.24);
+    }
+
+    .logic-space-core {
+      position: relative;
+      z-index: 2;
+      min-height: 126px;
+      display: grid;
+      place-content: center;
+      gap: 4px;
+      padding: 18px 18px 14px;
+      border: 1px solid rgba(156, 224, 200, 0.48);
+      border-radius: 7px;
+      color: #fffdf8;
+      text-align: center;
+      background:
+        linear-gradient(rgba(156, 224, 200, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(156, 224, 200, 0.08) 1px, transparent 1px),
+        rgba(12, 28, 25, 0.96);
+      background-size: 18px 18px;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.34), inset 0 0 34px rgba(156, 224, 200, 0.06);
+      transform-style: preserve-3d;
+    }
+
+    .logic-space-core::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border: 1px solid rgba(156, 224, 200, 0.3);
+      border-radius: 7px;
+      background: rgba(31, 60, 53, 0.28);
+      transform: translate3d(12px, -12px, -1px);
+    }
+
+    .logic-space-core::after {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      z-index: -1;
+      border: 1px solid rgba(156, 224, 200, 0.1);
+      border-radius: 4px;
+      box-shadow: inset 0 0 22px rgba(156, 224, 200, 0.08);
+    }
+
+    .logic-space-kicker {
+      color: #9ce0c8;
+      font-size: 0.6rem;
+      font-weight: 900;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .logic-space-core strong {
+      font-size: 0.86rem;
+      line-height: 1.15;
+    }
+
+    .logic-space-network {
+      width: 100%;
+      height: 42px;
+      margin-top: 3px;
+      overflow: visible;
+    }
+
+    .logic-space-network line,
+    .logic-space-network path {
+      fill: none;
+      stroke: rgba(156, 224, 200, 0.42);
+      stroke-width: 1;
+      stroke-dasharray: 3 4;
+      animation: logicFlow 3.2s linear infinite;
+    }
+
+    .logic-space-network circle {
+      fill: #9ce0c8;
+      filter: drop-shadow(0 0 4px rgba(156, 224, 200, 0.72));
+    }
+
+    .latent-region {
+      --region-color: #15cdbc;
+      position: relative;
+      z-index: 2;
+      min-height: 116px;
+      display: grid;
+      align-content: center;
+      gap: 4px;
+      padding: 17px 24px 17px 28px;
+      border: 1px solid color-mix(in srgb, var(--region-color), #fff 32%);
+      border-radius: 7px;
+      color: #fffdf8;
+      background:
+        linear-gradient(125deg, color-mix(in srgb, var(--region-color), transparent 82%), transparent 56%),
+        rgba(13, 25, 24, 0.92);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.26);
+      cursor: default;
+      transition: transform 260ms var(--ease-out), border-color 220ms ease, box-shadow 260ms ease;
+    }
+
+    .latent-region::before {
+      content: "";
+      position: absolute;
+      right: -5px;
+      top: 50%;
+      width: 9px;
+      height: 9px;
+      border: 1px solid color-mix(in srgb, var(--region-color), #fff 55%);
+      border-radius: 50%;
+      background: #101719;
+      box-shadow: 0 0 0 5px color-mix(in srgb, var(--region-color), transparent 82%), 0 0 14px var(--region-color);
+      transform: translateY(-50%);
+    }
+
+    .latent-region::after {
+      content: "";
+      position: absolute;
+      left: 12px;
+      top: 16px;
+      bottom: 16px;
+      width: 3px;
+      border-radius: 99px;
+      background: var(--region-color);
+      box-shadow: 0 0 16px color-mix(in srgb, var(--region-color), transparent 45%);
+    }
+
+    .latent-region[data-region="embodiment"] {
+      --region-color: #dc6d4f;
+      padding: 17px 28px 17px 24px;
+      text-align: right;
+    }
+
+    .latent-region[data-region="embodiment"]::before {
+      left: -5px;
+      right: auto;
+    }
+
+    .latent-region[data-region="embodiment"]::after {
+      left: auto;
+      right: 12px;
+    }
+
+    .latent-region[data-region="environment"]:hover {
+      border-color: color-mix(in srgb, var(--region-color), #fff 58%);
+      box-shadow: 0 24px 54px color-mix(in srgb, var(--region-color), rgba(0, 0, 0, 0.22) 82%);
+      transform: translateX(-5px);
+    }
+
+    .latent-region[data-region="embodiment"]:hover {
+      border-color: color-mix(in srgb, var(--region-color), #fff 58%);
+      box-shadow: 0 24px 54px color-mix(in srgb, var(--region-color), rgba(0, 0, 0, 0.22) 82%);
+      transform: translateX(5px);
+    }
+
+    .latent-region-label {
+      color: color-mix(in srgb, var(--region-color), #fff 52%);
+      font-size: 0.62rem;
+      font-weight: 900;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .latent-region strong {
+      font-size: 0.98rem;
+      line-height: 1.2;
+    }
+
+    .latent-region p {
+      margin: 2px 0 0;
+      color: rgba(255, 253, 248, 0.62);
+      font-size: 0.76rem;
+      line-height: 1.45;
+    }
+
+    .region-interface-ports {
+      position: absolute;
+      left: -18px;
+      top: 50%;
+      display: grid;
+      gap: 12px;
+      padding: 5px 0;
+      transform: translateY(-50%);
+    }
+
+    .region-interface-ports::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      border-left: 1px solid color-mix(in srgb, var(--region-color), transparent 48%);
+      transform: translateX(-50%);
+    }
+
+    .region-interface-ports span {
+      position: relative;
+      width: 8px;
+      height: 8px;
+      border: 1px solid color-mix(in srgb, var(--region-color), #fff 42%);
+      border-radius: 2px;
+      background: #101719;
+      box-shadow: 0 0 10px color-mix(in srgb, var(--region-color), transparent 46%);
+      animation: interfacePulse 2.6s ease-in-out infinite;
+    }
+
+    .region-interface-ports span:nth-child(2) {
+      animation-delay: 320ms;
+    }
+
+    .region-interface-ports span:nth-child(3) {
+      animation-delay: 640ms;
+    }
+
+    .region-interface-ports span::before {
+      content: "";
+      position: absolute;
+      right: 100%;
+      top: 50%;
+      width: 18px;
+      border-top: 1px dashed color-mix(in srgb, var(--region-color), transparent 34%);
+    }
+
+    .latent-region[data-region="embodiment"] .region-interface-ports {
+      left: auto;
+      right: -18px;
+    }
+
+    .latent-region[data-region="embodiment"] .region-interface-ports span::before {
+      left: 100%;
+      right: auto;
+    }
+
+    .research-board.is-spatial .latent-regions {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    .foundation-base {
+      position: absolute;
+      left: 8%;
+      right: -4%;
+      top: calc(100% + 205px);
+      z-index: 6;
+      min-height: 106px;
+      display: grid;
+      grid-template-columns: minmax(170px, 0.7fr) minmax(0, 1.8fr);
+      align-items: center;
+      gap: 26px;
+      padding: 22px 30px 22px 34px;
+      border: 1px solid rgba(156, 224, 200, 0.34);
+      border-radius: 7px;
+      color: #fffdf8;
+      background:
+        linear-gradient(90deg, rgba(156, 224, 200, 0.12), transparent 42%),
+        rgba(12, 21, 20, 0.92);
+      box-shadow: 0 24px 62px rgba(0, 0, 0, 0.34), inset 0 1px rgba(255, 255, 255, 0.04);
+      cursor: default;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-26px) scaleY(0.72);
+      transform-origin: top center;
+      transition: opacity 320ms ease 120ms, transform 680ms var(--ease-out) 100ms;
+      backdrop-filter: blur(18px);
+    }
+
+    .foundation-base::before {
+      content: "";
+      position: absolute;
+      left: 14px;
+      top: 18px;
+      bottom: 18px;
+      width: 3px;
+      border-radius: 99px;
+      background: linear-gradient(#9ce0c8, #8ccf74);
+      box-shadow: 0 0 18px rgba(156, 224, 200, 0.34);
+    }
+
+    .foundation-base-heading {
+      display: grid;
+      gap: 5px;
+    }
+
+    .foundation-base-heading span {
+      color: #9ce0c8;
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .foundation-base-heading strong {
+      font-size: 1.08rem;
+      line-height: 1.18;
+    }
+
+    .foundation-base p {
+      margin: 0;
+      color: rgba(255, 253, 248, 0.68);
+      font-size: 0.86rem;
+      line-height: 1.55;
+    }
+
+    .research-board.is-spatial .foundation-base {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scaleY(1);
     }
 
     .map-axis {
@@ -970,6 +1549,29 @@
       color: var(--night);
       background: #fffdf8;
       transform: translate(2px, calc(-50% - 2px));
+    }
+
+    @keyframes frameSweep {
+      from {
+        left: -34%;
+      }
+
+      to {
+        left: 112%;
+      }
+    }
+
+    @keyframes logicFlow {
+      to {
+        stroke-dashoffset: -21;
+      }
+    }
+
+    @keyframes interfacePulse {
+      50% {
+        border-color: #fffdf8;
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--region-color), transparent 86%), 0 0 16px var(--region-color);
+      }
     }
 
     @keyframes routeFlow {
@@ -2104,7 +2706,82 @@
         min-height: 1280px;
       }
 
-      .research-board::after {
+      .research-board.is-spatial {
+        margin-bottom: 470px;
+      }
+
+      .research-board.is-spatial .research-map-plane {
+        transform: perspective(1500px) translate3d(-4px, -18px, 46px) rotateX(3deg) rotateY(-2deg) scale(0.98);
+      }
+
+      .research-spatial-toggle {
+        left: 18px;
+      }
+
+      .research-depth-side {
+        width: 24px;
+        height: calc(100% + 430px);
+        clip-path: polygon(0 0, 100% 20px, 100% 100%, 0 calc(100% - 20px));
+      }
+
+      .research-depth-floor {
+        width: calc(100% + 24px);
+        height: 430px;
+        clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 100%, 24px 100%);
+      }
+
+      .skill-latent-axis {
+        left: 18px;
+        right: auto;
+        top: calc(100% + 20px);
+        width: min(210px, calc(100% - 52px));
+      }
+
+      .skill-latent-axis::before,
+      .skill-latent-axis::after {
+        display: none;
+      }
+
+      .latent-regions {
+        left: 0;
+        right: -8px;
+        top: calc(100% + 112px);
+        grid-template-columns: minmax(0, 1fr) minmax(124px, 0.76fr) minmax(0, 1fr);
+        gap: 14px;
+      }
+
+      .latent-regions::before {
+        left: 8%;
+        right: 8%;
+        top: 50%;
+        bottom: auto;
+      }
+
+      .latent-region {
+        min-height: 118px;
+        padding: 14px 18px 14px 24px;
+      }
+
+      .latent-region[data-region="embodiment"] {
+        padding: 14px 24px 14px 18px;
+      }
+
+      .logic-space-core {
+        min-height: 126px;
+        padding-inline: 12px;
+      }
+
+      .foundation-base {
+        left: 18px;
+        right: -8px;
+        top: calc(100% + 286px);
+        min-height: 126px;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 18px 20px 18px 28px;
+      }
+
+      .research-map-plane::after {
         content: "";
         position: absolute;
         left: 50%;
@@ -2261,9 +2938,68 @@
       }
     }
 
+    @media (max-width: 620px) {
+      .research-board.is-spatial {
+        margin-bottom: 760px;
+      }
+
+      .research-depth-side {
+        height: calc(100% + 730px);
+      }
+
+      .research-depth-floor {
+        height: 730px;
+      }
+
+      .latent-regions {
+        left: 18px;
+        right: -8px;
+        top: calc(100% + 132px);
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .latent-regions::before {
+        left: 50%;
+        right: auto;
+        top: 38px;
+        bottom: 38px;
+        width: 1px;
+        height: auto;
+        background: linear-gradient(180deg, #15cdbc, #9ce0c8 50%, #dc6d4f);
+      }
+
+      .latent-region {
+        width: calc(100% - 42px);
+        min-height: 106px;
+      }
+
+      .latent-region[data-region="environment"] {
+        justify-self: start;
+      }
+
+      .latent-region[data-region="embodiment"] {
+        justify-self: end;
+      }
+
+      .logic-space-core {
+        width: 76%;
+        min-height: 122px;
+        justify-self: center;
+      }
+
+      .foundation-base {
+        top: calc(100% + 532px);
+      }
+    }
+
     @media (max-width: 520px) {
       :root {
         --page-gutter: 14px;
+      }
+
+      .research-board.is-spatial {
+        margin-bottom: 760px;
       }
 
       .section-float-nav {
@@ -2677,7 +3413,7 @@
       color: var(--ink);
     }
 
-    [data-theme="light"] .research-board {
+    [data-theme="light"] .research-map-plane {
       border-color: rgba(24, 32, 29, 0.1);
       background:
         linear-gradient(rgba(24, 32, 29, 0.05) 1px, transparent 1px),
@@ -2686,8 +3422,114 @@
       box-shadow: 0 24px 70px rgba(24, 32, 29, 0.08);
     }
 
-    [data-theme="light"] .research-board::before,
-    [data-theme="light"] .research-board::after {
+    [data-theme="light"] .research-board:not(.is-spatial):hover .research-map-plane,
+    [data-theme="light"] .research-board.is-spatial .research-map-plane {
+      border-color: rgba(15, 123, 92, 0.32);
+      box-shadow: 0 34px 90px rgba(24, 32, 29, 0.14), 0 0 0 1px rgba(15, 123, 92, 0.06);
+    }
+
+    [data-theme="light"] .research-spatial-toggle {
+      color: #0f6f55;
+      border-color: rgba(15, 123, 92, 0.28);
+      background: rgba(255, 253, 248, 0.96);
+      box-shadow: 0 10px 28px rgba(24, 32, 29, 0.12);
+    }
+
+    [data-theme="light"] .research-spatial-toggle:hover,
+    [data-theme="light"] .research-spatial-toggle:focus-visible {
+      color: #fffdf8;
+      border-color: #0f7b5c;
+      background: #0f7b5c;
+    }
+
+    [data-theme="light"] .research-depth-side,
+    [data-theme="light"] .research-depth-floor {
+      border-color: rgba(15, 123, 92, 0.28);
+      background:
+        linear-gradient(rgba(15, 123, 92, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 123, 92, 0.08) 1px, transparent 1px),
+        linear-gradient(145deg, rgba(219, 235, 226, 0.96), rgba(185, 213, 199, 0.94));
+      background-size: 26px 26px;
+      filter: drop-shadow(0 22px 30px rgba(24, 32, 29, 0.12));
+    }
+
+    [data-theme="light"] .skill-latent-axis,
+    [data-theme="light"] .foundation-base {
+      color: var(--ink);
+      border-color: rgba(15, 123, 92, 0.28);
+      background:
+        linear-gradient(90deg, rgba(15, 123, 92, 0.1), transparent 52%),
+        rgba(255, 253, 248, 0.95);
+      box-shadow: 0 20px 48px rgba(24, 32, 29, 0.14);
+    }
+
+    [data-theme="light"] .logic-space-core {
+      color: var(--ink);
+      border-color: rgba(15, 123, 92, 0.28);
+      background:
+        linear-gradient(rgba(15, 123, 92, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 123, 92, 0.07) 1px, transparent 1px),
+        rgba(255, 253, 248, 0.97);
+      background-size: 18px 18px;
+      box-shadow: 0 18px 42px rgba(24, 32, 29, 0.13), inset 0 0 28px rgba(15, 123, 92, 0.04);
+    }
+
+    [data-theme="light"] .logic-space-core::before {
+      border-color: rgba(15, 123, 92, 0.22);
+      background: rgba(171, 212, 194, 0.34);
+    }
+
+    [data-theme="light"] .logic-space-kicker {
+      color: #0f7b5c;
+    }
+
+    [data-theme="light"] .logic-space-network line,
+    [data-theme="light"] .logic-space-network path {
+      stroke: rgba(15, 123, 92, 0.46);
+    }
+
+    [data-theme="light"] .logic-space-network circle {
+      fill: #0f7b5c;
+    }
+
+    [data-theme="light"] .region-interface-ports span,
+    [data-theme="light"] .latent-region::before {
+      background: #fffdf8;
+    }
+
+    [data-theme="light"] .latent-region {
+      color: var(--ink);
+      border-color: color-mix(in srgb, var(--region-color), #18201d 22%);
+      background:
+        linear-gradient(125deg, color-mix(in srgb, var(--region-color), transparent 78%), transparent 58%),
+        rgba(255, 253, 248, 0.94);
+      box-shadow: 0 16px 38px rgba(24, 32, 29, 0.1);
+    }
+
+    [data-theme="light"] .latent-region:hover {
+      border-color: color-mix(in srgb, var(--region-color), #18201d 14%);
+      box-shadow: 0 22px 46px color-mix(in srgb, var(--region-color), rgba(24, 32, 29, 0.14) 82%);
+    }
+
+    [data-theme="light"] .latent-region-label {
+      color: color-mix(in srgb, var(--region-color), #18201d 28%);
+    }
+
+    [data-theme="light"] .latent-region p {
+      color: rgba(24, 32, 29, 0.62);
+    }
+
+    [data-theme="light"] .skill-latent-axis span,
+    [data-theme="light"] .foundation-base-heading span {
+      color: #0f7b5c;
+    }
+
+    [data-theme="light"] .foundation-base p {
+      color: rgba(24, 32, 29, 0.66);
+    }
+
+    [data-theme="light"] .research-map-plane::before,
+    [data-theme="light"] .research-map-plane::after {
       border-color: rgba(24, 32, 29, 0.1);
     }
 
@@ -2958,6 +3800,29 @@
       .section-mascot {
         animation: none !important;
       }
+
+      .research-frame-glow::after {
+        animation: none !important;
+      }
+
+      .logic-space-network line,
+      .logic-space-network path,
+      .region-interface-ports span {
+        animation: none !important;
+      }
+
+      .research-board,
+      .research-map-plane,
+      .research-depth-side,
+      .research-depth-floor,
+      .skill-latent-axis,
+      .latent-regions,
+      .latent-region,
+      .foundation-base,
+      .research-spatial-toggle,
+      .research-spatial-toggle svg {
+        transition-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
@@ -3050,6 +3915,65 @@
         </div>
 
         <div class="research-board" data-i18n-aria="nav.research" aria-label="Research map">
+          <span class="research-frame-glow" aria-hidden="true"></span>
+          <button class="research-spatial-toggle" type="button" aria-expanded="false" aria-controls="research-space-details" data-i18n-aria="research.spatial.toggle" aria-label="Toggle the skill latent dimension">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 3 8 4.5-8 4.5-8-4.5L12 3Z"></path>
+              <path d="m4 7.5 8 4.5 8-4.5M4 12l8 4.5 8-4.5M4 16.5 12 21l8-4.5"></path>
+            </svg>
+            <span class="toggle-open" data-i18n="research.spatial.open">Unfold skill latent</span>
+            <span class="toggle-close" data-i18n="research.spatial.close">Return to 2D</span>
+          </button>
+
+          <div id="research-space-details" class="research-depth-geometry" aria-hidden="true">
+            <span class="research-depth-side"></span>
+            <span class="research-depth-floor"></span>
+
+            <div class="skill-latent-axis">
+              <span data-i18n="research.spatial.dimension">Skill latent</span>
+              <strong data-i18n="research.spatial.space">Unified Logic Space</strong>
+            </div>
+
+            <div class="latent-regions" role="group" data-i18n-aria="research.regions.aria" aria-label="Skill latent regions">
+              <article class="latent-region" data-region="environment">
+                <span class="region-interface-ports" aria-hidden="true"><span></span><span></span><span></span></span>
+                <span class="latent-region-label" data-i18n="research.region.environment.label">Region 01 · Extension Interface</span>
+                <strong data-i18n="research.region.environment.title">Environment Extension</strong>
+                <p data-i18n="research.region.environment.copy">Generalize shared logic across scenes, objects, tasks, and world dynamics.</p>
+              </article>
+
+              <div class="logic-space-core">
+                <span class="logic-space-kicker" data-i18n="research.regions.origin">Skill latent core</span>
+                <strong data-i18n="research.spatial.space">Unified Logic Space</strong>
+                <svg class="logic-space-network" viewBox="0 0 150 42" aria-hidden="true">
+                  <path d="M8 22 L42 8 L75 21 L109 7 L142 22 M42 8 L48 35 L75 21 L102 35 L109 7"></path>
+                  <line x1="8" y1="22" x2="48" y2="35"></line>
+                  <line x1="102" y1="35" x2="142" y2="22"></line>
+                  <circle cx="8" cy="22" r="3"></circle><circle cx="42" cy="8" r="3"></circle>
+                  <circle cx="48" cy="35" r="3"></circle><circle cx="75" cy="21" r="4"></circle>
+                  <circle cx="102" cy="35" r="3"></circle><circle cx="109" cy="7" r="3"></circle>
+                  <circle cx="142" cy="22" r="3"></circle>
+                </svg>
+              </div>
+
+              <article class="latent-region" data-region="embodiment">
+                <span class="region-interface-ports" aria-hidden="true"><span></span><span></span><span></span></span>
+                <span class="latent-region-label" data-i18n="research.region.embodiment.label">Region 02 · Extension Interface</span>
+                <strong data-i18n="research.region.embodiment.title">Embodiment Extension</strong>
+                <p data-i18n="research.region.embodiment.copy">Transfer shared skills across morphologies, sensors, and action spaces.</p>
+              </article>
+            </div>
+
+            <aside class="foundation-base">
+              <div class="foundation-base-heading">
+                <span data-i18n="research.foundation.eyebrow">Foundation Model</span>
+                <strong data-i18n="research.foundation.title">A complete robot mind needs a shared foundation.</strong>
+              </div>
+              <p data-i18n="research.foundation.copy">It provides strong formal completeness and a complete space for logical composition.</p>
+            </aside>
+          </div>
+
+          <div class="research-map-plane">
           <span class="axis-arrow x" aria-hidden="true"></span>
           <span class="axis-arrow y" aria-hidden="true"></span>
           <span class="map-axis axis-x" data-i18n="research.axis">Representation Flow</span>
@@ -3140,6 +4064,7 @@
             </span>
             <span class="map-project-arrow" aria-hidden="true">↗</span>
           </button>
+          </div>
         </div>
       </div>
     </section>
@@ -3457,6 +4382,18 @@
       }
 
       const nodes = Array.from(board.querySelectorAll(".map-node, .map-project-module"));
+      const spatialToggle = board.querySelector(".research-spatial-toggle");
+      const spatialDetails = board.querySelector(".research-depth-geometry");
+
+      const setSpatialState = (isExpanded) => {
+        board.classList.toggle("is-spatial", isExpanded);
+        spatialToggle?.setAttribute("aria-expanded", String(isExpanded));
+        spatialDetails?.setAttribute("aria-hidden", String(!isExpanded));
+      };
+
+      const toggleSpatialState = () => {
+        setSpatialState(!board.classList.contains("is-spatial"));
+      };
 
       const clearPreview = () => {
         board.classList.remove("is-previewing");
@@ -3473,6 +4410,26 @@
         node.addEventListener("pointerleave", clearPreview);
         node.addEventListener("focus", () => showPreview(node));
         node.addEventListener("blur", clearPreview);
+      });
+
+      spatialToggle?.addEventListener("click", (event) => {
+        event.stopPropagation();
+        toggleSpatialState();
+      });
+
+      board.addEventListener("click", (event) => {
+        if (event.target.closest("button, a, .map-node, .latent-regions, .foundation-base")) {
+          return;
+        }
+
+        toggleSpatialState();
+      });
+
+      board.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && board.classList.contains("is-spatial")) {
+          setSpatialState(false);
+          spatialToggle?.focus();
+        }
       });
 
       board.addEventListener("pointerleave", clearPreview);
@@ -3610,6 +4567,22 @@
           "hero.copy": "Hello, I'm Qingda Hu. Welcome here!",
           "research.focus": "I focus on general robot representations in the spatiotemporal (4D) domain, seeking completeness in the definition and modeling of robot mind.",
           "research.axis": "Representation Flow",
+          "research.spatial.toggle": "Toggle the skill latent dimension",
+          "research.spatial.open": "Unfold skill latent",
+          "research.spatial.close": "Return to 2D",
+          "research.spatial.dimension": "Skill latent",
+          "research.spatial.space": "Unified Logic Space",
+          "research.foundation.eyebrow": "Foundation Model",
+          "research.foundation.title": "A complete robot mind needs a shared foundation.",
+          "research.foundation.copy": "It provides strong formal completeness and a complete space for logical composition.",
+          "research.regions.aria": "Skill latent regions",
+          "research.regions.origin": "Skill latent core",
+          "research.region.environment.label": "Region 01 · Extension Interface",
+          "research.region.environment.title": "Environment Extension",
+          "research.region.environment.copy": "Generalize shared logic across scenes, objects, tasks, and world dynamics.",
+          "research.region.embodiment.label": "Region 02 · Extension Interface",
+          "research.region.embodiment.title": "Embodiment Extension",
+          "research.region.embodiment.copy": "Transfer shared skills across morphologies, sensors, and action spaces.",
           "node.observe.title": "Observation Input",
           "node.observe.meta": "Temporal Modeling",
           "node.observe.detail": "What should the robot perceive, and which changes are worth encoding?",
@@ -3762,6 +4735,22 @@
           "hero.copy": "你好，我是扈庆达。欢迎来到这里！",
           "research.focus": "我关注时空维度（4D）下的通用机器人表征，寻求面向心智化建构的定义与建模的完备性。",
           "research.axis": "表征流",
+          "research.spatial.toggle": "切换技能潜变量维度",
+          "research.spatial.open": "展开技能潜变量",
+          "research.spatial.close": "回到平面",
+          "research.spatial.dimension": "技能潜变量",
+          "research.spatial.space": "统一逻辑空间",
+          "research.foundation.eyebrow": "基础模型",
+          "research.foundation.title": "完整的机器人心智需要共享的基础。",
+          "research.foundation.copy": "具有良好形式完备性和逻辑组合空间的完备性。",
+          "research.regions.aria": "技能潜变量区域",
+          "research.regions.origin": "技能潜变量核心",
+          "research.region.environment.label": "区域 01 · 扩展接口",
+          "research.region.environment.title": "环境延展",
+          "research.region.environment.copy": "让共享逻辑跨越场景、物体、任务与世界动力学持续泛化。",
+          "research.region.embodiment.label": "区域 02 · 扩展接口",
+          "research.region.embodiment.title": "具身延展",
+          "research.region.embodiment.copy": "让共享技能跨越机器人形态、传感器配置与动作空间完成迁移。",
           "node.observe.title": "观测输入",
           "node.observe.meta": "信念状态",
           "node.observe.detail": "机器人应当感知什么，哪些变化值得被编码？",
